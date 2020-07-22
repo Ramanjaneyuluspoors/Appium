@@ -16,16 +16,17 @@ import utils.CommonUtils;
 import utils.ServerService;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "C:\\Testing Software\\CucucmberAppium\\src\\test\\java\\Featurefile\\sanity.feature", 
-glue = "in.Effort.Steps",strict=true, monochrome=true, tags= {"@signin"},
+@CucumberOptions(features = "C:\\Users\\spoors\\git\\Appium\\CucucmberAppium\\src\\test\\java\\Featurefile", 
+glue = "in.Effort.Steps",strict=true, monochrome=true, tags= {"@signin or @formMinMax"},
 plugin = {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"})
 public class TestRunner { 
 	public static AndroidDriver<MobileElement> driver;
-	static String featureLoc = System.getProperty("user.dir") + "\\src\\test\\java\\Featurefile\\sanity.feature";
+	static String featureLoc = System.getProperty("user.home") + "\\src\\test\\java\\Featurefile\\sanity.feature";
 	static String nodejs = "C:/Program Files/nodejs/node.exe";
     static String appiumjs= System.getProperty("user.home") + "/AppData/Roaming/npm/node_modules/appium/build/lib/main.js";       //"C:/Users/spoors/AppData/Roaming/npm/node_modules/appium/build/lib/main.js";
 	static String propertiesPath=  System.getProperty("user.dir") + "/src/test/resources/Effort.properties";                  //"C:/Testing Software/CucucmberAppium/src/test/resources/Effort.properties";
     
+	
 	@BeforeClass 
 	public static void setup() throws IOException {
 		if (driver == null) {   
@@ -41,7 +42,7 @@ public class TestRunner {
 	}
 
 	@AfterClass
-	public static void teardown() {
+	public static void teardown() { 
 		driver.quit();
 		ServerService.stopService();
 	}
