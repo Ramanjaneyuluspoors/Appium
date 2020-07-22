@@ -3,16 +3,9 @@ package utils;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.apache.commons.text.RandomStringGenerator;
-
-import com.google.common.collect.Iterables;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.collections.ListUtils;

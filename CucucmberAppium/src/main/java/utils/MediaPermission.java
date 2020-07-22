@@ -3,6 +3,7 @@ package utils;
 
 import io.appium.java_client.MobileBy;
 
+
 public class MediaPermission {
 
 	// verifying media permission & location
@@ -30,7 +31,7 @@ public class MediaPermission {
 		}
 
 	}
-	
+	//media permission
 	public static void mediaPermission() {
 		try {        
 			if (CommonUtils.getdriver()
@@ -46,14 +47,14 @@ public class MediaPermission {
 	}
 	
 
-	
+	//image capture
 	public static void formImageCapture(String imageClick, String selectClickedImage) throws InterruptedException {
 		signinMediaPermission();
 		CommonUtils.getdriver().findElement(MobileBy.id(imageClick)).click();
 		CommonUtils.getdriver().findElement(MobileBy.xpath(selectClickedImage));
 		CommonUtils.waitForElementVisibility("//*[@text='VIEW']");
 	}
-	
+	//video capture
 	public static void formVideoCapture(String startVideoXpath, String stopVideoXpath, String selectVideoXpath) throws InterruptedException { ////*[@content-desc='Start video']  ////*[@content-desc='Stop video']
 		signinMediaPermission();
 		CommonUtils.getdriver().findElement(MobileBy.xpath(startVideoXpath)).click();   ////*[@resource-id='com.google.android.GoogleCamera:id/shutter_button']

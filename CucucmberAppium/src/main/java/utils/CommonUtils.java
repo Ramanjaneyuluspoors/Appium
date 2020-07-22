@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
@@ -22,6 +23,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import Actions.MobileActionGesture;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
@@ -30,8 +32,10 @@ import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.Tesseract1;
 import net.sourceforge.tess4j.TesseractException;
+import net.sourceforge.tess4j.util.LoadLibs;
 
 public class CommonUtils {
 
@@ -55,12 +59,13 @@ public class CommonUtils {
 	private static DesiredCapabilities capabilities = new DesiredCapabilities();
 	private static URL serverUrl;
 	public static AndroidDriver<MobileElement> driver;
-	public static String destDir;
+	public static String scrShotDir;
 	public static DateFormat dateFormat;
 	public static String scrPath;
 	public static String UDID;
 	public static String NO_RESET;
 	public static TouchAction T;
+	static File scrShotDirPath = new java.io.File("./" + scrShotDir + "//");
 
 	// loading properties
 	public static void loadConfigProp(String propertyFileName) throws IOException {
@@ -112,38 +117,70 @@ public class CommonUtils {
 	}
 
 	// screenshot method
-	public static void takeScreenShot() {
-
-		destDir = "screenshots";
+	public static String takeScreenShot() {
+		scrShotDir = "screenshots";
 		File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
 		dateFormat = new SimpleDateFormat("dd-MMM-yyyy__hh_mm_ssaa");
-
-		new File(destDir).mkdirs();
-
+		// Create folder under project with name "screenshots" if doesn't exist
+		new File(scrShotDir).mkdirs();
+		// set file name using current date time
 		String destFile = dateFormat.format(new Date()) + ".png";
-
 		try {
-
-			FileUtils.copyFile(scrFile, new File(destDir + "/" + destFile));
-			scrPath = destDir + "/" + destFile;
+			// copy paste file at destination folder location
+			FileUtils.copyFile(scrFile, new File(scrShotDir + "/" + destFile));
 		} catch (IOException e) {
+			System.out.println("Image not transfered to screencshot folder");
 			e.printStackTrace();
 		}
+		return destFile;
 	}
 
 	// retrieving toast message using OCR
-	public static String OCR(String ImagePath) {
+	public static String OCR() {
+		String imgName = takeScreenShot();
 		String result = null;
-		File imageFile = new File(ImagePath);
+		File imageFile = new File(System.getProperty("user.home") + "\\git\\Appium\\CucucmberAppium\\screenshots",
+				imgName);
+		System.out.println("Image name is :" + imageFile.toString());
 		ITesseract instance = new Tesseract1();
+
+		File tessDataFolder = LoadLibs.extractTessResources("tessdata"); // Extracts Tessdata folder
+		instance.setDatapath(tessDataFolder.getAbsolutePath()); // sets tessData path
 		try {
 			result = instance.doOCR(imageFile);
-
+			System.out.println(result);
 		} catch (TesseractException e) {
 			System.err.println(e.getMessage());
 		}
 		return result;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static String verify(AppiumDriver driver) {
+		String result = null;
+		File srcFile = driver.getScreenshotAs(OutputType.FILE);
+		ITesseract instance = new Tesseract();
+		try {
+			result = instance.doOCR(srcFile);
+		} catch (TesseractException e) {
+			System.out.println(e.getMessage());
+		}
+		return result;
+	}
+
+	public static String image(AppiumDriver<MobileElement> driver) {
+		File targetFile = null;
+		try {
+			File srcFile = driver.getScreenshotAs(OutputType.FILE);
+			String filename = UUID.randomUUID().toString();
+			targetFile = new File("./screenshots/" + filename + ".png");
+			FileUtils.copyFile(srcFile, targetFile);
+			System.out.println(targetFile.toString());
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return targetFile.toString();
 	}
 
 	// keyboard events
@@ -219,8 +256,7 @@ public class CommonUtils {
 		List<MobileElement> Homepage = driver.findElements(MobileBy.id("design_menu_item_text"));
 		for (int i = 0; i < Homepage.size(); i++) {
 			if (Homepage.get(i).getText().contains("Home")) {
-				driver.findElement(MobileBy.xpath("//android.widget.CheckedTextView[@text='Home']"))
-						.click();
+				driver.findElement(MobileBy.xpath("//android.widget.CheckedTextView[@text='Home']")).click();
 				waitForElementVisibility("//*[@text='Home']");
 			}
 			break;
@@ -243,10 +279,8 @@ public class CommonUtils {
 
 	public static void interruptSyncAndLetmeWork() throws InterruptedException {
 		try {
-			if (driver.findElement(MobileBy.xpath("//*[@text='INTERRUPT SYNC & LET ME WORK']"))
-					.isDisplayed()) {
-				driver.findElement(MobileBy.xpath("//*[@text='INTERRUPT SYNC & LET ME WORK']"))
-						.click();
+			if (driver.findElement(MobileBy.xpath("//*[@text='INTERRUPT SYNC & LET ME WORK']")).isDisplayed()) {
+				driver.findElement(MobileBy.xpath("//*[@text='INTERRUPT SYNC & LET ME WORK']")).click();
 				System.out.println("INTERRUPT SYNC & LET ME WORK Is clicked Successfully!!");
 			} else {
 				System.out.println("INTERRUPT SYNC & LET ME WORK Is not displayed!!");
@@ -256,6 +290,11 @@ public class CommonUtils {
 		}
 	}
 
-
+	public static void keyboardHide() {
+		try {
+			CommonUtils.getdriver().hideKeyboard();
+		} catch (Exception e) {
+		}
+	}
 
 }
