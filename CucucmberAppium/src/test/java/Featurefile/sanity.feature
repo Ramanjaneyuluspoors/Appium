@@ -55,4 +55,13 @@ Scenario: Form completion with allFields
 Scenario: Signout
 	Given user wants to signout	
 
+@formMinMax	
+Scenario: Form MinMax Validations
+	Given Swipe to MinMax form
+		|formNormal fields|
+	When user enters Min value 5 and Max value 9	
+		
+	
+	
+	
 	
