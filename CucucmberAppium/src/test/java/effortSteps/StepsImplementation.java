@@ -1,6 +1,7 @@
-package in.Effort.Steps;
+package effortSteps;
 
 import java.net.MalformedURLException;
+
 import Actions.CustomerPageActions;
 import Actions.HomepageAction;
 import Actions.MobileActionGesture;
@@ -10,6 +11,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import utils.CommonUtils;
+import utils.FormAdvanceSettings;
 import utils.Forms;
 import utils.RoutePlan;
 import utils.Work;
@@ -24,7 +26,7 @@ public class StepsImplementation {
 	@When("user click on signin")
 	public void user_click_on_signin() throws MalformedURLException, InterruptedException {
 		HomepageAction.signInAction(); // need to optimize taking 37s time to signin using location if sign-in forn
-    	Forms.createEntity();										// does'nt exist
+//    	Forms.createEntity();										// does'nt exist
 	}
 
 	@Then("verify signin validation")
@@ -143,5 +145,15 @@ public class StepsImplementation {
 	@Given("user wants to signout")
 	public void user_wants_to_signout() throws MalformedURLException, InterruptedException {
 		HomepageAction.signOutAction();
+	}
+	
+	@Given("^Swipe to MinMax form$")
+	public void Swipe_to_MinMax_form(String MinMaxform) throws InterruptedException, MalformedURLException {
+		Forms.goToFormPage(MinMaxform);
+	}
+	
+	@Then("user enters Min value {int} and Max value {int}")
+	public static void user_enters_Min_value_and_Max_value(int min, int max) throws MalformedURLException, InterruptedException {
+		FormAdvanceSettings.minMaxTesting(min, max);
 	}
 }
