@@ -17,7 +17,7 @@ import utils.ServerService;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "C:\\Users\\spoors\\git\\Appium\\CucucmberAppium\\src\\test\\java\\Featurefile", 
-glue = "in.Effort.Steps",strict=true, monochrome=true, tags= {"@signin or @formMinMax"},
+glue = "effortSteps",strict=true, monochrome=true, tags= {"@signin or @FieldDependencyBasedOnOtherFields"},
 plugin = {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"})
 public class TestRunner { 
 	public static AndroidDriver<MobileElement> driver;
@@ -26,7 +26,6 @@ public class TestRunner {
     static String appiumjs= System.getProperty("user.home") + "/AppData/Roaming/npm/node_modules/appium/build/lib/main.js";       //"C:/Users/spoors/AppData/Roaming/npm/node_modules/appium/build/lib/main.js";
 	static String propertiesPath=  System.getProperty("user.dir") + "/src/test/resources/Effort.properties";                  //"C:/Testing Software/CucucmberAppium/src/test/resources/Effort.properties";
     
-	
 	@BeforeClass 
 	public static void setup() throws IOException {
 		if (driver == null) {   
