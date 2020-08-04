@@ -225,28 +225,27 @@ public class CustomerPageActions {
 				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 		int countOfFields = formFields1.size();
 		formFields1.clear();
-        //get last element text
+		// get last element text
 		boolean searchElement = true;
 		String lastTxtElement = null;
-		
-		
+
 		if (searchElement) {
 			MobileActionGesture.flingVerticalToBottom_Android();
 			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
 					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]","");
+			lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("Get the last element text: " + lastTxtElement);
 			formFields1.clear();
 			MobileActionGesture.flingToBegining_Android();
 		}
-		
+
 		// add the elements to list
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
 				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 		countOfFields = formFields1.size();
 		System.out.println("Before swiping fields count is: " + countOfFields);
 		// scroll and add elements to list until the lastelement
-		while (!formFields1.isEmpty()) { 
+		while (!formFields1.isEmpty()) {
 			boolean flag = false;
 //			MobileActionGesture.swipeByElements(formFields1.get(formFields1.size() - 1), formFields1.get(1));
 //			MobileActionGesture.scrollDown();
@@ -256,34 +255,34 @@ public class CustomerPageActions {
 			countOfFields = formFields1.size();
 			System.out.println("After swiping fields count: " + countOfFields);
 			for (int j = 0; j < countOfFields; j++) {
-				if(formFields1.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
+				if (formFields1.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
 					flag = true;
-				}	
+				}
 			}
-			if(flag == true)
+			if (flag == true)
 				break;
-		} 
-			
-		boolean isDate = false, isCustomerType = false, isText = false, isURL = false, isEmail = false, isTerritory = false, isCountry = false, isEmployee = false,
-		isDateTime = false, isTime = false, isPickList = false, isMultiPickList = false, isMultiSelectDropdown = false, isLocation = false, isPhone = false,
-		isCurrency = false, isNumber = false, isDropdown = false, isYesNo = false, isCustomer = false, isMultiPickCustomer = false, isForm = false, isCustomEntity = false,
-		isSignature = false;
-		
-		//iterate and fill the form
-		for (int i = 0; i < countOfFields; i++) {		
+		}
+
+		boolean isDate = false, isCustomerType = false, isText = false, isURL = false, isEmail = false,
+				isTerritory = false, isCountry = false, isEmployee = false, isDateTime = false, isTime = false,
+				isPickList = false, isMultiPickList = false, isMultiSelectDropdown = false, isLocation = false,
+				isPhone = false, isCurrency = false, isNumber = false, isDropdown = false, isYesNo = false,
+				isCustomer = false, isMultiPickCustomer = false, isForm = false, isCustomEntity = false,
+				isSignature = false;
+
+		// iterate and fill the form
+		for (int i = 0; i < countOfFields; i++) {
 			String fieldsText = formFields1.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("after removing regexp:" + fieldsText);
-			
-						
+
 			switch (fieldsText) {
 			case "Date":
 			case "G-Date":
 			case "S-Date":
-				if (!isDate) {  
+				if (!isDate) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					CommonUtils.getdriver()
-							.findElement(MobileBy
-									.xpath("//*[starts-with(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.Button"))
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button"))
 							.click();
 					CommonUtils.alertContentXpath();
 					Forms.dateScriptInForms();
@@ -294,10 +293,10 @@ public class CustomerPageActions {
 			case "Customer Type":
 			case "G-Customer Type":
 			case "S-Customer Type:":
-				if (!isCustomerType) {   
+				if (!isCustomerType) {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					MobileElement cusType = CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[starts-with(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.Spinner"));
+							"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Spinner"));
 					MobileActionGesture.singleLongPress(cusType);
 					if (CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
 							.size() > 0) {
@@ -315,8 +314,9 @@ public class CustomerPageActions {
 					RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z')
 							.build();
 					String text = textGenerator.generate(5);
-					CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[contains(@text,'"+fieldsText+"')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.sendKeys(text);
 					isText = true;
 				}
@@ -329,8 +329,9 @@ public class CustomerPageActions {
 					RandomStringGenerator urlGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z')
 							.build();
 					String url = urlGenerator.generate(5);
-					CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[contains(@text,'"+fieldsText+"')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.sendKeys("www." + url + ".com");
 					isURL = true;
 				}
@@ -343,19 +344,20 @@ public class CustomerPageActions {
 					RandomStringGenerator emailGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z')
 							.build();
 					String email = emailGenerator.generate(5);
-					CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[contains(@text,'"+fieldsText+"')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.sendKeys(email + "@gmail.com");
 					isEmail = true;
 				}
-				break;                                                                                                             
+				break;
 			case "Territory":
 			case "G-Territory":
 			case "S-Territory":
 				if (!isTerritory) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					MobileElement terriory = CommonUtils.getdriver().findElement(MobileBy
-							.xpath("//*[contains(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.Spinner"));
+					MobileElement terriory = CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Spinner"));
 					MobileActionGesture.singleLongPress(terriory);
 					if (CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
 							.size() > 0) {
@@ -370,8 +372,8 @@ public class CustomerPageActions {
 			case "S-Country":
 				if (!isCountry) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					MobileElement country = CommonUtils.getdriver().findElement(MobileBy
-							.xpath("//*[contains(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.Spinner"));
+					MobileElement country = CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Spinner"));
 					MobileActionGesture.singleLongPress(country);
 					MobileActionGesture.scrollTospecifiedElement("Australia");
 					isCountry = true;
@@ -382,9 +384,8 @@ public class CustomerPageActions {
 			case "S-Employee":
 				if (!isEmployee) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[contains(@text,'"+fieldsText+"')]/parent::*/following-sibling::android.widget.Button"))
-							.click();
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::android.widget.Button")).click();
 					if (CommonUtils.getdriver().findElements(MobileBy.id("employeeNameTextView")).size() > 0) {
 						CommonUtils.getdriver().findElements(MobileBy.id("employeeNameTextView")).get(0).click();
 					}
@@ -397,8 +398,9 @@ public class CustomerPageActions {
 			case "S-DateTime":
 				if (!isDateTime) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[starts-with(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[1]"))
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+									+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[1]"))
 							.click();
 					CommonUtils.alertContentXpath();
 					Forms.dateScriptInForms();
@@ -411,9 +413,8 @@ public class CustomerPageActions {
 			case "S-Time":
 				if (!isTime) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					CommonUtils.getdriver()
-							.findElement(MobileBy
-									.xpath("//*[starts-with(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.Button"))
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button"))
 							.click();
 					Forms.TimeScriptInForms();
 					isTime = true;
@@ -425,8 +426,9 @@ public class CustomerPageActions {
 			case "S-Pick List":
 				if (!isPickList) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[starts-with(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"))
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+									+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"))
 							.click();
 					CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
 					if (CommonUtils.getdriver().findElements(MobileBy.id("titleTextView")).get(0).isDisplayed()) {
@@ -443,8 +445,9 @@ public class CustomerPageActions {
 			case "S-Multi Pick List":
 				if (!isMultiPickList) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					MobileElement multipicklist = CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[starts-with(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"));
+					MobileElement multipicklist = CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+									+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"));
 					MobileActionGesture.tapByElement(multipicklist);
 					CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
 					List<MobileElement> pickMultiPickList = CommonUtils.getdriver()
@@ -465,8 +468,9 @@ public class CustomerPageActions {
 			case "S-Multi Select Dropdown":
 				if (!isMultiSelectDropdown) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					MobileElement multiSelectDropdown = CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[starts-with(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"));
+					MobileElement multiSelectDropdown = CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+									+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"));
 					MobileActionGesture.tapByElement(multiSelectDropdown);
 					CommonUtils.waitForElementVisibility("//*[@text='Pick values']");
 					List<MobileElement> pickValues = CommonUtils.getdriver()
@@ -487,9 +491,8 @@ public class CustomerPageActions {
 			case "S-Location":
 				if (!isLocation) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[contains(@text,'"+fieldsText+"')]/parent::*/following-sibling::*/android.widget.Button"))
-							.click();
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/android.widget.Button")).click();
 					Thread.sleep(5000);
 					CommonUtils.waitForElementVisibility("//*[@text='MARK MY LOCATION']");
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='MARK MY LOCATION']")).click();
@@ -507,8 +510,9 @@ public class CustomerPageActions {
 				if (!isPhone) {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					String phoneNum = RandomStringUtils.randomNumeric(10);
-					CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[contains(@text,'"+fieldsText+"')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.sendKeys(phoneNum);
 					isPhone = true;
 				}
@@ -519,8 +523,9 @@ public class CustomerPageActions {
 				if (!isCurrency) {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					String currency1 = RandomStringUtils.randomNumeric(5);
-					CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[contains(@text,'"+fieldsText+"')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.sendKeys(currency1);
 					isCurrency = true;
 				}
@@ -531,8 +536,9 @@ public class CustomerPageActions {
 				if (!isNumber) {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					String number1 = RandomStringUtils.randomNumeric(5);
-					CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[starts-with(@text,'"+fieldsText+"')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.sendKeys(number1);
 					isNumber = true;
 				}
@@ -542,8 +548,8 @@ public class CustomerPageActions {
 			case "S-Dropdown":
 				if (!isDropdown) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					MobileElement dropdown = CommonUtils.getdriver().findElement(MobileBy
-							.xpath("//*[starts-with(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.Spinner"));
+					MobileElement dropdown = CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Spinner"));
 					MobileActionGesture.singleLongPress(dropdown);
 					CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView")).get(1)
 							.click();
@@ -558,8 +564,8 @@ public class CustomerPageActions {
 			case "S-YesOrNo":
 				if (!isYesNo) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					MobileElement yesno = CommonUtils.getdriver().findElement(
-							MobileBy.xpath("//*[contains(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.Spinner"));
+					MobileElement yesno = CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Spinner"));
 					MobileActionGesture.singleLongPress(yesno);
 					CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView")).get(1)
 							.click();
@@ -571,12 +577,12 @@ public class CustomerPageActions {
 			case "S-Customer":
 				if (!isCustomer) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					if (CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[starts-with(@text,'"+fieldsText+"')]/parent::*/following-sibling::android.widget.Button"))
-							.isEnabled()) {
+					if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::android.widget.Button")).isEnabled()) {
 						CommonUtils.getdriver()
 								.findElement(MobileBy.xpath(
-										"//*[starts-with(@text,'Customer')]/parent::*/parent::*/android.widget.Button"))
+										"//*[starts-with(@text,' " + fieldsText
+												+ "')]/parent::*/parent::*/android.widget.Button"))
 								.click();
 						CommonUtils.waitForElementVisibility("//*[@text='Customers']");
 						if (CommonUtils.getdriver().findElements(MobileBy.id("item_id")).size() > 0) {
@@ -602,7 +608,7 @@ public class CustomerPageActions {
 				if (!isCustomEntity) {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					MobileElement customEntity = CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[starts-with(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.Button"));
+							"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button"));
 					MobileActionGesture.tapByElement(customEntity);
 					CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
 					if (CommonUtils.getdriver().findElements(MobileBy.id("entityTitle")).size() > 0) {
@@ -622,8 +628,8 @@ public class CustomerPageActions {
 			case "S-Form":
 				if (!isForm) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					MobileElement form = CommonUtils.getdriver().findElement(
-							MobileBy.xpath("//*[starts-with(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.Button"));
+					MobileElement form = CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button"));
 					MobileActionGesture.tapByElement(form);
 					CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
 					try {
@@ -650,17 +656,18 @@ public class CustomerPageActions {
 					} catch (Exception e) {
 						System.out.println(e);
 					}
-				isForm = true;
-				Thread.sleep(500);
-			}
+					isForm = true;
+					Thread.sleep(500);
+				}
 				break;
 			case "Signature":
 			case "G-Signature":
 			case "S-Signature":
 				if (!isSignature) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					MobileElement signature = CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[starts-with(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"));
+					MobileElement signature = CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+									+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"));
 					MobileActionGesture.tapByElement(signature);
 					MediaPermission.mediaPermission();
 					CommonUtils.waitForElementVisibility("//*[@text='CAPTURE']");
@@ -668,7 +675,7 @@ public class CustomerPageActions {
 					MobileActionGesture.singleLongPress(signatureCapture);
 					CommonUtils.waitForElementVisibility("//*[@text='VIEW']");
 					isSignature = true;
-					Thread.sleep(500);     //CommonUtils.getdriver().pressKey(new KeyEvent(AndroidKey.CAMERA));
+					Thread.sleep(500); // CommonUtils.getdriver().pressKey(new KeyEvent(AndroidKey.CAMERA));
 				}
 				break;
 			case "Multi Pick Customer":
@@ -676,8 +683,9 @@ public class CustomerPageActions {
 			case "S-Multi Pick Customer":
 				if (!isMultiPickCustomer) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					MobileElement multiPickCustomer = CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[starts-with(@text,'"+fieldsText+"')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"));
+					MobileElement multiPickCustomer = CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+									+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"));
 					MobileActionGesture.tapByElement(multiPickCustomer);
 					CommonUtils.waitForElementVisibility("//*[@text='Customers']");
 					if (CommonUtils.getdriver().findElements(MobileBy.id("pickCustomerCheck")).size() > 0) {
