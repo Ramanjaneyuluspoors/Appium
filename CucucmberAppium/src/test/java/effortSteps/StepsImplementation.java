@@ -20,7 +20,7 @@ public class StepsImplementation {
 
 	@Given("Navigate to Home page")
 	public void navigate_to_Home_page() throws InterruptedException {
-		HomepageAction.NavigationVerfication();
+	    HomepageAction.NavigationVerfication();
 	}
 
 	@When("user click on signin")
@@ -33,7 +33,7 @@ public class StepsImplementation {
 	public void verify_signin_validation() throws InterruptedException {
 		ReceiptActions.PageVerification();
 	}
-
+	
 	@Given("^Scroll to customer card and click$")
 	public void scroll_to_customer_card_and_click(String customers) throws MalformedURLException {
 		MobileActionGesture.scrollTospecifiedElement("" + customers + "");
@@ -155,5 +155,16 @@ public class StepsImplementation {
 	@Then("user enters Min value {int} and Max value {int}")
 	public static void user_enters_Min_value_and_Max_value(int min, int max) throws MalformedURLException, InterruptedException {
 		FormAdvanceSettings.minMaxTesting(min, max);
+	}
+	
+	@Given("^scroll to specified form$")
+	public static void scroll_to_specified_form(String fieldDepency_form) throws MalformedURLException {
+		Forms.goToFormPage(fieldDepency_form);
+	}
+	
+	@Then("user gives dependencyfield {string} and input is {string}")
+	public static void user_gives_dependencyfield_and_input_is(String formFieldLabel, String formFieldInput) throws MalformedURLException, InterruptedException {
+		FormAdvanceSettings.clickSectionInPages();
+		FormAdvanceSettings.fieldDependencyValueOtherFields(formFieldLabel, formFieldInput);
 	}
 }

@@ -58,10 +58,13 @@ Scenario: Signout
 @formMinMax	
 Scenario: Form MinMax Validations
 	Given Swipe to MinMax form
-		|formNormal fields|
-	When user enters Min value 5 and Max value 9	
-		
+		|DeleteForm-1|
+	When user enters Min value 5 and Max value 9
 	
-	
+@FieldDependencyBasedOnOtherFields	
+Scenario: Form Field Dependency Based on Values in Other Fields
+	Given scroll to specified form
+		|FieldDependency Form|
+	When user gives dependencyfield "Pick List" and input is "check list,pot"
 	
 	
