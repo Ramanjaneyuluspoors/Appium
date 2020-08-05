@@ -1,6 +1,11 @@
 package utils;
 
 import java.net.MalformedURLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -420,13 +425,12 @@ public class FormAdvanceSettings {
 				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE ')]"));
 		int pageCount = pagination.size();
 		System.out.println("Total pages are: " + pageCount);
-
+		int i = 0;
 		// checkif pagination link exists
 		if (pagination.size() > 0) {
 			System.out.println("pagination exists");
-
 			// click on pagination link
-			for (int i = 0; i < pagination.size(); i++) {
+			for (i = 0; i < pagination.size(); i++) {
 				pagination.get(i).click();
 				// field dependency value based on other fields in pages
 				validatingFieldDependencyOfOtherFields(valueOf, inputData, i);
@@ -434,18 +438,17 @@ public class FormAdvanceSettings {
 		} else {
 			System.out.println("pagination not exists");
 			// field dependency value based on other fields
-			getFormFieldswhenPageNotExist(valueOf, inputData);
+			getFormFieldswhenPageNotExist(valueOf, inputData, i);
 		}
 //		Forms.formSaveButton();
 	}
 
 	// get fields when form has not pages
-	public static void getFormFieldswhenPageNotExist(String valueOf, String inputData)
+	public static void getFormFieldswhenPageNotExist(String valueOf, String inputData, int i)
 			throws MalformedURLException, InterruptedException {
 		// get all formfields elements xpath
-		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath(
-				"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
-						+ valueOf + "')]"));
+		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(
+				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 		int countOfFields = formFields1.size();
 		formFields1.clear();
 		String formFieldsLabel = valueOf;
@@ -503,7 +506,7 @@ public class FormAdvanceSettings {
 				case "S-Text":
 					if (!isText) {
 						MobileActionGesture.scrollUsingText(fieldsText);
-						inputTextWithOutPages(OriginalText, formFieldsLabel, formFieldsLabelInput);
+						textFieldDependencyInput(OriginalText, formFieldsLabel, formFieldsLabelInput, i);
 						isText = true;
 					}
 					break;
@@ -513,10 +516,10 @@ public class FormAdvanceSettings {
 				case "Currency":
 				case "G-Currency":
 				case "S-Currency":
-					if (!isNumber || isCurrency) {
+					if (!isNumber || !isCurrency) {
 						MobileActionGesture.scrollUsingText(fieldsText);
 						// currency or number method
-						numberInputWithOutPagination(OriginalText, formFieldsLabel, formFieldsLabelInput);
+						numberInput(OriginalText, formFieldsLabel, formFieldsLabelInput, i);
 						isNumber = true;
 						isCurrency = true;
 					}
@@ -527,17 +530,17 @@ public class FormAdvanceSettings {
 					if (!isPickList) {
 						MobileActionGesture.scrollUsingText(fieldsText);
 						// pick list method
-						selectPickListWithOutPages(OriginalText, formFieldsLabel, formFieldsLabelInput);
+						pickPickList(OriginalText, formFieldsLabel, formFieldsLabelInput, i);
 						isPickList = true;
 					}
 					break;
 				case "Customer":
 				case "G-Customer":
 				case "S-Customer":
-					if (isCustomer) {
+					if (!isCustomer) {
 						MobileActionGesture.scrollUsingText(fieldsText);
 						// customer method
-						selectCustomerWithOutPages(OriginalText, formFieldsLabel, formFieldsLabelInput);
+						customerSelect(OriginalText, formFieldsLabel, formFieldsLabelInput, i);
 						isCustomer = true;
 					}
 					break;
@@ -547,17 +550,17 @@ public class FormAdvanceSettings {
 					if (!isDropdown) {
 						MobileActionGesture.scrollUsingText(fieldsText);
 						// Dropdown method
-
+						dropdownSelection(OriginalText, formFieldsLabel, formFieldsLabelInput, i);
 						isDropdown = true;
 					}
 					break;
 				case "Date":
 				case "G-Date":
 				case "S-Date":
-					if (isDate) {
+					if (!isDate) {
 						MobileActionGesture.scrollUsingText(fieldsText);
 						// Date method
-
+						datePickerInForm(OriginalText, formFieldsLabel, formFieldsLabelInput, i);
 						isDate = true;
 					}
 				default:
@@ -577,8 +580,7 @@ public class FormAdvanceSettings {
 		// get all formfields elements xpath
 		List<MobileElement> formFields1 = CommonUtils.getdriver()
 				.findElements(MobileBy.xpath("//android.widget.TextView[contains(@text,'PAGE " + i1
-						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
-						+ valueOf + "')]"));
+						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 		int countOfFields = formFields1.size();
 		formFields1.clear();
 		String formFieldsLabel = valueOf;
@@ -647,7 +649,7 @@ public class FormAdvanceSettings {
 				case "Currency":
 				case "G-Currency":
 				case "S-Currency":
-					if (!isNumber || isCurrency) {
+					if (!isNumber || !isCurrency) {
 						MobileActionGesture.scrollUsingText(fieldsText);
 						// currency or number method
 						numberInput(OriginalText, fieldsText, formFieldsLabelInput, i);
@@ -661,7 +663,7 @@ public class FormAdvanceSettings {
 					if (!isPickList) {
 						MobileActionGesture.scrollUsingText(fieldsText);
 						// pick list method
-						pickListInPages(OriginalText, formFieldsLabel, formFieldsLabelInput, i);
+						pickPickList(OriginalText, formFieldsLabel, formFieldsLabelInput, i);
 						isPickList = true;
 					}
 					break;
@@ -671,7 +673,7 @@ public class FormAdvanceSettings {
 					if (!isCustomer) {
 						MobileActionGesture.scrollUsingText(fieldsText);
 						// customer method
-						customerSelectionInPages(OriginalText, fieldsText, formFieldsLabelInput, i);
+						customerSelect(OriginalText, fieldsText, formFieldsLabelInput, i);
 						isCustomer = true;
 					}
 					break;
@@ -681,7 +683,7 @@ public class FormAdvanceSettings {
 					if (!isDropdown) {
 						MobileActionGesture.scrollUsingText(fieldsText);
 						// Dropdown method
-
+						dropdownSelection(OriginalText, formFieldsLabel, formFieldsLabelInput, i);
 						isDropdown = true;
 					}
 					break;
@@ -691,7 +693,7 @@ public class FormAdvanceSettings {
 					if (!isDate) {
 						MobileActionGesture.scrollUsingText(fieldsText);
 						// Date method
-
+						datePickerInForm(OriginalText, formFieldsLabel, formFieldsLabelInput, i);
 						isDate = true;
 					}
 				default:
@@ -704,7 +706,7 @@ public class FormAdvanceSettings {
 		} // for loop
 	} // method close
 
-	// entering input for string in pages
+	// text input in form
 	public static void textFieldDependencyInput(String OriginalText, String formFieldsLabel,
 			String formFieldsLabelInput, int i) throws InterruptedException {
 		// get pages
@@ -714,21 +716,20 @@ public class FormAdvanceSettings {
 		String[] criteriaCondition = baseCondition;
 		String[] selectCondition = { "Equals", "Contain", "Does not contain", "Starts with", "Ends with" };
 		for (int k = 0; k < 4; k++) {
-			Thread.sleep(100);
+			if (k == 0) {
+				textInputData = formFieldsLabelInput;
+			}
+			if (k == 1) {
+				textInputData = formFieldsLabelInput + "extraWords";
+			}
+			if (k == 2) {
+				textInputData = "extraWords" + formFieldsLabelInput;
+			}
+			if (k == 3) {
+				textInputData = "extraWords";
+			}
 			if (pagination.size() > 0) {
 				pagination.get(i).click();
-				if (k == 0) {
-					textInputData = formFieldsLabelInput;
-				}
-				if (k == 1) {
-					textInputData = formFieldsLabelInput + "extraWords";
-				}
-				if (k == 2) {
-					textInputData = "extraWords" + formFieldsLabelInput;
-				}
-				if (k == 3) {
-					textInputData = "extraWords";
-				}
 				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 						"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
 								+ OriginalText + "\").instance(0))"));
@@ -743,7 +744,21 @@ public class FormAdvanceSettings {
 				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + formFieldsLabel + "')]");
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel + "')]"))
 						.click();
-				Thread.sleep(200);
+			} else {
+				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
+						"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
+								+ OriginalText + "\").instance(0))"));
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
+						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
+						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+				CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
+								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.sendKeys(textInputData);
+				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + formFieldsLabel + "')]");
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel + "')]"))
+						.click();
 			}
 			if (pagination.size() > 0) {
 				for (int j = 0; j < pagination.size(); j++) {
@@ -754,49 +769,7 @@ public class FormAdvanceSettings {
 		}
 	}
 
-	// enter text input in form with-out pagination
-	public static void inputTextWithOutPages(String OriginalText, String formFieldsLabel, String formFieldsLabelInput)
-			throws InterruptedException {
-		String textInputData = null;
-		for (int k = 0; k < 4; k++) {
-			if (k == 0) {
-				textInputData = formFieldsLabelInput;
-			}
-			if (k == 1) {
-				textInputData = formFieldsLabelInput + "extraWords";
-			}
-			if (k == 2) {
-				textInputData = "extraWords" + formFieldsLabelInput;
-			}
-			if (k == 3) {
-				textInputData = "extraWords";
-			}
-			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
-					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
-							+ OriginalText + "\").instance(0))"));
-			CommonUtils
-					.getdriver().findElement(MobileBy.xpath("//android.widget.TextView[starts-with(@text,'"
-							+ formFieldsLabel + "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-					.clear();
-			CommonUtils
-					.getdriver().findElement(MobileBy.xpath("//android.widget.TextView[starts-with(@text,'"
-							+ formFieldsLabel + "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-					.click();
-			CommonUtils.getdriver()
-					.findElement(MobileBy.xpath("//android.widget.TextView[starts-with(@text,'" + formFieldsLabel
-							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-					.sendKeys(textInputData);
-			CommonUtils.waitForElementVisibility(
-					"//android.widget.TextView[starts-with(@text,'" + formFieldsLabel + "')]");
-			CommonUtils.getdriver()
-					.findElement(
-							MobileBy.xpath("//android.widget.TextView[starts-with(@text,'" + formFieldsLabel + "')]"))
-					.click();
-			Thread.sleep(200);
-		}
-	}
-
-	// number input in form with pagination
+	// number input in form
 	public static void numberInput(String OriginalText, String formFieldsLabel, String formFieldsLabelInput, int i)
 			throws InterruptedException {
 		// get pages
@@ -804,10 +777,11 @@ public class FormAdvanceSettings {
 				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE ')]"));
 		int currencyInput = 0;
 		currencyInput = Integer.parseInt(formFieldsLabelInput);
+		String[] selectCondition = { "Equal to", "Less Than or Equal to", "Greater Than or Equal to", "Not equal to", "Greater Than", "Less Than" };
 		for (int j = 0; j < 3; j++) {
+			currencyInput = currencyInput - 1;
 			if (pagination.size() > 0) {
 				pagination.get(i).click();
-				currencyInput = currencyInput - 1;
 				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 						"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
 								+ OriginalText + "\").instance(0))"));
@@ -822,7 +796,22 @@ public class FormAdvanceSettings {
 				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + formFieldsLabel + "')]");
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel + "')]"))
 						.click();
-				Thread.sleep(200);
+				currencyInput = currencyInput + 2;
+			} else {
+				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
+						"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
+								+ OriginalText + "\").instance(0))"));
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
+						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
+						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+				CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
+								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.sendKeys(String.valueOf(currencyInput));
+				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + formFieldsLabel + "')]");
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel + "')]"))
+						.click();
 				currencyInput = currencyInput + 2;
 			}
 			if (pagination.size() > 0) {
@@ -834,40 +823,15 @@ public class FormAdvanceSettings {
 		}
 	}
 
-	// number input in form without pagination
-	public static void numberInputWithOutPagination(String OriginalText, String formFieldsLabel,
-			String formFieldsLabelInput) throws InterruptedException {
-		int currencyInput = 0;
-		currencyInput = Integer.parseInt(formFieldsLabelInput);
-		for (int j = 0; j < 3; j++) {
-			currencyInput = currencyInput - 1;
-			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
-					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
-							+ OriginalText + "\").instance(0))"));
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
-					+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
-					+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
-			CommonUtils.getdriver()
-					.findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
-							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-					.sendKeys(String.valueOf(currencyInput));
-			CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + formFieldsLabel + "')]");
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel + "')]"))
-					.click();
-			Thread.sleep(200);
-			currencyInput = currencyInput + 2;
-		}
-	}
-
-	// customer selection form with pagination
-	public static void customerSelectionInPages(String OriginalText, String formFieldsLabel,
-			String formFieldsLabelInput, int i) throws MalformedURLException {
+	// customer selection form
+	public static void customerSelect(String OriginalText, String formFieldsLabel, String formFieldsLabelInput, int i)
+			throws MalformedURLException {
 		// get pages
 		List<MobileElement> pagination = CommonUtils.getdriver()
 				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE ')]"));
 		String customer = null;
 		customer = formFieldsLabelInput;
+		String[] selectCondition = {"In","Not In"};
 		String[] cusArray = customer.split(",");
 		for (int j = 0; j < 2; j++) {
 			if (pagination.size() > 0) {
@@ -889,6 +853,24 @@ public class FormAdvanceSettings {
 				} catch (Exception e) {
 					System.out.println(e);
 				}
+			} else {
+				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
+						"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
+								+ OriginalText + "\").instance(0))"));
+				CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[starts-with(@text,'" + formFieldsLabel + "')]/parent::*/parent::*/android.widget.Button"))
+						.click();
+				CustomerPageActions.customerSearch(cusArray[j]);
+				try {
+					if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + cusArray[j] + "']"))
+							.isDisplayed()) {
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + cusArray[j] + "']")).click();
+						Thread.sleep(500);
+						System.out.println("Customer found !!");
+					}
+				} catch (Exception e) {
+					System.out.println(e);
+				}
 			}
 			if (pagination.size() > 0) {
 				for (int k = 0; k < pagination.size(); k++) {
@@ -899,39 +881,13 @@ public class FormAdvanceSettings {
 		}
 	}
 
-	//select customer in form without pagination
-	public static void selectCustomerWithOutPages(String OriginalText, String formFieldsLabel,
-			String formFieldsLabelInput) throws MalformedURLException {
-		String customer = null;
-		customer = formFieldsLabelInput;
-		String[] cusArray = customer.split(",");
-		for (int j = 0; j < 2; j++) {
-			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
-					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
-							+ OriginalText + "\").instance(0))"));
-			CommonUtils.getdriver().findElement(MobileBy.xpath(
-					"//*[starts-with(@text,'" + formFieldsLabel + "')]/parent::*/parent::*/android.widget.Button"))
-					.click();
-			CustomerPageActions.customerSearch(cusArray[j]);
-			try {
-				if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + cusArray[j] + "']"))
-						.isDisplayed()) {
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + cusArray[j] + "']")).click();
-					Thread.sleep(500);
-					System.out.println("Customer found !!");
-				}
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-		}
-	}
-	
-	//pick-list selection in form with pagination
-	public static void pickListInPages(String OriginalText, String formFieldsLabel,
-			String formFieldsLabelInput, int i) throws InterruptedException {
+	// pick-list selection in form
+	public static void pickPickList(String OriginalText, String formFieldsLabel, String formFieldsLabelInput, int i)
+			throws InterruptedException {
 		// get pages
 		List<MobileElement> pagination = CommonUtils.getdriver()
 				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE ')]"));
+		String[] selectCondition = {"In","Not In"};
 		String pickList = null;
 		pickList = formFieldsLabelInput;
 		String[] pickListArray = pickList.split(",");
@@ -943,13 +899,38 @@ public class FormAdvanceSettings {
 								+ OriginalText + "\").instance(0))"));
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
 						+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button")).click();
-		        CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
+				CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
 				try {
 					if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + pickListArray[j] + "']"))
 							.isDisplayed()) {
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + pickListArray[j] + "']")).click();
-						Thread.sleep(500);
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + pickListArray[j] + "']"))
+								.click();
+						Thread.sleep(300);
+						CommonUtils.getdriver()
+								.findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel + "')]"))
+								.click();
 						System.out.println("Picklist found!!");
+					}
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+			} else {
+				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
+						"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
+								+ OriginalText + "\").instance(0))"));
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
+						+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button")).click();
+				CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
+				try {
+					if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + pickListArray[j] + "']"))
+							.isDisplayed()) {
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + pickListArray[j] + "']"))
+								.click();
+						Thread.sleep(300);
+						CommonUtils.getdriver()
+								.findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel + "')]"))
+								.click();
+						System.out.println("PickList found!!");
 					}
 				} catch (Exception e) {
 					System.out.println(e);
@@ -964,34 +945,140 @@ public class FormAdvanceSettings {
 			}
 		}
 	}
-	
-	//select picklist in form without pages
-	public static void selectPickListWithOutPages(String OriginalText, String formFieldsLabel,
-			String formFieldsLabelInput) {
-		String pickList = null;
-		pickList = formFieldsLabelInput;
-		String[] pickListArray = pickList.split(",");
+
+	// select dropdown value in form
+	public static void dropdownSelection(String OriginalText, String formFieldsLabel, String formFieldsLabelInput,
+			int i) throws MalformedURLException, InterruptedException {
+		List<MobileElement> pagination = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE ')]"));
+		String[] selectCondition = {"In","Not In"};
+		String dropDown = null;
+		dropDown = formFieldsLabelInput;
+		String[] dropDownArray = dropDown.split(",");
 		for (int j = 0; j < 2; j++) {
-			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
-					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
-							+ OriginalText + "\").instance(0))"));
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
-					+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button")).click();
-			CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
-			try {
-				if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + pickListArray[j] + "']"))
+			if (pagination.size() > 0) {
+				pagination.get(i).click();
+				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
+						"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
+								+ OriginalText + "\").instance(0))"));
+				if (CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[starts-with(@text,'" + formFieldsLabel + "')]/parent::*/parent::*/android.widget.Spinner"))
 						.isDisplayed()) {
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + pickListArray[j] + "']"))
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
+							+ "')]/parent::*/parent::*/android.widget.Spinner")).click();
+					CommonUtils.getdriver()
+							.findElement(MobileBy
+									.xpath("//android.widget.CheckedTextView[@text='" + dropDownArray[j] + "']"))
 							.click();
-					Thread.sleep(500);
-					System.out.println("PickList found!!");
+				} else {
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + dropDownArray[j] + "']"))
+							.click();
 				}
-			} catch (Exception e) {
-				System.out.println(e);
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel + "')]"))
+						.click();
+			} else {
+				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
+						"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
+								+ OriginalText + "\").instance(0))"));
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath(
+						"//*[starts-with(@text,'" + formFieldsLabel + "')]/parent::*/parent::*/android.widget.Spinner"))
+						.size() > 0) {
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel
+							+ "')]/parent::*/parent::*/android.widget.Spinner")).click();
+					CommonUtils.getdriver()
+							.findElement(MobileBy
+									.xpath("//android.widget.CheckedTextView[@text='" + dropDownArray[j] + "']"))
+							.click();
+				} else {
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + dropDownArray[j] + "']"))
+							.click();
+				}
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + formFieldsLabel + "')]"))
+						.click();
+			}
+			if (pagination.size() > 0) {
+				for (int k = 0; k < pagination.size(); k++) {
+					Thread.sleep(500);
+					pagination.get(k).click();
+					// code of elements are not visible with pages
+				}
 			}
 		}
 	}
-	
+
+	public static void datePickerInForm(String OriginalText, String formFieldsLabel, String formFieldsLabelInput,
+			int i) throws InterruptedException {
+		List<MobileElement> pagination = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE ')]"));
+		String[] selectCondition = {"After","Before","In between","On","Not on"};
+		String dateString = null;
+		dateString = formFieldsLabelInput;
+		SimpleDateFormat DateFor = new SimpleDateFormat("dd MMMM yyyy");
+		Calendar c = Calendar.getInstance();
+		
+		try {
+			// Setting the date to the given date
+			c.setTime(DateFor.parse(dateString));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Given date is: "+ DateFor.format(c.getTime()));
+		
+		for (int j = 0; j < 3; j++) {
+			// Number of Days to add
+			c.add(Calendar.DAY_OF_MONTH, -1);
+			// conversion of date
+			String newDate = DateFor.format(c.getTime());
+			// Date Printing
+			System.out.println("My Date is : " + newDate);
+
+			if (pagination.size() > 0) {
+				pagination.get(i).click();
+				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
+						"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
+								+ OriginalText + "\").instance(0))"));
+				CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[starts-with(@text,'" + formFieldsLabel + "')]/parent::*/parent::*/android.widget.Button"))
+						.click();
+				CommonUtils.alertContentXpath();
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='" + newDate + "']"))
+						.size() > 0) {
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='" + newDate + "']")).click();
+				} else {
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Next month']")).click();
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='" + newDate + "']")).click();
+				}
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='OK']")).click();
+			} else {
+				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
+						"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
+								+ OriginalText + "\").instance(0))"));
+				CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[starts-with(@text,'" + formFieldsLabel + "')]/parent::*/parent::*/android.widget.Button"))
+						.click();
+				CommonUtils.alertContentXpath();
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='" + newDate + "']"))
+						.size() > 0) {
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='" + newDate + "']")).click();
+				} else {
+					do {
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Next month']")).click();
+					} while (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='" + newDate + "']"))
+							.size() > 0);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='" + newDate + "']")).click();
+				}
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='OK']")).click();
+				Thread.sleep(300);
+			}
+			c.add(Calendar.DAY_OF_MONTH, 2);
+			if (pagination.size() > 0) {
+				for (int k = 0; k < pagination.size(); k++) {
+					Thread.sleep(200);
+					pagination.get(k).click();
+				}
+			}
+		}
+	}
 	
 	// validating formfields are hidden in form with pagination
 	public static void formFields_should_hidden(String formFieldsLabel) {
@@ -1009,7 +1096,7 @@ public class FormAdvanceSettings {
 
 	}
 
-	// validating formfields are hidden in form with pages
+	// validating formfields are hidden in form with pagination
 	public static void validate_formFields_are_hidden_inPages(String formFieldsLabel, int j)
 			throws MalformedURLException {
 		int k = j + 1;
@@ -1060,12 +1147,12 @@ public class FormAdvanceSettings {
 			if (fieldsLabelText.equals(formFieldsLabel)) {
 				continue;
 			}
-			// here code for elements should not visible in pages
+			// formFields should not visible in pages
 
 		}
 	}
 
-	// validating formfields are hidden in form without pages
+	// validating formfields are hidden in form without pagination
 	public static void formFields_are_not_visible_without_Pages(String formFieldsLabel) throws MalformedURLException {
 		// get all formfields elements xpath
 		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(
@@ -1116,11 +1203,14 @@ public class FormAdvanceSettings {
 				continue;
 			}
 			// here code for elements should not visible without pages
+//			MobileElement elementNotVisible = CommonUtils.getdriver().findElement(
+//					MobileBy.xpath("//android.widget.TextView[starts-with(@text,'" + formFieldsText + "')]"));
+//			elementNotVisible = null;
 		}
 	}
 
 	// verifying formFields are visible
-	public static void checking_formFields_should_visible() {
+	public static void checking_formFields_should_visible(String formFieldsLabel) throws MalformedURLException {
 		// get pages
 		List<MobileElement> pagination = CommonUtils.getdriver()
 				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE ')]"));
@@ -1128,13 +1218,15 @@ public class FormAdvanceSettings {
 			for (int j = 0; j < pagination.size(); j++) {
 				pagination.get(j).click();
 				// code for formfields of elements should visible in form with pages
+				validate_formFields_are_visible_inPages(formFieldsLabel, j);
 			}
 		} else {
 			// code for formfields of elements should visible in form without pages
+			formFields_are_visible_without_pages(formFieldsLabel);
 		}
 	}
 
-	// valiadting formfields are visible in form with pages
+	// valiadting formfields are visible in form with pagination
 	public static void validate_formFields_are_visible_inPages(String formFieldsLabel, int j)
 			throws MalformedURLException {
 		int k = j + 1;
@@ -1185,12 +1277,15 @@ public class FormAdvanceSettings {
 			if (fieldsLabelText.equals(formFieldsLabel)) {
 				continue;
 			}
-			// here code for elements should visible in pages
-
+			// here code for elements should visible with pages
+			CommonUtils.getdriver()
+					.findElement(
+							MobileBy.xpath("//android.widget.TextView[starts-with(@text,'" + fieldsLabelText + "')]"))
+					.isDisplayed();
 		}
 	}
 
-	//validating formfields are visible in form without pagination
+	// validating formfields are visible in form without pagination
 	public static void formFields_are_visible_without_pages(String formFieldsLabel) throws MalformedURLException {
 		// get all formfields elements xpath
 		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(
@@ -1240,10 +1335,286 @@ public class FormAdvanceSettings {
 			if (formFieldsText.equals(formFieldsLabel)) {
 				continue;
 			}
-			// here code for elements should not without pages visible
+			// here code for elements should be visible without pages
+			CommonUtils.getdriver()
+					.findElement(
+							MobileBy.xpath("//android.widget.TextView[starts-with(@text,'" + formFieldsText + "')]"))
+					.isDisplayed();
 		}
 	}
+	
+	//validate form fields disable
+	public static void formFields_Disable(String formFieldsLabel) throws MalformedURLException {
+		// get pages
+		List<MobileElement> pagination = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE ')]"));
+		if (pagination.size() > 0) {
+			for (int j = 0; j < pagination.size(); j++) {
+				pagination.get(j).click();
+				// validating formfields should disable in form with pages
+				 verifying_formFields_Disable_withPages(formFieldsLabel, j);
+			}
+		} else {
+			// validating formfields should disable in form without pages
+			formFields_are_disable_withOut_pages(formFieldsLabel);
+		}
+	}
+	
+	//checking formfields are disable in form with pagination
+	public static void verifying_formFields_Disable_withPages(String formFieldsLabel, int j) throws MalformedURLException {
+		int k = j + 1;
+		// get all formfields elements xpath
+		List<MobileElement> formFieldsLists = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		int countOfFields = formFieldsLists.size();
+		formFieldsLists.clear();
+		String lastTxtElement = null;
+		boolean searchElement = true;
+		if (searchElement) {
+			MobileActionGesture.flingVerticalToBottom_Android();
+			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText()
+					.replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println("Get the last element text: " + lastTxtElement);
+			formFieldsLists.clear();
+			MobileActionGesture.flingToBegining_Android();
+		}
 
+		// add the elements to list
+		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		countOfFields = formFieldsLists.size();
+		System.out.println("Before swiping fields count is: " + countOfFields);
+
+		// scroll and add elements to list until the lastelement
+		while (!formFieldsLists.isEmpty()) {
+			boolean flag = false;
+			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			countOfFields = formFieldsLists.size();
+			System.out.println("After swiping fields count: " + countOfFields);
+			for (int i = 0; i < countOfFields; i++) {
+				if (formFieldsLists.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
+					flag = true;
+				}
+			}
+			if (flag == true)
+				break;
+		}
+		for (int i = 0; i < formFieldsLists.size(); i++) {
+			String fieldsLabelText = formFieldsLists.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println("Elements text " + fieldsLabelText);
+			if (fieldsLabelText.equals(formFieldsLabel)) {
+				continue;
+			}
+			// formFields should be disable in pages
+//			CommonUtils.getdriver()
+//					.findElement(MobileBy
+//							.xpath("//*[starts-with(@text,'" + fieldsLabelText + "')]/parent::*/parent::*/child::*[2]"))
+//					.isEnabled();
+			
+		}
+		
+	}
+	
+	// validating formfields are disable in form without pagination
+	public static void formFields_are_disable_withOut_pages(String formFieldsLabel) throws MalformedURLException {
+		// get all formfields elements xpath
+		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(
+				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		int countOfFields = formFields1.size();
+		formFields1.clear();
+
+		// get last element text
+		boolean searchElement = true;
+		String lastTxtElement = null;
+
+		if (searchElement) {
+			MobileActionGesture.flingVerticalToBottom_Android();
+			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println("Get the last element text: " + lastTxtElement);
+			formFields1.clear();
+			MobileActionGesture.flingToBegining_Android();
+		}
+
+		// add the elements to list
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		countOfFields = formFields1.size();
+		System.out.println("Before swiping fields count is: " + countOfFields);
+
+		// scroll and add elements to list until the lastelement
+		while (!formFields1.isEmpty()) {
+			boolean flag = false;
+			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			countOfFields = formFields1.size();
+			System.out.println("After swiping fields count: " + countOfFields);
+			for (int j = 0; j < countOfFields; j++) {
+				if (formFields1.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
+					flag = true;
+				}
+			}
+			if (flag == true)
+				break;
+		}
+		for (int i = 0; i < countOfFields; i++) {
+			String formFieldsText = formFields1.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println("field element text " + formFieldsText);
+			if (formFieldsText.equals(formFieldsLabel)) {
+				continue;
+			}
+			// formFields should be disable without pages
+//			CommonUtils.getdriver()
+//					.findElement(MobileBy
+//							.xpath("//*[starts-with(@text,'" + formFieldsText + "')]/parent::*/parent::*/child::*[2]"))
+//					.isEnabled();
+
+		}
+	}
 	
 	
+	// validate form fields enable
+	public static void formFields_Enable(String formFieldsLabel) throws MalformedURLException {
+		// get pages
+		List<MobileElement> pagination = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE ')]"));
+		if (pagination.size() > 0) {
+			for (int j = 0; j < pagination.size(); j++) {
+				pagination.get(j).click();
+				// validating formfields should enable in form with pages
+				verifying_formFields_Enable_withPages(formFieldsLabel, j);
+			}
+		} else {
+			// validating formfields should enable in form without pages
+
+		}
+	}
+	
+	// validating formFields are enabled in form withpages
+	public static void verifying_formFields_Enable_withPages(String formFieldsLabel, int j) throws MalformedURLException {
+		int k = j + 1;
+		// get all formfields elements xpath
+		List<MobileElement> formFieldsLists = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		int countOfFields = formFieldsLists.size();
+		formFieldsLists.clear();
+		String lastTxtElement = null;
+		boolean searchElement = true;
+		if (searchElement) {
+			MobileActionGesture.flingVerticalToBottom_Android();
+			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText()
+					.replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println("Get the last element text: " + lastTxtElement);
+			formFieldsLists.clear();
+			MobileActionGesture.flingToBegining_Android();
+		}
+
+		// add the elements to list
+		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		countOfFields = formFieldsLists.size();
+		System.out.println("Before swiping fields count is: " + countOfFields);
+
+		// scroll and add elements to list until the lastelement
+		while (!formFieldsLists.isEmpty()) {
+			boolean flag = false;
+			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			countOfFields = formFieldsLists.size();
+			System.out.println("After swiping fields count: " + countOfFields);
+			for (int i = 0; i < countOfFields; i++) {
+				if (formFieldsLists.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
+					flag = true;
+				}
+			}
+			if (flag == true)
+				break;
+		}
+		for (int i = 0; i < formFieldsLists.size(); i++) {
+			String fieldsLabelText = formFieldsLists.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println("Elements text " + fieldsLabelText);
+			if (fieldsLabelText.equals(formFieldsLabel)) {
+				continue;
+			}
+			// formFields should be enable in pages
+			CommonUtils.getdriver()
+					.findElement(MobileBy
+							.xpath("//*[starts-with(@text,'" + fieldsLabelText + "')]/parent::*/parent::*/child::*[2]"))
+					.isEnabled();
+			
+		}
+	}
+	
+	public static void checking_formFields_should_enable_without_Pagination(String formFieldsLabel) throws MalformedURLException {
+		// get all formfields elements xpath
+		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(
+				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		int countOfFields = formFields1.size();
+		formFields1.clear();
+
+		// get last element text
+		boolean searchElement = true;
+		String lastTxtElement = null;
+
+		if (searchElement) {
+			MobileActionGesture.flingVerticalToBottom_Android();
+			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println("Get the last element text: " + lastTxtElement);
+			formFields1.clear();
+			MobileActionGesture.flingToBegining_Android();
+		}
+
+		// add the elements to list
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		countOfFields = formFields1.size();
+		System.out.println("Before swiping fields count is: " + countOfFields);
+
+		// scroll and add elements to list until the lastelement
+		while (!formFields1.isEmpty()) {
+			boolean flag = false;
+			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			countOfFields = formFields1.size();
+			System.out.println("After swiping fields count: " + countOfFields);
+			for (int j = 0; j < countOfFields; j++) {
+				if (formFields1.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
+					flag = true;
+				}
+			}
+			if (flag == true)
+				break;
+		}
+		for (int i = 0; i < countOfFields; i++) {
+			String formFieldsText = formFields1.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println("field element text " + formFieldsText);
+			if (formFieldsText.equals(formFieldsLabel)) {
+				continue;
+			}
+			// formFields should be disable without pages
+			CommonUtils.getdriver()
+					.findElement(MobileBy
+							.xpath("//*[starts-with(@text,'" + formFieldsText + "')]/parent::*/parent::*/child::*[2]"))
+					.isEnabled();
+		}
+	}
+	
+	
+	
+	
+
 }
