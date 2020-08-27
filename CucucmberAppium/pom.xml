@@ -156,6 +156,14 @@
 			<version>5.0.0-ALPHA</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/dk.brics.automaton/automaton -->
+		<dependency>
+			<groupId>dk.brics.automaton</groupId>
+			<artifactId>automaton</artifactId>
+			<version>1.11-8</version>
+		</dependency>
+		
+		
 
 	</dependencies>
 </project>
