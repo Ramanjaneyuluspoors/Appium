@@ -162,9 +162,20 @@ public class StepsImplementation {
 		Forms.goToFormPage(fieldDepency_form);
 	}
 	
-	@Then("user gives dependencyfield {string} and input is {string}")
-	public static void user_gives_dependencyfield_and_input_is(String formFieldLabel, String formFieldInput) throws MalformedURLException, InterruptedException {
+	@Then("user gives the basecondition {string} and dependencyfield {string} and input is {string}")
+	public static void user_gives_the_basecondition_and_dependencyfield_and_input_is(String baseCondition, String formFieldLabel, String formFieldInput) throws MalformedURLException, InterruptedException {
 		FormAdvanceSettings.clickSectionInPages();
-		FormAdvanceSettings.fieldDependencyValueOtherFields(formFieldLabel, formFieldInput);
+		FormAdvanceSettings.fieldDependencyValueOtherFields(baseCondition, formFieldLabel, formFieldInput);
+	}
+	
+	@Given("move to specified form")
+	public void move_to_specified_form(String regularExpression_form) throws MalformedURLException {
+		Forms.goToFormPage(regularExpression_form);
+	}
+
+	@When("user enters the Regular Expression {string} for datatype {string}")
+	public void user_enters_the_Regular_Expression_for_datatype(String regExp, String formFieldLabel) throws MalformedURLException, InterruptedException {
+		FormAdvanceSettings.clickSectionInPages();
+		FormAdvanceSettings.regularExpressionTesting(regExp, formFieldLabel);
 	}
 }
