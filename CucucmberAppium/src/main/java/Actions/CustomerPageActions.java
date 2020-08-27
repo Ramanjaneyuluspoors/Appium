@@ -272,8 +272,10 @@ public class CustomerPageActions {
 
 		// iterate and fill the form
 		for (int i = 0; i < countOfFields; i++) {
+			String OriginalfieldsText = formFields1.get(i).getText();
 			String fieldsText = formFields1.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("after removing regexp:" + fieldsText);
+			System.out.println(
+					"Before removeing special character" + OriginalfieldsText + "after removing regexp:" + fieldsText);
 
 			switch (fieldsText) {
 			case "Date":
@@ -577,13 +579,11 @@ public class CustomerPageActions {
 			case "S-Customer":
 				if (!isCustomer) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
-							+ "')]/parent::*/following-sibling::android.widget.Button")).isEnabled()) {
-						CommonUtils.getdriver()
-								.findElement(MobileBy.xpath(
-										"//*[starts-with(@text,' " + fieldsText
-												+ "')]/parent::*/parent::*/android.widget.Button"))
-								.click();
+					if (CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button"))
+							.isEnabled()) {
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+								+ "')]/parent::*/parent::*/android.widget.Button")).click();
 						CommonUtils.waitForElementVisibility("//*[@text='Customers']");
 						if (CommonUtils.getdriver().findElements(MobileBy.id("item_id")).size() > 0) {
 							CommonUtils.getdriver().findElements(MobileBy.id("item_id")).get(0).click();
@@ -671,7 +671,7 @@ public class CustomerPageActions {
 					MobileActionGesture.tapByElement(signature);
 					MediaPermission.mediaPermission();
 					CommonUtils.waitForElementVisibility("//*[@text='CAPTURE']");
-					MobileElement signatureCapture = CommonUtils.getdriver().findElement(MobileBy.id("saveButton"));
+					MobileElement signatureCapture = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='CAPTURE']"));  //id("saveButton")
 					MobileActionGesture.singleLongPress(signatureCapture);
 					CommonUtils.waitForElementVisibility("//*[@text='VIEW']");
 					isSignature = true;
