@@ -17,7 +17,7 @@ import utils.ServerService;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "C:\\Users\\spoors\\git\\Appium\\CucucmberAppium\\src\\test\\java\\Featurefile", 
-glue = "effortSteps",strict=true, monochrome=true, tags= {"@signin or @FieldDependencyBasedOnOtherFields"},
+glue = "effortSteps",dryRun=false, strict=true, monochrome=true, tags= {"@signin or @RegularExpression"},
 plugin = {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"})
 public class TestRunner { 
 	public static AndroidDriver<MobileElement> driver;
