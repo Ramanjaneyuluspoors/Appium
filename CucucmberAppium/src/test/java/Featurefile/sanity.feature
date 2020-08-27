@@ -64,7 +64,11 @@ Scenario: Form MinMax Validations
 @FieldDependencyBasedOnOtherFields	
 Scenario: Form Field Dependency Based on Values in Other Fields
 	Given scroll to specified form
-		|FieldDependency Form|
-	When user gives dependencyfield "Pick List" and input is "check list,pot"
-	
-	
+		|Form-5|
+	When user gives the basecondition "Mandatory when" and dependencyfield "Dropdown" and input is "extrawordsabc,abc"
+
+@RegularExpression	
+Scenario: Regular Expression Validations	
+	Given move to specified form
+		|Form-5|
+	When user enters the Regular Expression "[0-9A-Za-z]" for datatype "Text"
