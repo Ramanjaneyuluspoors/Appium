@@ -47,10 +47,20 @@ public class Forms {
 						.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/saveForm\")"))
 				.click();
 		CommonUtils.alertContentXpath();
-		CommonUtils.getdriver()
+		if (CommonUtils.getdriver()
 				.findElement(MobileBy
 						.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveButton\")"))
-				.click();
+				.isDisplayed()) {
+			CommonUtils.getdriver().findElement(MobileBy
+					.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveButton\")"))
+					.click();
+		} else if (CommonUtils.getdriver()
+				.findElement(MobileBy.AndroidUIAutomator(
+						"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveWorkflowButton\")"))
+				.isDisplayed()) {
+			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
+					"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveWorkflowButton\")")).click();
+		}
 		CommonUtils.interruptSyncAndLetmeWork();
 		// verify if popup with i understand message is display then click on it
 		try {
@@ -283,15 +293,15 @@ public class Forms {
 						.equals(inputTextlastElement)) {
 					flag = true;
 				}
-			}
+			} 
 			//exit while loop
 			if (flag == true)
 				break;
 		}		
 		//iterate the list fields
 		for (int i = 0; i < countOfAllFields; i++) {
-			String allFieldsText = labelViews.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			String allFieldsTextOriginal = labelViews.get(i).getText();
+			String allFieldsText = labelViews.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("Original Text is: " + allFieldsTextOriginal + "\nmodified text: " + allFieldsText);
 
 			switch (allFieldsText) {
@@ -319,7 +329,7 @@ public class Forms {
 						"//*[@id='label_for_view' and contains(@text,'"+allFieldsText+"')]/parent::*/android.widget.Button"))
 						.isEnabled()) {
 					CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[@id='label_for_view' and contains(@text,'Customer')]/parent::*/android.widget.Button"))
+							"//*[@id='label_for_view' and contains(@text,'"+allFieldsText+"')]/parent::*/android.widget.Button"))
 							.click();
 					CommonUtils.waitForElementVisibility("//*[@text='Customers']");
 					if (CommonUtils.getdriver().findElements(MobileBy.id("item_id")).size() > 0) {

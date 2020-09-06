@@ -22,7 +22,7 @@ public class HomepageAction {
 		try {
 			CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/startStopWorkSwitch']");
 			MobileElement SigninButton = CommonUtils.getdriver()
-					.findElement(MobileBy.className("android.widget.Switch"));
+					.findElement(MobileBy.xpath("//*[@text='OFF']"));
 			if (SigninButton.getText().contains("OFF")) {
 				SigninButton.click();
 				Thread.sleep(2000);

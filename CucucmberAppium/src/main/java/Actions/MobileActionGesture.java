@@ -49,6 +49,11 @@ public class MobileActionGesture {
 						+ eleText + "\").instance(0))"));
 		System.out.println("scrolled element is " + eleScroll);
 	}
+	
+	public static String directScrollToView(String eleText) {
+		CommonUtils.getdriver().findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(textContains(\""+eleText+"\"));");
+		return eleText;
+	}
 
 	// Tap to an element for 50 milliseconds
 	public static void tapByElement(MobileElement mobileElement) throws MalformedURLException {
@@ -142,12 +147,8 @@ public class MobileActionGesture {
 
 	public static void flingToBegining_Android() {
 		try {
-//	            CommonUtils.getdriver().findElements(MobileBy.AndroidUIAutomator(
-//	                    "new UiScrollable(new UiSelector()).setAsVerticalList().flingToEnd()"));
 			    CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingBackward();"));
-//			    CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
-//				    	"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollToEnd(1)"));
 		} catch (Exception e) {
 			System.out.println(e);
 		}

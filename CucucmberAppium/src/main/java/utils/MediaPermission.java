@@ -31,13 +31,15 @@ public class MediaPermission {
 		}
 
 	}
-	//media permission
+
+	// media permission
 	public static void mediaPermission() {
-		try {        
+		//AndroidUIAutomator("new UiSelector().resourceId(\"com.android.packageinstaller:id/permission_allow_button\")")
+		////*[@text='Allow EFFORT Plus to take pictures and record video?']
+		try {
 			if (CommonUtils.getdriver()
-					.findElement(MobileBy.AndroidUIAutomator(
-							"new UiSelector().resourceId(\"com.android.packageinstaller:id/permission_allow_button\")"))
-					.isDisplayed()) {
+					.findElements(MobileBy.xpath("//*[@text='Allow EFFORT Plus to take pictures and record video?']"))
+					.size() > 0) {
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Allow']")).click();
 				System.out.println("media permission is allowed");
 			}

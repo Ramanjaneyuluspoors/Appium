@@ -29,21 +29,22 @@ public class FormAdvanceSettings {
 			// click on pagination link
 			for (int i = 0; i < pagination.size(); i++) {
 				pagination.get(i).click();
-				Forms.verifySectionToClickAdd();
-				fillMinMaxData(min, max);
+				fillMinMaxData(min, max, i);
 			}
 		} else {
 			System.out.println("pagination not exists");
 			Forms.verifySectionToClickAdd();
-			fillMinMaxData(min, max);
+			min_max_withoutPages(min, max);
 		}
-//		Forms.formSaveButton();
+		Forms.formSaveButton();
 	}
 
-	public static void fillMinMaxData(int min, int max) throws MalformedURLException, InterruptedException {
+	public static void fillMinMaxData(int min, int max, int i) throws MalformedURLException, InterruptedException {
 		// get all formfields elements xpath
-		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(
-				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		int j = i + 1;
+		List<MobileElement> formFields1 = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 		int countOfFields = formFields1.size();
 		formFields1.clear();
 		// get last element text
@@ -52,8 +53,9 @@ public class FormAdvanceSettings {
 
 		if (searchElement) {
 			MobileActionGesture.flingVerticalToBottom_Android();
-			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
-					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			formFields1 = CommonUtils.getdriver()
+					.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+							+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 			lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("Get the last element text: " + lastTxtElement);
 			formFields1.clear();
@@ -61,8 +63,8 @@ public class FormAdvanceSettings {
 		}
 
 		// add the elements to list
-		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
-				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 		countOfFields = formFields1.size();
 		System.out.println("Before swiping fields count is: " + countOfFields);
 
@@ -70,12 +72,12 @@ public class FormAdvanceSettings {
 		while (!formFields1.isEmpty()) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
-			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
-					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 			countOfFields = formFields1.size();
 			System.out.println("After swiping fields count: " + countOfFields);
-			for (int j = 0; j < countOfFields; j++) {
-				if (formFields1.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
+			for (int k = 0; k < countOfFields; k++) {
+				if (formFields1.get(k).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
 					flag = true;
 				}
 			}
@@ -83,92 +85,97 @@ public class FormAdvanceSettings {
 				break;
 		}
 
-		boolean isText = false, isPhone = false, isCurrency = false, isNumber = false;
-
 		// iterate and fill the form
-		for (int i = 0; i < countOfFields; i++) {
-			String fieldsText = formFields1.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("after removing regexp:" + fieldsText);
-
-			int j = 0, k = 0;
+		for (int m = 0; m < countOfFields; m++) {
+			String originalText = formFields1.get(m).getText();
+			String fieldsText = formFields1.get(m).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println(
+					"Before removing special character: " + originalText + "\nafter removing regexp: " + fieldsText);
+			
+			int n = 0, p = 0;
 			int min_test = min, max_text = max;
+
 			switch (fieldsText) {
 			case "Text":
 			case "G-Text":
 			case "S-Text":
-				if (!isText) {
-					MobileActionGesture.scrollUsingText(fieldsText);
-					RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z')
-							.build();
-					for (j = 0; j < 3; j++) {
-						min_test = min_test - 1;
-						String textMinInput = textGenerator.generate(min_test);
-						String textMinInput1 = textGenerator.generate(min);
-						System.out.println("min input data: " + textMinInput);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
-						CommonUtils.getdriver()
-								.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-										+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.sendKeys(textMinInput);
-						MobileActionGesture.scrollUsingText("Currency");
-						CommonUtils.getdriver().findElement(MobileBy.xpath(
-								"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.click();
-						if (textMinInput1.length() < textMinInput.length()) {
-							String text = CommonUtils.OCR();
-							System.out.println("Expected toast message for max input is " + text);
-							Assertions.assertFalse(
-									text.contains("" + fieldsText + " cannot be shorter than " + textMinInput1
-											+ "characters."),
-									"" + fieldsText + " cannot be shorter than " + textMinInput1 + "characters.");
-						}
-						MobileActionGesture.scrollUsingText(fieldsText);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-						min_test = min_test + 2;
-					}
-					for (k = 0; k < 3; k++) {
-						max_text = max_text - 1;
-						MobileActionGesture.scrollUsingText(fieldsText);
-						String textMaxInput = textGenerator.generate(max_text);
-						String textMaxInput1 = textGenerator.generate(max);
-						System.out.println("Max input data is: " + textMaxInput);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
-						CommonUtils.getdriver()
-								.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-										+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.sendKeys(textMaxInput);
-						MobileActionGesture.scrollUsingText("Currency");
-						CommonUtils.getdriver().findElement(MobileBy.xpath(
-								"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.click();
-						if (textMaxInput1.length() < textMaxInput.length()) {
-							String text = CommonUtils.OCR();
-							System.out.println("Expected toast message for max input is " + text);
-							Assertions.assertFalse(
-									text.contains("" + fieldsText + " cannot be longer than " + textMaxInput1
-											+ "characters."),
-									"" + fieldsText + " cannot be longer than " + textMaxInput1 + "characters.");
-						}
-						MobileActionGesture.scrollUsingText(fieldsText);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-						max_text = max_text + 2;
-					}
+				MobileActionGesture.scrollUsingText(fieldsText);
+				RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
+				//inserting min input value
+				for (n = 0; n < 3; n++) {
+					min_test = min_test - 1;
+					String textMinInput = textGenerator.generate(min_test);
+					String textMinInput1 = textGenerator.generate(min);
+					System.out.println("min input data: " + textMinInput);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
 					CommonUtils.getdriver()
 							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-							.sendKeys(textGenerator.generate(max));
+							.sendKeys(textMinInput);
 					MobileActionGesture.scrollUsingText("Currency");
 					CommonUtils.getdriver().findElement(MobileBy.xpath(
 							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
-					isText = true;
+					CommonUtils.getdriver().hideKeyboard();
+					if (textMinInput1.length() < textMinInput.length()) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for max input is " + text);
+						Assertions.assertFalse(
+								text.contains(
+										"" + fieldsText + " cannot be shorter than " + textMinInput1 + "characters."),
+								"" + fieldsText + " cannot be shorter than " + textMinInput1 + "characters.");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					min_test = min_test + 2;
 				}
+				//inserting max input value
+				for (p = 0; p < 3; p++) {
+					max_text = max_text - 1;
+					String textMaxInput = textGenerator.generate(max_text);
+					String textMaxInput1 = textGenerator.generate(max);
+					System.out.println("Max input data is: " + textMaxInput);
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.sendKeys(textMaxInput);
+					MobileActionGesture.scrollUsingText("Currency");
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.click();
+					CommonUtils.getdriver().hideKeyboard();
+					if (textMaxInput1.length() < textMaxInput.length()) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for max input is " + text);
+						Assertions.assertFalse(
+								text.contains(
+										"" + fieldsText + " cannot be longer than " + textMaxInput1 + "characters."),
+								"" + fieldsText + " cannot be longer than " + textMaxInput1 + "characters.");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					max_text = max_text + 2;
+				}
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+				CommonUtils.getdriver().hideKeyboard();
+				CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.sendKeys(textGenerator.generate(max));
+				MobileActionGesture.scrollUsingText("Currency");
+				CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.click();
+				CommonUtils.getdriver().hideKeyboard();
 				break;
 			case "Phone":
 			case "Phone Number":
@@ -176,215 +183,589 @@ public class FormAdvanceSettings {
 			case "S-Phone":
 			case "G-Phone Number":
 			case "S-Phone NUmber":
-				if (!isPhone) {
-					MobileActionGesture.scrollUsingText(fieldsText);
-					for (j = 0; j < 3; j++) {
-						min_test = min_test - 1;
-						String phoneNum = RandomStringUtils.randomNumeric(min_test);
-						String phoneNum1 = RandomStringUtils.randomNumeric(min);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
-						CommonUtils.getdriver()
-								.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-										+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.sendKeys(phoneNum);
-						MobileActionGesture.scrollUsingText("Currency");
-						CommonUtils.getdriver().findElement(MobileBy.xpath(
-								"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.click();
-						if (phoneNum1.length() < phoneNum.length()) {
-							String text = CommonUtils.OCR();
-							System.out.println("Expected toast message for min input is " + text);
-							Assertions.assertFalse(
-									text.contains(
-											"" + fieldsText + " cannot be shorter than " + phoneNum1 + "characters."),
-									"" + fieldsText + " cannot be shorter than " + phoneNum1 + "characters.");
-						}
-						MobileActionGesture.scrollUsingText(fieldsText);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-						min_test = min_test + 2;
-					}
-					for (k = 0; k < 3; k++) {
-						max_text = max_text - 1;
-						String phoneNum = RandomStringUtils.randomNumeric(max_text);
-						String phoneNum1 = RandomStringUtils.randomNumeric(max);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
-						CommonUtils.getdriver()
-								.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-										+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.sendKeys(phoneNum);
-						MobileActionGesture.scrollUsingText("Currency");
-						CommonUtils.getdriver().findElement(MobileBy.xpath(
-								"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.click();
-						if (phoneNum1.length() > phoneNum.length()) {
-							String text = CommonUtils.OCR();
-							System.out.println("Expected toast message for max input is " + text);
-							Assertions.assertFalse(
-									text.contains(
-											"" + fieldsText + " cannot be longer than " + phoneNum1 + "characters."),
-									"" + fieldsText + " cannot be longer than " + phoneNum1 + "characters.");
-						}
-						MobileActionGesture.scrollUsingText(fieldsText);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-						max_text = max_text + 2;
-					}
+				MobileActionGesture.scrollUsingText(fieldsText);
+				//inserting min input value
+				for (n = 0; n < 3; n++) {
+					min_test = min_test - 1;
+					String phoneNum = RandomStringUtils.randomNumeric(min_test);
+					String phoneNum1 = RandomStringUtils.randomNumeric(min);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
 					CommonUtils.getdriver()
 							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-							.sendKeys(RandomStringUtils.randomNumeric(max));
+							.sendKeys(phoneNum);
 					MobileActionGesture.scrollUsingText("Currency");
 					CommonUtils.getdriver().findElement(MobileBy.xpath(
 							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
-					isPhone = true;
+					CommonUtils.getdriver().hideKeyboard();
+					if (phoneNum1.length() < phoneNum.length()) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for min input is " + text);
+						Assertions.assertFalse(
+								text.contains("" + fieldsText + " cannot be shorter than " + phoneNum1 + "characters."),
+								"" + fieldsText + " cannot be shorter than " + phoneNum1 + "characters.");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					min_test = min_test + 2;
 				}
+				//inserting max input value
+				for (p = 0; p < 3; p++) {
+					max_text = max_text - 1;
+					String phoneNum = RandomStringUtils.randomNumeric(max_text);
+					String phoneNum1 = RandomStringUtils.randomNumeric(max);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.sendKeys(phoneNum);
+					MobileActionGesture.scrollUsingText("Currency");
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.click();
+					CommonUtils.getdriver().hideKeyboard();
+					if (phoneNum1.length() > phoneNum.length()) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for max input is " + text);
+						Assertions.assertFalse(
+								text.contains("" + fieldsText + " cannot be longer than " + phoneNum1 + "characters."),
+								"" + fieldsText + " cannot be longer than " + phoneNum1 + "characters.");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					max_text = max_text + 2;
+				}
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+				CommonUtils.getdriver().hideKeyboard();
+				CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.sendKeys(RandomStringUtils.randomNumeric(max));
+				MobileActionGesture.scrollUsingText("Currency");
+				CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.click();
+				CommonUtils.getdriver().hideKeyboard();
 				break;
 			case "Currency":
 			case "G-Currency":
 			case "S-Currency":
-				if (!isCurrency) {
-					MobileActionGesture.scrollUsingText(fieldsText);
-					for (j = 0; j < 3; j++) {
-						min_test = min_test - 1;
-						System.out.println("min input data: " + min_test);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
-						CommonUtils.getdriver()
-								.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-										+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.sendKeys(String.valueOf(min_test));
-						MobileActionGesture.scrollUsingText("Number");
-						CommonUtils.getdriver().findElement(MobileBy.xpath(
-								"//*[contains(@text,'Number')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.click();
-						if (min < min_test) {
-							String text = CommonUtils.OCR();
-							System.out.println("Expected toast message for min value is :" + text);
-							Assertions.assertFalse(text.contains("" + fieldsText + " cannot be less than " + min + "."),
-									"" + fieldsText + " cannot be less than " + min + ".");
-						}
-						MobileActionGesture.scrollUsingText(fieldsText);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-						min_test = min_test + 2;
-					}
-					for (k = 0; k < 3; k++) {
-						max_text = max_text - 1;
-						MobileActionGesture.scrollUsingText(fieldsText);
-						System.out.println("Max input data is: " + max_text);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
-						CommonUtils.getdriver()
-								.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-										+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.sendKeys(String.valueOf(max_text));
-						MobileActionGesture.scrollTospecifiedElement("Number");
-						CommonUtils.getdriver().findElement(MobileBy.xpath(
-								"//*[contains(@text,'Number')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.click();
-						if (max > max_text) {
-							String text = CommonUtils.OCR();
-							System.out.println("Expected toast message for max value is :" + text);
-							Assertions.assertFalse(
-									text.contains("" + fieldsText + " cannot be greater than " + max + "."),
-									"" + fieldsText + " cannot be greater than " + max + ".");
-						}
-						MobileActionGesture.scrollUsingText(fieldsText);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-						max_text = max_text + 2;
-					}
+				MobileActionGesture.scrollUsingText(fieldsText);
+				//inserting min input value
+				for (n = 0; n < 3; n++) {
+					min_test = min_test - 1;
+					System.out.println("min input data: " + min_test);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
 					CommonUtils.getdriver()
 							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-							.sendKeys(String.valueOf(max));
+							.sendKeys(String.valueOf(min_test));
 					MobileActionGesture.scrollUsingText("Number");
 					CommonUtils.getdriver().findElement(MobileBy.xpath(
 							"//*[contains(@text,'Number')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
-					isCurrency = true;
+					CommonUtils.getdriver().hideKeyboard();
+					if (min < min_test) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for min value is :" + text);
+						Assertions.assertFalse(text.contains("" + fieldsText + " cannot be less than " + min + "."),
+								"" + fieldsText + " cannot be less than " + min + ".");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					min_test = min_test + 2;
 				}
+				//inserting max input value
+				for (p = 0; p < 3; p++) {
+					max_text = max_text - 1;
+					MobileActionGesture.scrollUsingText(fieldsText);
+					System.out.println("Max input data is: " + max_text);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.sendKeys(String.valueOf(max_text));
+					MobileActionGesture.scrollTospecifiedElement("Number");
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'Number')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.click();
+					CommonUtils.getdriver().hideKeyboard();
+					if (max > max_text) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for max value is :" + text);
+						Assertions.assertFalse(text.contains("" + fieldsText + " cannot be greater than " + max + "."),
+								"" + fieldsText + " cannot be greater than " + max + ".");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					max_text = max_text + 2;
+				}
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+				CommonUtils.getdriver().hideKeyboard();
+				CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.sendKeys(String.valueOf(max));
+				MobileActionGesture.scrollUsingText("Number");
+				CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[contains(@text,'Number')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.click();
+				CommonUtils.getdriver().hideKeyboard();
 				break;
 			case "Number":
 			case "G-Number":
 			case "S-Number":
-				if (!isNumber) {
-					MobileActionGesture.scrollUsingText(fieldsText);
-					for (j = 0; j < 3; j++) {
-						min_test = min_test - 1;
-						System.out.println("min input data: " + min_test);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
-						CommonUtils.getdriver()
-								.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-										+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.sendKeys(String.valueOf(min_test));
-						MobileActionGesture.scrollUsingText("Currency");
-						CommonUtils.getdriver().findElement(MobileBy.xpath(
-								"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.click();
-						if (min < min_test) {
-							String text = CommonUtils.OCR();
-							System.out.println("Expected toast message for min value is :" + text);
-							Assertions.assertFalse(text.contains("" + fieldsText + " cannot be less than " + min + "."),
-									"" + fieldsText + " cannot be less than " + min + ".");
-						}
-						MobileActionGesture.scrollUsingText(fieldsText);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-						min_test = min_test + 2;
-					}
-					for (k = 0; k < 3; k++) {
-						max_text = max_text - 1;
-						MobileActionGesture.scrollUsingText(fieldsText);
-						System.out.println("Max input data is: " + max_text);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
-						CommonUtils.getdriver()
-								.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-										+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.sendKeys(String.valueOf(max_text));
-						MobileActionGesture.scrollTospecifiedElement("Currency");
-						CommonUtils.getdriver().findElement(MobileBy.xpath(
-								"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-								.click();
-						if (max > max_text) {
-							String text = CommonUtils.OCR();
-							System.out.println("Expected Toast message for max value is :" + text);
-							Assertions.assertFalse(
-									text.contains("" + fieldsText + " cannot be greater than " + max + "."),
-									"" + fieldsText + " cannot be greater than " + max + ".");
-						}
-						MobileActionGesture.scrollUsingText(fieldsText);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-						max_text = max_text + 2;
-					}
+				MobileActionGesture.scrollUsingText(fieldsText);
+				//inserting min input value
+				for (n = 0; n < 3; n++) {
+					min_test = min_test - 1;
+					System.out.println("min input data: " + min_test);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
 					CommonUtils.getdriver()
 							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-							.sendKeys(String.valueOf(max));
+							.sendKeys(String.valueOf(min_test));
 					MobileActionGesture.scrollUsingText("Currency");
 					CommonUtils.getdriver().findElement(MobileBy.xpath(
 							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
-					isNumber = true;
+					CommonUtils.getdriver().hideKeyboard();
+					if (min < min_test) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for min value is :" + text);
+						Assertions.assertFalse(text.contains("" + fieldsText + " cannot be less than " + min + "."),
+								"" + fieldsText + " cannot be less than " + min + ".");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					min_test = min_test + 2;
 				}
+				//inserting max input value
+				for (p = 0; p < 3; p++) {
+					max_text = max_text - 1;
+					MobileActionGesture.scrollUsingText(fieldsText);
+					System.out.println("Max input data is: " + max_text);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.sendKeys(String.valueOf(max_text));
+					MobileActionGesture.scrollTospecifiedElement("Currency");
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.click();
+					CommonUtils.getdriver().hideKeyboard();
+					if (max > max_text) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected Toast message for max value is :" + text);
+						Assertions.assertFalse(text.contains("" + fieldsText + " cannot be greater than " + max + "."),
+								"" + fieldsText + " cannot be greater than " + max + ".");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					max_text = max_text + 2;
+				}
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+				CommonUtils.getdriver().hideKeyboard();
+				CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.sendKeys(String.valueOf(max));
+				MobileActionGesture.scrollUsingText("Currency");
+				CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.click();
+				CommonUtils.getdriver().hideKeyboard();
 			default:
 				break;
 			}
 		}
 	}
+	
+	public static void min_max_withoutPages(int min, int max) throws MalformedURLException {
+		List<MobileElement> minMaxFields = CommonUtils.getdriver().findElements(
+				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		int minMaxFieldsCount = minMaxFields.size();
+		minMaxFields.clear();
+		// get last element text
+		boolean searchElement = true;
+		String lastTxtElement = null;
+
+		if (searchElement) {
+			MobileActionGesture.flingVerticalToBottom_Android();
+			minMaxFields.addAll(CommonUtils.getdriver().findElements(MobileBy
+					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			lastTxtElement = minMaxFields.get(minMaxFields.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]",
+					"");
+			System.out.println("Get the last element text: " + lastTxtElement);
+			minMaxFields.clear();
+			MobileActionGesture.flingToBegining_Android();
+		}
+
+		// add the elements to list
+		minMaxFields.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		minMaxFieldsCount = minMaxFields.size();
+		System.out.println("Before swiping fields count is: " + minMaxFieldsCount);
+
+		// scroll and add elements to list until the lastelement
+		while (!minMaxFields.isEmpty()) {
+			boolean flag = false;
+			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			minMaxFields.addAll(CommonUtils.getdriver().findElements(MobileBy
+					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			minMaxFieldsCount = minMaxFields.size();
+			System.out.println("After swiping fields count: " + minMaxFieldsCount);
+			for (int k = 0; k < minMaxFieldsCount; k++) {
+				if (minMaxFields.get(k).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
+					flag = true;
+				}
+			}
+			if (flag == true)
+				break;
+		}
+
+		// iterate and fill the form
+		for (int m = 0; m < minMaxFieldsCount; m++) {
+			String originalText = minMaxFields.get(m).getText();
+			String fieldsText = minMaxFields.get(m).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println(
+					"Before removing special character: " + originalText + "after removing regexp: " + fieldsText);
+
+			int n = 0, p = 0;
+			int min_test = min, max_text = max;
+
+			switch (fieldsText) {
+			case "Text":
+			case "G-Text":
+			case "S-Text":
+				MobileActionGesture.scrollUsingText(fieldsText);
+				RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
+				// inserting min input value
+				for (n = 0; n < 3; n++) {
+					min_test = min_test - 1;
+					String textMinInput = textGenerator.generate(min_test);
+					String textMinInput1 = textGenerator.generate(min);
+					System.out.println("min input data: " + textMinInput);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.sendKeys(textMinInput);
+					MobileActionGesture.scrollUsingText("Currency");
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.click();
+					CommonUtils.getdriver().hideKeyboard();
+					if (textMinInput1.length() < textMinInput.length()) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for max input is " + text);
+						Assertions.assertFalse(
+								text.contains(
+										"" + fieldsText + " cannot be shorter than " + textMinInput1 + "characters."),
+								"" + fieldsText + " cannot be shorter than " + textMinInput1 + "characters.");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					min_test = min_test + 2;
+				}
+				// inserting max input value
+				for (p = 0; p < 3; p++) {
+					max_text = max_text - 1;
+					String textMaxInput = textGenerator.generate(max_text);
+					String textMaxInput1 = textGenerator.generate(max);
+					System.out.println("Max input data is: " + textMaxInput);
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.sendKeys(textMaxInput);
+					MobileActionGesture.scrollUsingText("Currency");
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.click();
+					CommonUtils.getdriver().hideKeyboard();
+					if (textMaxInput1.length() < textMaxInput.length()) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for max input is " + text);
+						Assertions.assertFalse(
+								text.contains(
+										"" + fieldsText + " cannot be longer than " + textMaxInput1 + "characters."),
+								"" + fieldsText + " cannot be longer than " + textMaxInput1 + "characters.");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					max_text = max_text + 2;
+				}
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+				CommonUtils.getdriver().hideKeyboard();
+				CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.sendKeys(textGenerator.generate(max));
+				MobileActionGesture.scrollUsingText("Currency");
+				CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.click();
+				CommonUtils.getdriver().hideKeyboard();
+				break;
+			case "Phone":
+			case "Phone Number":
+			case "G-Phone":
+			case "S-Phone":
+			case "G-Phone Number":
+			case "S-Phone NUmber":
+				MobileActionGesture.scrollUsingText(fieldsText);
+				// inserting min input value
+				for (n = 0; n < 3; n++) {
+					min_test = min_test - 1;
+					String phoneNum = RandomStringUtils.randomNumeric(min_test);
+					String phoneNum1 = RandomStringUtils.randomNumeric(min);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.sendKeys(phoneNum);
+					MobileActionGesture.scrollUsingText("Currency");
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.click();
+					CommonUtils.getdriver().hideKeyboard();
+					if (phoneNum1.length() < phoneNum.length()) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for min input is " + text);
+						Assertions.assertFalse(
+								text.contains("" + fieldsText + " cannot be shorter than " + phoneNum1 + "characters."),
+								"" + fieldsText + " cannot be shorter than " + phoneNum1 + "characters.");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					min_test = min_test + 2;
+				}
+				// inserting max input value
+				for (p = 0; p < 3; p++) {
+					max_text = max_text - 1;
+					String phoneNum = RandomStringUtils.randomNumeric(max_text);
+					String phoneNum1 = RandomStringUtils.randomNumeric(max);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.sendKeys(phoneNum);
+					MobileActionGesture.scrollUsingText("Currency");
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.click();
+					CommonUtils.getdriver().hideKeyboard();
+					if (phoneNum1.length() > phoneNum.length()) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for max input is " + text);
+						Assertions.assertFalse(
+								text.contains("" + fieldsText + " cannot be longer than " + phoneNum1 + "characters."),
+								"" + fieldsText + " cannot be longer than " + phoneNum1 + "characters.");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					max_text = max_text + 2;
+				}
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+				CommonUtils.getdriver().hideKeyboard();
+				CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.sendKeys(RandomStringUtils.randomNumeric(max));
+				MobileActionGesture.scrollUsingText("Currency");
+				CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.click();
+				CommonUtils.getdriver().hideKeyboard();
+				break;
+			case "Currency":
+			case "G-Currency":
+			case "S-Currency":
+				MobileActionGesture.scrollUsingText(fieldsText);
+				// inserting min input value
+				for (n = 0; n < 3; n++) {
+					min_test = min_test - 1;
+					System.out.println("min input data: " + min_test);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.sendKeys(String.valueOf(min_test));
+					MobileActionGesture.scrollUsingText("Number");
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'Number')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.click();
+					CommonUtils.getdriver().hideKeyboard();
+					if (min < min_test) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for min value is :" + text);
+						Assertions.assertFalse(text.contains("" + fieldsText + " cannot be less than " + min + "."),
+								"" + fieldsText + " cannot be less than " + min + ".");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					min_test = min_test + 2;
+				}
+				// inserting max input value
+				for (p = 0; p < 3; p++) {
+					max_text = max_text - 1;
+					MobileActionGesture.scrollUsingText(fieldsText);
+					System.out.println("Max input data is: " + max_text);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.sendKeys(String.valueOf(max_text));
+					MobileActionGesture.scrollTospecifiedElement("Number");
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'Number')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.click();
+					CommonUtils.getdriver().hideKeyboard();
+					if (max > max_text) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for max value is :" + text);
+						Assertions.assertFalse(text.contains("" + fieldsText + " cannot be greater than " + max + "."),
+								"" + fieldsText + " cannot be greater than " + max + ".");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					max_text = max_text + 2;
+				}
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+				CommonUtils.getdriver().hideKeyboard();
+				CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.sendKeys(String.valueOf(max));
+				MobileActionGesture.scrollUsingText("Number");
+				CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[contains(@text,'Number')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.click();
+				CommonUtils.getdriver().hideKeyboard();
+				break;
+			case "Number":
+			case "G-Number":
+			case "S-Number":
+				MobileActionGesture.scrollUsingText(fieldsText);
+				// inserting min input value
+				for (n = 0; n < 3; n++) {
+					min_test = min_test - 1;
+					System.out.println("min input data: " + min_test);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.sendKeys(String.valueOf(min_test));
+					MobileActionGesture.scrollUsingText("Currency");
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.click();
+					CommonUtils.getdriver().hideKeyboard();
+					if (min < min_test) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected toast message for min value is :" + text);
+						Assertions.assertFalse(text.contains("" + fieldsText + " cannot be less than " + min + "."),
+								"" + fieldsText + " cannot be less than " + min + ".");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					min_test = min_test + 2;
+				}
+				// inserting max input value
+				for (p = 0; p < 3; p++) {
+					max_text = max_text - 1;
+					MobileActionGesture.scrollUsingText(fieldsText);
+					System.out.println("Max input data is: " + max_text);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					CommonUtils.getdriver().hideKeyboard();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.sendKeys(String.valueOf(max_text));
+					MobileActionGesture.scrollTospecifiedElement("Currency");
+					CommonUtils.getdriver().findElement(MobileBy.xpath(
+							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+							.click();
+					CommonUtils.getdriver().hideKeyboard();
+					if (max > max_text) {
+						String text = CommonUtils.OCR();
+						System.out.println("Expected Toast message for max value is :" + text);
+						Assertions.assertFalse(text.contains("" + fieldsText + " cannot be greater than " + max + "."),
+								"" + fieldsText + " cannot be greater than " + max + ".");
+					}
+					MobileActionGesture.scrollUsingText(fieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
+					max_text = max_text + 2;
+				}
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+				CommonUtils.getdriver().hideKeyboard();
+				CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
+								+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.sendKeys(String.valueOf(max));
+				MobileActionGesture.scrollUsingText("Currency");
+				CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
+						.click();
+				CommonUtils.getdriver().hideKeyboard();
+			default:
+				break;
+			}
+		}
+	}
+	
 
 	// verify form with pagination and section tab exist or not
 	public static void clickSectionInPages() throws MalformedURLException, InterruptedException {
@@ -440,12 +821,13 @@ public class FormAdvanceSettings {
 //		Forms.formSaveButton();
 	}
 
-	// get fields when form did not pages
+	// get fields when form did not had pages
 	public static void getFormFieldswhenPageNotExist(String basecondition, String valueOf, String inputData, int i)
 			throws MalformedURLException, InterruptedException {
 		// get all formfields elements xpath
-		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(
-				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath(
+				"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
+						+ valueOf + "')]"));
 		int countOfFields = formFields1.size();
 		formFields1.clear();
 		String formFieldsLabel = valueOf;
@@ -465,16 +847,18 @@ public class FormAdvanceSettings {
 		}
 
 		// add the elements to list
-		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
-				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
+				"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
+						+ valueOf + "')]")));
 		countOfFields = formFields1.size();
 		System.out.println("Before swiping fields count is: " + countOfFields);
 		// scroll and add elements to list until the lastelement
-		while (!formFields1.isEmpty()) {
+		while (formFields1.isEmpty()) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
-			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
-					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
+					"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
+							+ valueOf + "')]")));
 			countOfFields = formFields1.size();
 			System.out.println("After swiping fields count: " + countOfFields);
 			for (int j = 0; j < countOfFields; j++) {
@@ -576,7 +960,7 @@ public class FormAdvanceSettings {
 		int i1 = i + 1;
 		// get all formfields elements xpath
 		List<MobileElement> formFields1 = CommonUtils.getdriver()
-				.findElements(MobileBy.xpath("//android.widget.TextView[contains(@text,'PAGE " + i1
+				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
 						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
 						+ valueOf + "')]"));
 		int countOfFields = formFields1.size();
@@ -587,9 +971,8 @@ public class FormAdvanceSettings {
 		String lastElementText = null;
 		if (searchElement) {
 			MobileActionGesture.flingVerticalToBottom_Android();
-			formFields1.addAll(CommonUtils.getdriver()
-					.findElements(MobileBy.xpath("//android.widget.TextView[contains(@text,'PAGE " + i1
-							+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
+					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			lastElementText = formFields1.get(formFields1.size() - 1).getText();
 			System.out.println("Get the element text :" + lastElementText);
 			formFields1.clear();
@@ -597,18 +980,17 @@ public class FormAdvanceSettings {
 		}
 
 		// add elements to list of formfields displaying in first screen
-		formFields1.addAll(CommonUtils.getdriver()
-				.findElements(MobileBy.xpath("//android.widget.TextView[contains(@text,'PAGE " + i1
-						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
-						+ valueOf + "')]")));
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
+				+ valueOf + "')]")));
 		countOfFields = formFields1.size();
 		System.out.println("Before swiping count: " + countOfFields);
 
-		while (!formFields1.isEmpty()) {
+		while (formFields1.isEmpty()) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
 			formFields1.addAll(CommonUtils.getdriver()
-					.findElements(MobileBy.xpath("//android.widget.TextView[contains(@text,'PAGE " + i1
+					.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
 							+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
 							+ valueOf + "')]")));
 			countOfFields = formFields1.size();
@@ -638,6 +1020,7 @@ public class FormAdvanceSettings {
 				case "S-Text":
 					if (!isText) {
 						MobileActionGesture.scrollUsingText(fieldsText);
+						//text method
 						textFieldDependencyInput(basecondition, OriginalText, fieldsText, formFieldsLabelInput, i);
 						isText = true;
 					}
@@ -1216,7 +1599,7 @@ public class FormAdvanceSettings {
 				continue;
 			}
 			// formFields should not visible in pages
-
+			
 		}
 	}
 
@@ -1340,12 +1723,11 @@ public class FormAdvanceSettings {
 				break;
 		}
 		for (int i = 0; i < formFieldsLists.size(); i++) {
+			String originalFields = formFieldsLists.get(i).getText();
 			String fieldsLabelText = formFieldsLists.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Elements text " + fieldsLabelText);
-			if (fieldsLabelText.equals(formFieldsLabel)) {
-				continue;
-			}
+			System.out.println("Original text: " + originalFields + "\nElements text: " + fieldsLabelText);
 			// here code for elements should visible with pages
+			MobileActionGesture.scrollUsingText(lastTxtElement);
 			CommonUtils.getdriver()
 					.findElement(
 							MobileBy.xpath("//android.widget.TextView[starts-with(@text,'" + fieldsLabelText + "')]"))
@@ -1400,10 +1782,9 @@ public class FormAdvanceSettings {
 		for (int i = 0; i < countOfFields; i++) {
 			String formFieldsText = formFields1.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("field element text " + formFieldsText);
-			if (formFieldsText.equals(formFieldsLabel)) {
-				continue;
-			}
+
 			// here code for elements should be visible without pages
+			MobileActionGesture.scrollUsingText(lastTxtElement);
 			CommonUtils.getdriver()
 					.findElement(
 							MobileBy.xpath("//android.widget.TextView[starts-with(@text,'" + formFieldsText + "')]"))
@@ -1476,7 +1857,10 @@ public class FormAdvanceSettings {
 		for (int i = 0; i < formFieldsLists.size(); i++) {
 			String fieldsLabelText = formFieldsLists.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("Elements text " + fieldsLabelText);
-			if (fieldsLabelText.equals(formFieldsLabel)) {
+			if (CommonUtils.getdriver()
+					.findElement(MobileBy
+							.xpath("//*[starts-with(@text,'" + formFieldsLabel + "')]/parent::*/parent::*/child::*[2]"))
+					.isEnabled()) {
 				continue;
 			}
 			// formFields should be disable in pages
@@ -1534,9 +1918,13 @@ public class FormAdvanceSettings {
 				break;
 		}
 		for (int i = 0; i < countOfFields; i++) {
+			String originalFields = formFields1.get(i).getText();
 			String formFieldsText = formFields1.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("field element text " + formFieldsText);
-			if (formFieldsText.equals(formFieldsLabel)) {
+			System.out.println("original Fields text: " + originalFields + "\nfield element text: " + formFieldsText);
+			if (CommonUtils.getdriver()
+					.findElement(MobileBy
+							.xpath("//*[starts-with(@text,'" + formFieldsLabel + "')]/parent::*/parent::*/child::*[2]"))
+					.isEnabled()) {
 				continue;
 			}
 			// formFields should be disable without pages
@@ -1561,7 +1949,7 @@ public class FormAdvanceSettings {
 			}
 		} else {
 			// validating formfields should enable in form without pages
-
+			checking_formFields_should_enable_without_Pagination(formFieldsLabel);
 		}
 	}
 
@@ -1613,10 +2001,8 @@ public class FormAdvanceSettings {
 		for (int i = 0; i < formFieldsLists.size(); i++) {
 			String fieldsLabelText = formFieldsLists.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("Elements text " + fieldsLabelText);
-			if (fieldsLabelText.equals(formFieldsLabel)) {
-				continue;
-			}
 			// formFields should be enable in pages
+			MobileActionGesture.scrollUsingText(lastTxtElement);
 			CommonUtils.getdriver()
 					.findElement(MobileBy
 							.xpath("//*[starts-with(@text,'" + fieldsLabelText + "')]/parent::*/parent::*/child::*[2]"))
@@ -1672,9 +2058,6 @@ public class FormAdvanceSettings {
 		for (int i = 0; i < countOfFields; i++) {
 			String formFieldsText = formFields1.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("field element text " + formFieldsText);
-			if (formFieldsText.equals(formFieldsLabel)) {
-				continue;
-			}
 			// formFields should be disable without pages
 			CommonUtils.getdriver()
 					.findElement(MobileBy
@@ -1746,8 +2129,7 @@ public class FormAdvanceSettings {
 		if (searchElement) {
 			MobileActionGesture.flingVerticalToBottom_Android();
 			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
-					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[contains(@text,'"
-					+ formFieldLabel + "')]")));
+					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText()
 					.replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("Get the last element text: " + lastTxtElement);
@@ -1763,7 +2145,7 @@ public class FormAdvanceSettings {
 		System.out.println("Before swiping fields count is: " + countOfFields);
 
 		// scroll and add elements to list until the lastelement
-		while (!formFieldsLists.isEmpty()) {
+		while (formFieldsLists.isEmpty()) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
 			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
@@ -1865,8 +2247,7 @@ public class FormAdvanceSettings {
 		if (searchElement) {
 			MobileActionGesture.flingVerticalToBottom_Android();
 			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
-					"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[contains(@text,'"
-							+ formFieldLabel + "')]")));
+					"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("Get the last element text: " + lastTxtElement);
 			formFields1.clear();
@@ -1880,9 +2261,8 @@ public class FormAdvanceSettings {
 		countOfFields = formFields1.size();
 		System.out.println("Before swiping fields count is: " + countOfFields);
 
-		boolean isText = false;
 		// scroll and add elements to list until the lastelement
-		while (!formFields1.isEmpty()) {
+		while (formFields1.isEmpty()) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
 			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
@@ -1912,7 +2292,6 @@ public class FormAdvanceSettings {
 			case "Text":
 			case "G-Text":
 			case "S-Text":
-//				if (!isText) {
 				MobileActionGesture.scrollUsingText(fieldsText);
 				/* inputting the matching regular expression */
 				CommonUtils.getdriver()
@@ -1956,8 +2335,6 @@ public class FormAdvanceSettings {
 						.findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 						.clear();
-//					isText = true;
-				// }
 			default:
 				break;
 			}

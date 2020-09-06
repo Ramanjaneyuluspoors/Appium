@@ -114,7 +114,7 @@ public class CommonUtils {
 
 	public static void implicitWait() {
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-	}
+	} 
 
 	// screenshot method
 	public static String takeScreenShot() {
