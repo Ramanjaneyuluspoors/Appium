@@ -12,9 +12,11 @@ import java.net.MalformedURLException;
 import java.time.Duration;
 
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.interactions.touch.TouchActions;
 
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.MultiTouchAction;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
@@ -60,6 +62,14 @@ public class MobileActionGesture {
 		new TouchAction(CommonUtils.getdriver()).tap(tapOptions().withElement(element(mobileElement)))
 				.waitAction(waitOptions(Duration.ofMillis(50))).perform();
 	}
+	
+	// Double Tap to an element for 50 milliseconds
+		public static void doubleTapByElement(MobileElement mobileElement) throws MalformedURLException {
+			TouchActions action = new TouchActions(CommonUtils.getdriver());
+			action.doubleTap(mobileElement);
+			action.perform();
+		}
+	
 
 	// Horizontal Swipe by percentages
 	public static void horizontalSwipeByPercentage(double startPercentage, double endPercentage,
@@ -134,12 +144,10 @@ public class MobileActionGesture {
 
 	public static void flingVerticalToBottom_Android() {
 		try {
-//	            CommonUtils.getdriver().findElements(MobileBy.AndroidUIAutomator(
-//	                    "new UiScrollable(new UiSelector()).setAsVerticalList().flingToEnd()"));
-			    CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
-					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingForward();"));
+	            CommonUtils.getdriver().findElements(MobileBy.AndroidUIAutomator(
+	                    "new UiScrollable(new UiSelector()).setAsVerticalList().flingToEnd(2)"));
 //			    CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
-//				    	"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollToEnd(1)"));
+//					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingForward();"));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -147,8 +155,10 @@ public class MobileActionGesture {
 
 	public static void flingToBegining_Android() {
 		try {
+//			    CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
+//					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingBackward();"));
 			    CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
-					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingBackward();"));
+						"new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToBeginning(2);"));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -189,6 +199,14 @@ public class MobileActionGesture {
 	public static void scrollUsingTouchActions_ByElements(MobileElement startElement, MobileElement endElement) {
 		new TouchAction(CommonUtils.getdriver()).press(element(startElement)).waitAction(waitOptions(ofMillis(50)))
 				.moveTo(element(endElement)).release().perform();
+	}
+	
+	// Multitouch action by using an android element
+	public static void multiTouchByElement(MobileElement androidElement) {
+		TouchAction press = new TouchAction(CommonUtils.getdriver()).press(element(androidElement))
+				.waitAction(waitOptions(ofMillis(50))).release();
+
+		new MultiTouchAction(CommonUtils.getdriver()).add(press).perform();
 	}
 
 }

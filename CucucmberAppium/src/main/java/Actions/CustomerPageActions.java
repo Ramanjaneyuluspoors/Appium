@@ -11,7 +11,6 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import utils.CommonUtils;
-import utils.Forms;
 import utils.MediaPermission;
 
 public class CustomerPageActions {

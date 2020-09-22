@@ -7,6 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import utils.CommonUtils;
+import utils.Forms;
 import utils.MediaPermission;
 
 public class HomepageAction {
@@ -31,7 +32,7 @@ public class HomepageAction {
 				try {
 					CommonUtils.interruptSyncAndLetmeWork();
 					if (CommonUtils.getdriver().findElement(MobileBy.id("saveForm")).isDisplayed()) {
-						CustomerPageActions.verifyFormPagesAndFill();
+						Forms.verifyFormPagesAndFill();
 					}
 				} catch (Exception e) {
 					MediaPermission.signinMediaPermission();
@@ -45,6 +46,7 @@ public class HomepageAction {
 
 	// verifying user home page navigation
 	public static void NavigationVerfication() throws InterruptedException {
+		Thread.sleep(2000);
 		CommonUtils.waitForElementVisibility("//*[@text='Home']");
 		MobileElement name = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Home']"));
 		if (name.getText().contains("Home")) {
@@ -64,7 +66,7 @@ public class HomepageAction {
 			// verify if sign-out form exist then fill if not signout from map
 			try {
 				if (CommonUtils.getdriver().findElement(MobileBy.id("saveForm")).isDisplayed()) {
-					CustomerPageActions.verifyFormPagesAndFill();
+					Forms.verifyFormPagesAndFill();
 				}
 			} catch (Exception e) {
 				MediaPermission.signinMediaPermission();
