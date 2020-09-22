@@ -17,7 +17,7 @@ import utils.ServerService;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "C:\\Users\\spoors\\git\\Appium\\CucucmberAppium\\src\\test\\java\\Featurefile", 
-glue = "effortSteps",dryRun=false, strict=true, monochrome=true, tags= {"@signin or @RegularExpression"},
+glue = "effortSteps",dryRun=false, strict=true, monochrome=true, tags= {"@signin"},
 plugin = {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"})
 public class TestRunner { 
 	public static AndroidDriver<MobileElement> driver;
@@ -28,7 +28,7 @@ public class TestRunner {
     
 	@BeforeClass 
 	public static void setup() throws IOException {
-		if (driver == null) {   
+		if (driver == null) {    
 			ServerService.services(""+nodejs+"" , ""+appiumjs+"");
 			ServerService.stopService(); 
 			ServerService.startService(); 
