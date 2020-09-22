@@ -40,15 +40,15 @@ Scenario: Day plan Activity
 Scenario: Work Creation 
 	Given Scroll to work "Sanity" 
 	When user search for work 
-		|Task|
+		|Sanity|
 	Then verify work exist or not 
-		|Task|
+		|Sanity|
 	And perform workaction and move to homepage 
 	
 @Form 
 Scenario: Form completion with allFields 
 	Given Scroll to form and click 
-		|formPagination|
+		|AllFieldsForm new|
 	Then fill form to complete 
 	
 @signout
@@ -58,17 +58,23 @@ Scenario: Signout
 @formMinMax	
 Scenario: Form MinMax Validations
 	Given Swipe to MinMax form
-		|DeleteForm-1|
+		|MInMaxForm|
 	When user enters Min value 5 and Max value 9
 	
 @FieldDependencyBasedOnOtherFields	
 Scenario: Form Field Dependency Based on Values in Other Fields
 	Given scroll to specified form
-		|Form-5|
-	When user gives the basecondition "Mandatory when" and dependencyfield "Dropdown" and input is "extrawordsabc,abc"
+		|formPagination|
+	When user gives the basecondition "Hide when" and dependencyfield "Text" and input is "ramu"
 
 @RegularExpression	
 Scenario: Regular Expression Validations	
 	Given move to specified form
 		|Form-5|
 	When user enters the Regular Expression "[0-9A-Za-z]" for datatype "Text"
+	
+@Highlighting_Background_Field_Based_on_FieldValue 
+Scenario: Highlighting Background Field Based on FieldValue 
+	Given scroll to specified color form
+		|DeleteForm-3| 
+	When user enters the field value 10 for datatype "Number"  
