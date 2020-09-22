@@ -2,6 +2,7 @@ package effortSteps;
 
 import java.net.MalformedURLException;
 
+import Actions.CustomerCreation;
 import Actions.CustomerPageActions;
 import Actions.HomepageAction;
 import Actions.MobileActionGesture;
@@ -17,7 +18,7 @@ import utils.RoutePlan;
 import utils.Work;
 
 public class StepsImplementation {
-
+ 
 	@Given("Navigate to Home page")
 	public void navigate_to_Home_page() throws InterruptedException {
 	    HomepageAction.NavigationVerfication();
@@ -25,7 +26,11 @@ public class StepsImplementation {
 
 	@When("user click on signin")
 	public void user_click_on_signin() throws MalformedURLException, InterruptedException {
-		HomepageAction.signInAction(); // need to optimize taking 37s time to signin using location if sign-in forn
+		MobileActionGesture.scrollTospecifiedElement("Customers");
+		CustomerPageActions.customerFab();
+//		CustomerPageActions.captureImage();
+		CustomerCreation.createCustomerWithAllFields();
+//		HomepageAction.signInAction(); // need to optimize taking 37s time to signin using location if sign-in form
 //    	Forms.createEntity();										// does'nt exist
 	}
 
@@ -57,7 +62,7 @@ public class StepsImplementation {
 	@And("^Do customer activity and checkout$")
 	public void Do_customer_activity_and_checkout(String formName) throws MalformedURLException, InterruptedException {
 		CustomerPageActions.clickActivity(formName);
-		CustomerPageActions.verifyFormPagesAndFill();
+		Forms.verifyFormPagesAndFill();
 		CustomerPageActions.HomepageCusCheckout();
 	}
 
@@ -79,7 +84,7 @@ public class StepsImplementation {
 	@And("perform routeactivity")
 	public void perform_routeactivity() throws MalformedURLException, InterruptedException {
 		RoutePlan.performRouteActivity();
-		CustomerPageActions.verifyFormPagesAndFill();
+		Forms.verifyFormPagesAndFill();
 	}
 
 	@Then("complete client visit do customer checkout")
@@ -109,7 +114,8 @@ public class StepsImplementation {
 
 	@Given("Scroll to work {string}")
 	public void scroll_to_work(String workName) throws MalformedURLException, InterruptedException {
-		utils.Work.goToWorkPage(workName);
+//		Work.goToWorkPage(workName);
+		Work.scrollToSpecifiedWork(workName);
 	}
 
 	@When("^user search for work$")
@@ -133,12 +139,13 @@ public class StepsImplementation {
 
 	@Given("^Scroll to form and click$")
 	public void scroll_to_form_and_click(String form) throws InterruptedException, MalformedURLException {
+		Thread.sleep(13000);
 		Forms.verifyForminHomePage(form);
 	}
 
 	@Then("fill form to complete")
 	public void fill_form_to_complete() throws MalformedURLException, InterruptedException {
-		CustomerPageActions.verifyFormPagesAndFill();
+		Forms.verifyFormPagesAndFill();
 		CommonUtils.goBackward();
 	}
 
@@ -154,6 +161,7 @@ public class StepsImplementation {
 	
 	@Then("user enters Min value {int} and Max value {int}")
 	public static void user_enters_Min_value_and_Max_value(int min, int max) throws MalformedURLException, InterruptedException {
+		FormAdvanceSettings.clickSectionInPages();
 		FormAdvanceSettings.minMaxTesting(min, max);
 	}
 	
@@ -177,5 +185,16 @@ public class StepsImplementation {
 	public void user_enters_the_Regular_Expression_for_datatype(String regExp, String formFieldLabel) throws MalformedURLException, InterruptedException {
 		FormAdvanceSettings.clickSectionInPages();
 		FormAdvanceSettings.regularExpressionTesting(regExp, formFieldLabel);
+	}
+	
+	@Given("^scroll to specified color form$")
+	public static void scroll_to_specified_color_form(String colorForm) throws MalformedURLException {
+		Forms.goToFormPage(colorForm);
+	}
+	
+	@When("user enters the field value {int} for datatype {string}")
+	public static void user_enters_the_field_value_for_datatype(int fieldValue, String fieldLabel) throws MalformedURLException, InterruptedException {
+		FormAdvanceSettings.clickSectionInPages();
+		FormAdvanceSettings.testing_highlighting_background_field_basedOn_fieldValue(fieldValue, fieldLabel);
 	}
 }
