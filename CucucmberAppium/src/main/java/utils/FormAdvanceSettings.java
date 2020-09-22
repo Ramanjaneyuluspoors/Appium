@@ -47,20 +47,15 @@ public class FormAdvanceSettings {
 						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 		int countOfFields = formFields1.size();
 		formFields1.clear();
-		// get last element text
-		boolean searchElement = true;
 		String lastTxtElement = null;
-
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFields1 = CommonUtils.getdriver()
-					.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
-							+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
-			lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Get the last element text: " + lastTxtElement);
-			formFields1.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+		// swipe to bottom and get the last element from the list
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFields1.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
 		formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
@@ -71,7 +66,7 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (!formFields1.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
 					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 			countOfFields = formFields1.size();
@@ -91,7 +86,7 @@ public class FormAdvanceSettings {
 			String fieldsText = formFields1.get(m).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println(
 					"Before removing special character: " + originalText + "\nafter removing regexp: " + fieldsText);
-			
+
 			int n = 0, p = 0;
 			int min_test = min, max_text = max;
 
@@ -101,7 +96,7 @@ public class FormAdvanceSettings {
 			case "S-Text":
 				MobileActionGesture.scrollUsingText(fieldsText);
 				RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
-				//inserting min input value
+				// inserting min input value
 				for (n = 0; n < 3; n++) {
 					min_test = min_test - 1;
 					String textMinInput = textGenerator.generate(min_test);
@@ -132,7 +127,7 @@ public class FormAdvanceSettings {
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
 					min_test = min_test + 2;
 				}
-				//inserting max input value
+				// inserting max input value
 				for (p = 0; p < 3; p++) {
 					max_text = max_text - 1;
 					String textMaxInput = textGenerator.generate(max_text);
@@ -184,7 +179,7 @@ public class FormAdvanceSettings {
 			case "G-Phone Number":
 			case "S-Phone NUmber":
 				MobileActionGesture.scrollUsingText(fieldsText);
-				//inserting min input value
+				// inserting min input value
 				for (n = 0; n < 3; n++) {
 					min_test = min_test - 1;
 					String phoneNum = RandomStringUtils.randomNumeric(min_test);
@@ -213,7 +208,7 @@ public class FormAdvanceSettings {
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
 					min_test = min_test + 2;
 				}
-				//inserting max input value
+				// inserting max input value
 				for (p = 0; p < 3; p++) {
 					max_text = max_text - 1;
 					String phoneNum = RandomStringUtils.randomNumeric(max_text);
@@ -259,7 +254,7 @@ public class FormAdvanceSettings {
 			case "G-Currency":
 			case "S-Currency":
 				MobileActionGesture.scrollUsingText(fieldsText);
-				//inserting min input value
+				// inserting min input value
 				for (n = 0; n < 3; n++) {
 					min_test = min_test - 1;
 					System.out.println("min input data: " + min_test);
@@ -286,7 +281,7 @@ public class FormAdvanceSettings {
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
 					min_test = min_test + 2;
 				}
-				//inserting max input value
+				// inserting max input value
 				for (p = 0; p < 3; p++) {
 					max_text = max_text - 1;
 					MobileActionGesture.scrollUsingText(fieldsText);
@@ -331,7 +326,7 @@ public class FormAdvanceSettings {
 			case "G-Number":
 			case "S-Number":
 				MobileActionGesture.scrollUsingText(fieldsText);
-				//inserting min input value
+				// inserting min input value
 				for (n = 0; n < 3; n++) {
 					min_test = min_test - 1;
 					System.out.println("min input data: " + min_test);
@@ -358,7 +353,7 @@ public class FormAdvanceSettings {
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
 					min_test = min_test + 2;
 				}
-				//inserting max input value
+				// inserting max input value
 				for (p = 0; p < 3; p++) {
 					max_text = max_text - 1;
 					MobileActionGesture.scrollUsingText(fieldsText);
@@ -403,26 +398,21 @@ public class FormAdvanceSettings {
 			}
 		}
 	}
-	
+
 	public static void min_max_withoutPages(int min, int max) throws MalformedURLException {
 		List<MobileElement> minMaxFields = CommonUtils.getdriver().findElements(
 				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 		int minMaxFieldsCount = minMaxFields.size();
 		minMaxFields.clear();
-		// get last element text
-		boolean searchElement = true;
+		//swipe and get the last element from the list
 		String lastTxtElement = null;
-
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			minMaxFields.addAll(CommonUtils.getdriver().findElements(MobileBy
-					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = minMaxFields.get(minMaxFields.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]",
-					"");
-			System.out.println("Get the last element text: " + lastTxtElement);
-			minMaxFields.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+		MobileActionGesture.flingVerticalToBottom_Android();
+		minMaxFields.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = minMaxFields.get(minMaxFields.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		minMaxFields.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
 		minMaxFields.addAll(CommonUtils.getdriver().findElements(MobileBy
@@ -433,7 +423,7 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (!minMaxFields.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			minMaxFields.addAll(CommonUtils.getdriver().findElements(MobileBy
 					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			minMaxFieldsCount = minMaxFields.size();
@@ -765,7 +755,6 @@ public class FormAdvanceSettings {
 			}
 		}
 	}
-	
 
 	// verify form with pagination and section tab exist or not
 	public static void clickSectionInPages() throws MalformedURLException, InterruptedException {
@@ -795,6 +784,8 @@ public class FormAdvanceSettings {
 		}
 	}
 
+	static boolean hasNextPage = false;
+
 	// Validating Hide disable mandatory conditions in forms
 	public static void fieldDependencyValueOtherFields(String basecondition, String valueOf, String inputData)
 			throws MalformedURLException, InterruptedException {
@@ -804,18 +795,23 @@ public class FormAdvanceSettings {
 		int pageCount = pagination.size();
 		System.out.println("Total pages are: " + pageCount);
 		int i = 0;
+
 		// checkif pagination link exists
 		if (pagination.size() > 0) {
-			System.out.println("pagination exists");
+			System.out.println("******** Pagination exists ********");
+
 			// click on pagination link
 			for (i = 0; i < pagination.size(); i++) {
-				pagination.get(i).click();
-				// field dependency value based on other fields in pages
-				validatingFieldDependencyOfOtherFields(basecondition, valueOf, inputData, i);
+				System.out.println("Current page is: " + pagination.get(i));
+				if (!hasNextPage) {
+					pagination.get(i).click();
+					// field dependency value based on other fields in pages
+					validatingFieldDependencyOfOtherFields(basecondition, valueOf, inputData, i);
+				}
 			}
 		} else {
-			System.out.println("pagination not exists");
-			// field dependency value based on other fields
+			System.out.println("******** Pagination not exists ********");
+			// field dependency value based on other fields with-out pagination
 			getFormFieldswhenPageNotExist(basecondition, valueOf, inputData, i);
 		}
 //		Forms.formSaveButton();
@@ -828,24 +824,22 @@ public class FormAdvanceSettings {
 		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath(
 				"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
 						+ valueOf + "')]"));
+		List<MobileElement> formFields2 = CommonUtils.getdriver().findElements(
+				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 		int countOfFields = formFields1.size();
 		formFields1.clear();
 		String formFieldsLabel = valueOf;
 		String formFieldsLabelInput = inputData;
-		// get last element text
-		boolean searchElement = true;
+
+		// swipe and get the last element text from the list
 		String lastTxtElement = null;
-
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
-					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = formFields1.get(formFields1.size() - 1).getText();
-			System.out.println("Get the last element text: " + lastTxtElement);
-			formFields1.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
-
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFields1.get(formFields1.size() - 1).getText();
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFields1.clear();
+		MobileActionGesture.flingToBegining_Android();
 		// add the elements to list
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
 				"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
@@ -855,14 +849,16 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (formFields1.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
 					"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
 							+ valueOf + "')]")));
+			formFields2.addAll(CommonUtils.getdriver().findElements(MobileBy
+					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFields1.size();
 			System.out.println("After swiping fields count: " + countOfFields);
 			for (int j = 0; j < countOfFields; j++) {
-				if (formFields1.get(j).getText().equals(lastTxtElement)) {
+				if (formFields1.size() > 0 || formFields2.get(j).getText().equals(lastTxtElement)) {
 					flag = true;
 				}
 			}
@@ -963,21 +959,25 @@ public class FormAdvanceSettings {
 				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
 						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
 						+ valueOf + "')]"));
+		List<MobileElement> formFields2 = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
+						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 		int countOfFields = formFields1.size();
+		// remove fields from list
 		formFields1.clear();
 		String formFieldsLabel = valueOf;
 		String formFieldsLabelInput = inputData;
-		boolean searchElement = true;
 		String lastElementText = null;
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
-					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastElementText = formFields1.get(formFields1.size() - 1).getText();
-			System.out.println("Get the element text :" + lastElementText);
-			formFields1.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+
+		// scroll and get last element from the list
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastElementText = formFields1.get(formFields1.size() - 1).getText();
+		System.out.println("Get the element text :" + lastElementText);
+		// remove fields from list
+		formFields1.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add elements to list of formfields displaying in first screen
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
@@ -986,22 +986,27 @@ public class FormAdvanceSettings {
 		countOfFields = formFields1.size();
 		System.out.println("Before swiping count: " + countOfFields);
 
+		// if element is not exist scroll to specified element and add to list
 		while (formFields1.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
-			formFields1.addAll(CommonUtils.getdriver()
-					.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
-							+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
-							+ valueOf + "')]")));
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
+			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
+					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
+					+ valueOf + "')]")));
+			formFields2.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
+					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFields1.size();
 			System.out.println("After swiping fields count: " + countOfFields);
-			for (int j = 0; j < countOfFields; j++) {
-				if (formFields1.get(j).getText().equals(lastElementText)) {
+			for (int j = 0; j < formFields2.size(); j++) {
+				// if specified element found break the for loop
+				if (formFields1.size() > 0 || formFields2.get(j).getText().equals(lastElementText)) {
 					flag = true;
 				}
 			}
-			if (flag == true)
+			// break the while loop
+			if (flag == true) {
 				break;
+			}
 		}
 
 		boolean isDate = false, isText = false, isPickList = false, isCurrency = false, isNumber = false,
@@ -1013,14 +1018,14 @@ public class FormAdvanceSettings {
 			System.out.println(
 					"Before removing regular expression: " + OriginalText + "\nAfter removing regexp: " + fieldsText);
 			if (fieldsText.equals(formFieldsLabel)) {
-
+				hasNextPage = true;
 				switch (fieldsText) {
 				case "Text":
 				case "G-Text":
 				case "S-Text":
 					if (!isText) {
 						MobileActionGesture.scrollUsingText(fieldsText);
-						//text method
+						// text method
 						textFieldDependencyInput(basecondition, OriginalText, fieldsText, formFieldsLabelInput, i);
 						isText = true;
 					}
@@ -1097,20 +1102,11 @@ public class FormAdvanceSettings {
 		String textInputData = null;
 		String[] criteriaCondition = baseCondition;
 		String[] selectCondition = { "Equals", "Contain", "Does not contain", "Starts with", "Ends with" };
+		String[] myInput = {formFieldsLabelInput,formFieldsLabelInput + "extraWords", "extraWords" + formFieldsLabelInput, "extraWords"};
 		for (int k = 0; k < 4; k++) {
-			if (k == 0) {
-				textInputData = formFieldsLabelInput;
-			}
-			if (k == 1) {
-				textInputData = formFieldsLabelInput + "extraWords";
-			}
-			if (k == 2) {
-				textInputData = "extraWords" + formFieldsLabelInput;
-			}
-			if (k == 3) {
-				textInputData = "extraWords";
-			}
+			textInputData = myInput[k];
 			if (pagination.size() > 0) {
+				CommonUtils.waitForElementVisibility("//*[contains(@text,'PAGE " + i + "')]");
 				pagination.get(i).click();
 				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 						"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
@@ -1526,8 +1522,8 @@ public class FormAdvanceSettings {
 				.isDisplayed()) {
 			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 					"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveWorkflowButton\")")).click();
-			Thread.sleep(300);
 		}
+		Thread.sleep(300);
 	}
 
 	// validating formfields are hidden in form with pagination
@@ -1558,17 +1554,15 @@ public class FormAdvanceSettings {
 		int countOfFields = formFieldsLists.size();
 		formFieldsLists.clear();
 		String lastTxtElement = null;
-		boolean searchElement = true;
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
-					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText()
-					.replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Get the last element text: " + lastTxtElement);
-			formFieldsLists.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+		//swipe and get the last element
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]",
+				"");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFieldsLists.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
 		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
@@ -1579,7 +1573,7 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (!formFieldsLists.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
 					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFieldsLists.size();
@@ -1599,7 +1593,7 @@ public class FormAdvanceSettings {
 				continue;
 			}
 			// formFields should not visible in pages
-			
+
 		}
 	}
 
@@ -1611,19 +1605,15 @@ public class FormAdvanceSettings {
 		int countOfFields = formFields1.size();
 		formFields1.clear();
 
-		// get last element text
-		boolean searchElement = true;
 		String lastTxtElement = null;
-
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
-					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Get the last element text: " + lastTxtElement);
-			formFields1.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+		//swipe and get the last element 
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFields1.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
@@ -1634,7 +1624,7 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (!formFields1.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
 					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFields1.size();
@@ -1653,10 +1643,10 @@ public class FormAdvanceSettings {
 			if (formFieldsText.equals(formFieldsLabel)) {
 				continue;
 			}
-			// here code for elements should not visible without pages
-//			MobileElement elementNotVisible = CommonUtils.getdriver().findElement(
-//					MobileBy.xpath("//android.widget.TextView[starts-with(@text,'" + formFieldsText + "')]"));
-//			elementNotVisible = null;
+//			// here code for elements should not visible without pages
+//			List<MobileElement> elementNotVisible = CommonUtils.getdriver().findElements(
+//					MobileBy.xpath("//*[starts-with(@text,'" + formFieldsText + "')]"));
+
 		}
 	}
 
@@ -1688,17 +1678,15 @@ public class FormAdvanceSettings {
 		int countOfFields = formFieldsLists.size();
 
 		String lastTxtElement = null;
-		boolean searchElement = true;
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
-					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText()
-					.replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Get the last element text: " + lastTxtElement);
-			formFieldsLists.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+		//swipe and get the last element
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]",
+				"");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFieldsLists.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
 		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
@@ -1709,7 +1697,7 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (!formFieldsLists.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
 					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFieldsLists.size();
@@ -1743,19 +1731,15 @@ public class FormAdvanceSettings {
 		int countOfFields = formFields1.size();
 		formFields1.clear();
 
-		// get last element text
-		boolean searchElement = true;
 		String lastTxtElement = null;
-
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
-					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Get the last element text: " + lastTxtElement);
-			formFields1.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+		//swipe and get the last element
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFields1.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
@@ -1766,7 +1750,7 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (!formFields1.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
 					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFields1.size();
@@ -1820,17 +1804,15 @@ public class FormAdvanceSettings {
 		int countOfFields = formFieldsLists.size();
 		formFieldsLists.clear();
 		String lastTxtElement = null;
-		boolean searchElement = true;
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
-					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText()
-					.replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Get the last element text: " + lastTxtElement);
-			formFieldsLists.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+		//swipe and get the last element
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]",
+				"");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFieldsLists.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
 		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
@@ -1841,7 +1823,7 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (!formFieldsLists.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
 					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFieldsLists.size();
@@ -1881,19 +1863,15 @@ public class FormAdvanceSettings {
 		int countOfFields = formFields1.size();
 		formFields1.clear();
 
-		// get last element text
-		boolean searchElement = true;
 		String lastTxtElement = null;
-
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
-					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Get the last element text: " + lastTxtElement);
-			formFields1.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+		//swipe and get the last element
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFields1.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
@@ -1904,7 +1882,7 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (!formFields1.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
 					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFields1.size();
@@ -1964,17 +1942,15 @@ public class FormAdvanceSettings {
 		int countOfFields = formFieldsLists.size();
 		formFieldsLists.clear();
 		String lastTxtElement = null;
-		boolean searchElement = true;
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
-					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText()
-					.replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Get the last element text: " + lastTxtElement);
-			formFieldsLists.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+		//swipe and get the last element
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]",
+				"");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFieldsLists.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
 		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
@@ -1985,7 +1961,7 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (!formFieldsLists.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
 					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFieldsLists.size();
@@ -2019,19 +1995,15 @@ public class FormAdvanceSettings {
 		int countOfFields = formFields1.size();
 		formFields1.clear();
 
-		// get last element text
-		boolean searchElement = true;
 		String lastTxtElement = null;
-
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
-					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Get the last element text: " + lastTxtElement);
-			formFields1.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+		//get the last element 
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFields1.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
@@ -2042,7 +2014,7 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (!formFields1.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
 					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFields1.size();
@@ -2124,18 +2096,16 @@ public class FormAdvanceSettings {
 		int countOfFields = formFieldsLists.size();
 		formFieldsLists.clear();
 		String lastTxtElement = null;
-		boolean searchElement = true;
+
 		// scroll and get last element
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
-					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText()
-					.replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Get the last element text: " + lastTxtElement);
-			formFieldsLists.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]",
+				"");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFieldsLists.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
 		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
@@ -2147,7 +2117,7 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (formFieldsLists.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
 					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[contains(@text,'"
 					+ formFieldLabel + "')]")));
@@ -2161,6 +2131,8 @@ public class FormAdvanceSettings {
 			if (flag == true)
 				break;
 		}
+
+		MobileActionGesture.flingToBegining_Android();
 		boolean isText = false;
 		// iterate and fill the form
 		for (int l = 0; l < countOfFields; l++) {
@@ -2240,19 +2212,16 @@ public class FormAdvanceSettings {
 		int countOfFields = formFields1.size();
 		formFields1.clear();
 
-		// get last element text
-		boolean searchElement = true;
 		String lastTxtElement = null;
 
-		if (searchElement) {
-			MobileActionGesture.flingVerticalToBottom_Android();
-			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
-					"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-			lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Get the last element text: " + lastTxtElement);
-			formFields1.clear();
-			MobileActionGesture.flingToBegining_Android();
-		}
+		// get last element text
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFields1.clear();
+		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
@@ -2264,7 +2233,7 @@ public class FormAdvanceSettings {
 		// scroll and add elements to list until the lastelement
 		while (formFields1.isEmpty()) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
 					"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[contains(@text,'"
 							+ formFieldLabel + "')]")));
@@ -2278,6 +2247,7 @@ public class FormAdvanceSettings {
 			if (flag == true)
 				break;
 		}
+
 		MobileActionGesture.flingToBegining_Android();
 		// inputting the regular expression for text data type
 		for (int i = 0; i < countOfFields; i++) {
@@ -2339,6 +2309,234 @@ public class FormAdvanceSettings {
 				break;
 			}
 		}
+	}
+
+	// testing Highlighting Background of a Field Based on field value
+	public static void testing_highlighting_background_field_basedOn_fieldValue(int colorInput, String fieldLabel)
+			throws MalformedURLException, InterruptedException {
+		// get pages
+		List<MobileElement> pagination = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//*[contains(@content-desc,'Page ')]"));
+		// checkif pagination link exists
+		if (pagination.size() > 0) {
+			System.out.println("pagination exists");
+
+			// click on pagination link
+			for (int i = 0; i < pagination.size(); i++) {
+				pagination.get(i).click();
+				Validations_for_Highlighting_BackgroundField_Basedon_fieldValue_in_pagination(colorInput, fieldLabel,
+						i);
+			}
+		} else {
+			System.out.println("pagination not exists");
+			Forms.verifySectionToClickAdd();
+			highlighting_BackgroundField_Basedon_fieldValue_WithOut_Pages(colorInput, fieldLabel);
+		}
+//		Forms.formSaveButton();
+	}
+
+	// color validations with pagination
+	public static int Validations_for_Highlighting_BackgroundField_Basedon_fieldValue_in_pagination(int fieldInput,
+			String fieldLabel, int i) throws MalformedURLException, InterruptedException {
+		int j = i + 1;
+		// get all formfields elements of text
+		List<MobileElement> formFieldsLists = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[contains(@text,'"
+						+ fieldLabel + "')]"));
+		int countOfFields = formFieldsLists.size();
+		formFieldsLists.clear();
+		String lastTxtElement = null;
+
+		// scroll and get last element
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFieldsLists.get(formFieldsLists.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]",
+				"");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFieldsLists.clear();
+		MobileActionGesture.flingToBegining_Android();
+
+		// add the elements to list
+		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[contains(@text,'"
+				+ fieldLabel + "')]")));
+		countOfFields = formFieldsLists.size();
+		System.out.println("Before swiping fields count is: " + countOfFields);
+
+		// scroll and add elements to list until the lastelement
+		while (formFieldsLists.isEmpty()) {
+			boolean flag = false;
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
+			formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[contains(@text,'"
+					+ fieldLabel + "')]")));
+			countOfFields = formFieldsLists.size();
+			System.out.println("After swiping fields count: " + countOfFields);
+			for (int k = 0; k < countOfFields; k++) {
+				if (formFieldsLists.get(k).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
+					flag = true;
+				}
+			}
+			if (flag == true)
+				break;
+		}
+		MobileActionGesture.flingToBegining_Android();
+		// get pages
+		List<MobileElement> pagination = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//*[contains(@content-desc,'Page ')]"));
+
+		// iterate and fill the form
+		for (int l = 0; l < countOfFields; l++) {
+			String OriginalText = formFieldsLists.get(l).getText();
+			String fieldsText = formFieldsLists.get(l).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println(
+					"Before removing regular expression: " + OriginalText + "\nAfter removing regexp: " + fieldsText);
+			int colorInputValue = fieldInput;
+
+			switch (OriginalText) {
+			case "Number":
+			case "G-Number":
+			case "S-Number":
+			case "Currency":
+			case "G-Currency":
+			case "S-Currency":
+				MobileActionGesture.scrollUsingText(OriginalText);
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + OriginalText + "')]"))
+						.size() > 0) {
+					MobileActionGesture.scrollUsingText(OriginalText);
+					for (int n = 0; n < 3; n++) {
+						if (pagination.size() > 0) {
+							Thread.sleep(100);
+							pagination.get(i).click();
+							MobileActionGesture.scrollUsingText(OriginalText);
+							colorInputValue = colorInputValue - 1;
+							System.out.println("min input data: " + colorInputValue);
+							CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
+									+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
+									.click();
+							CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
+									+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
+									.clear();
+							CommonUtils.getdriver().hideKeyboard();
+							CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
+									+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
+									.sendKeys(String.valueOf(colorInputValue));
+							MobileActionGesture.scrollUsingText("Currency");
+							CommonUtils.getdriver().findElement(MobileBy.xpath(
+									"//*[contains(@text,'Currency')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
+									.click();
+							CommonUtils.getdriver().hideKeyboard();
+						}
+						// checkif pagination link exists
+						if (pagination.size() > 0) {
+							for (int k = 0; k < pagination.size(); k++) {
+								Thread.sleep(100);
+								pagination.get(k).click();
+							}
+						}
+						colorInputValue = colorInputValue + 2;
+					}
+				}
+				break;
+			}
+		}
+		return fieldInput;
+	}
+
+	// color field validation based on input for currency/number data type with out
+	// using pagination
+	public static int highlighting_BackgroundField_Basedon_fieldValue_WithOut_Pages(int fieldInput, String fieldLabel)
+			throws MalformedURLException {
+		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath(
+				"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[contains(@text,'"
+						+ fieldLabel + "')]"));
+		int countOfFields = formFields1.size();
+		formFields1.clear();
+
+		String lastTxtElement = null;
+		// get last element text
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+		System.out.println("Get the last element text: " + lastTxtElement);
+		formFields1.clear();
+		MobileActionGesture.flingToBegining_Android();
+
+		// add the elements to list
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
+				"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[contains(@text,'"
+						+ fieldLabel + "')]")));
+		countOfFields = formFields1.size();
+		System.out.println("Before swiping fields count is: " + countOfFields);
+
+		// scroll and add elements to list until the lastelement
+		while (formFields1.isEmpty()) {
+			boolean flag = false;
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
+			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
+					"//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[contains(@text,'"
+							+ fieldLabel + "')]")));
+			countOfFields = formFields1.size();
+			System.out.println("After swiping fields count: " + countOfFields);
+			for (int j = 0; j < countOfFields; j++) {
+				if (formFields1.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
+					flag = true;
+				}
+			}
+			if (flag == true)
+				break;
+		}
+
+		MobileActionGesture.flingToBegining_Android();
+		// inputting the color field for currency/number data type
+		for (int i = 0; i < countOfFields; i++) {
+			String OriginalText = formFields1.get(i).getText();
+			String fieldsText = formFields1.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println(
+					"Before removing regular expression: " + OriginalText + "\nAfter removing regexp: " + fieldsText);
+
+			int colorFieldInput = fieldInput;
+
+			switch (OriginalText) {
+			case "Number":
+			case "G-Number":
+			case "S-Number":
+			case "Currency":
+			case "G-Currency":
+			case "S-Currency":
+				MobileActionGesture.scrollUsingText(OriginalText);
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + OriginalText + "')]"))
+						.size() > 0) {
+					MobileActionGesture.scrollUsingText(OriginalText);
+					for (int n = 0; n < 3; n++) {
+						MobileActionGesture.scrollUsingText(OriginalText);
+						colorFieldInput = colorFieldInput - 1;
+						System.out.println("min input data: " + colorFieldInput);
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
+								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
+								.click();
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
+								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
+								.clear();
+						CommonUtils.getdriver().hideKeyboard();
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
+								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
+								.sendKeys(String.valueOf(colorFieldInput));
+						MobileActionGesture.scrollUsingText("Currency");
+						CommonUtils.getdriver().findElement(MobileBy.xpath(
+								"//*[contains(@text,'Currency')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
+								.click();
+						CommonUtils.getdriver().hideKeyboard();
+						colorFieldInput = colorFieldInput + 2;
+					}
+				}
+				break; //// *[@text='Number']/parent::*/parent::*/android.widget.LinearLayout/android.widget.ImageButton -'+'
+			}
+		}
+		return fieldInput;
 	}
 
 }
