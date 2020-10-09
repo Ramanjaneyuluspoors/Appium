@@ -26,10 +26,13 @@ public class StepsImplementation {
 
 	@When("user click on signin")
 	public void user_click_on_signin() throws MalformedURLException, InterruptedException {
-		MobileActionGesture.scrollTospecifiedElement("Customers");
-		CustomerPageActions.customerFab();
+		Work.checkWorkExistInHomePageorNot("Sanity");
+		Work.workSearch("Sanity");
+		Work.verifyWorkExistOrNot("Sanity");
+//		MobileActionGesture.scrollTospecifiedElement("Customers");
+//		CustomerPageActions.customerFab();
 //		CustomerPageActions.captureImage();
-		CustomerCreation.createCustomerWithAllFields();
+//		CustomerCreation.createCustomerWithAllFields();
 //		HomepageAction.signInAction(); // need to optimize taking 37s time to signin using location if sign-in form
 //    	Forms.createEntity();										// does'nt exist
 	}
@@ -115,7 +118,7 @@ public class StepsImplementation {
 	@Given("Scroll to work {string}")
 	public void scroll_to_work(String workName) throws MalformedURLException, InterruptedException {
 //		Work.goToWorkPage(workName);
-		Work.scrollToSpecifiedWork(workName);
+		Work.checkWorkExistInHomePageorNot(workName);
 	}
 
 	@When("^user search for work$")
@@ -139,7 +142,6 @@ public class StepsImplementation {
 
 	@Given("^Scroll to form and click$")
 	public void scroll_to_form_and_click(String form) throws InterruptedException, MalformedURLException {
-		Thread.sleep(13000);
 		Forms.verifyForminHomePage(form);
 	}
 
