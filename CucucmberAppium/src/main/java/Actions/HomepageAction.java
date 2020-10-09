@@ -22,10 +22,8 @@ public class HomepageAction {
 	public static void signInAction() throws MalformedURLException, InterruptedException {
 		try {
 			CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/startStopWorkSwitch']");
-			MobileElement SigninButton = CommonUtils.getdriver()
-					.findElement(MobileBy.xpath("//*[@text='OFF']"));
-			if (SigninButton.getText().contains("OFF")) {
-				SigninButton.click();
+			if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='OFF']")).isDisplayed()) {
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='OFF']")).click();
 				Thread.sleep(2000);
 				// sign-in form(if sign-in form exist then capturing location page will not
 				// display )
@@ -33,15 +31,16 @@ public class HomepageAction {
 					CommonUtils.interruptSyncAndLetmeWork();
 					if (CommonUtils.getdriver().findElement(MobileBy.id("saveForm")).isDisplayed()) {
 						Forms.verifyFormPagesAndFill();
+					} else {
+						MediaPermission.signinMediaPermission();
 					}
 				} catch (Exception e) {
-					MediaPermission.signinMediaPermission();
+					System.out.println(e);
 				}
-			}
+			} // closing if block
 		} catch (Exception e) {
 			System.out.println("User already begin the day!!");
 		}
-
 	}
 
 	// verifying user home page navigation

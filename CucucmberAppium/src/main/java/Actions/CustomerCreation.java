@@ -3,9 +3,9 @@ package Actions;
 import java.net.MalformedURLException;
 import java.util.List;
 
-import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.text.RandomStringGenerator;
+import org.openqa.selenium.By;
 
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
@@ -15,84 +15,124 @@ import utils.MediaPermission;
 
 public class CustomerCreation {
 
-	public static void createCustomerWithAllFields() throws MalformedURLException, InterruptedException {
+	public static List<MobileElement> createCustomerWithAllFields() throws MalformedURLException, InterruptedException {
 		// get labelview elements
-		List<MobileElement> labelElements = CommonUtils.getdriver()
-				.findElements(MobileBy.xpath("//android.widget.TextView[@id ='label_for_view']"));
+		List<MobileElement> labelElements = CommonUtils.getdriver().findElements(
+				By.xpath("//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']"));
 		// get input text elements
 		List<MobileElement> inputTextElements = CommonUtils.getdriver()
 				.findElements(MobileBy.className("android.widget.EditText"));
+		
+		List<MobileElement> labelElements1 = CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']"));
+		List<MobileElement> inputTextElements1
+				= CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText"));
+		
 		// merging both lists
 		List<MobileElement> newList = labelElements;
 		newList.addAll(inputTextElements);
+		
+		List<MobileElement> newList1 = labelElements;
+		
 //		labelElements.addAll(inputTextElements);
 		// get customer fields count
 		int customerFieldsCount = newList.size();
+		int customerFieldsCount1 = newList1.size();
 		System.out.println("fields count: " + customerFieldsCount);
-
+		
+		//remove elements from list
 		newList.clear();
 
 		// find the last element to stop continuos scrolling
 		String customerLastListElement = null;
 		// scroll to bottom and add customerlist fields
 		MobileActionGesture.flingVerticalToBottom_Android();
-		// add customer fields to get last element
-		labelElements
-				.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//android.widget.TextView[@text and @id ='label_for_view']")));
+		// add customer fields to get last element of the customer fields
+		labelElements.addAll(CommonUtils.getdriver().findElements(
+				MobileBy.xpath("//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']")));
 		inputTextElements.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
 		// merge both list to get last element
 		newList = labelElements;
 		newList.addAll(inputTextElements);
-//			labelElements.addAll(inputTextElements);
+		customerFieldsCount = newList.size();
+		System.out.println("****** Last screen elements count ****** : "+customerFieldsCount);
 		// get customer last textelement
 		customerLastListElement = newList.get(newList.size() - 1).getText();
 		System.out.println("Customer last element: " + customerLastListElement);
 		// remove the elements from the list
+		newList.clear();
 		labelElements.clear();
+		inputTextElements.clear();
 		// scroll to top
 		MobileActionGesture.flingToBegining_Android();
+		
 
 		// adding the customer fields present in the first screen
 		labelElements.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
 				"//android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/parent::*/parent::*/android.widget.LinearLayout/android.widget.TextView")));
 		inputTextElements.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
+		
+		labelElements1.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/parent::*/parent::*/android.widget.LinearLayout/android.widget.TextView")));
+		inputTextElements1
+				.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
 		// merging both list
 		newList = labelElements;
 		newList.addAll(inputTextElements);
-//		labelElements.addAll(inputTextElements);
+		
 		// get customer fields count present in the first screen
 		customerFieldsCount = newList.size();
+		customerFieldsCount1= newList1.size();
 		System.out.println("Before swiping customer fields count: " + customerFieldsCount);
+		System.out.println("Before swiping customer fields count for another list: " + customerFieldsCount1);
 
+		
 		// scroll and add elelemnts to list until last element found
-		while (!newList.isEmpty()) {
+		while (!newList.isEmpty() && newList != null) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
-			inputTextElements.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
-			labelElements.addAll(
-					CommonUtils.getdriver().findElements(MobileBy.xpath("//android.widget.TextView[@text and @id ='label_for_view']")));
+			labelElements.addAll(CommonUtils.getdriver().findElements(MobileBy
+					.xpath("//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']")));
+			inputTextElements
+					.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
+			
+			labelElements1.addAll(CommonUtils.getdriver().findElements(MobileBy
+					.xpath("//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']")));
+			inputTextElements1
+					.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
 			// merging both list
 			newList = labelElements;
 			newList.addAll(inputTextElements);
-//			labelElements.addAll(inputTextElements);
-			// get the count of all added elements
+			
+			newList1 = labelElements1;
+			newList1.addAll(inputTextElements1);
+			
+			// get the count of all added elements lists
 			customerFieldsCount = newList.size();
-			System.out.println("After swiping fields count: " + customerFieldsCount);
-			for (int i = 0; i < customerFieldsCount; i++) {
-				if (newList.get(i).getText().equals(customerLastListElement)) {
+			customerFieldsCount1 = newList1.size();
+			System.out.println("..... After swiping fields count ..... : " + customerFieldsCount);
+			for (int i = 1; i <= customerFieldsCount1; i++) {
+				System.out.println("***** print text ***** : "+newList.get(customerFieldsCount - i).getText());
+				System.out.println("===== Field Text ===== : " + newList1.get(i - 1).getText());
+				if (newList1.get(i - 1).getText().equals(customerLastListElement)) {
+					System.out.println("----- Field Text Inside elements ----- : "+newList1.get(i - 1).getText());
 					flag = true;
 				}
 			}
 			if (flag == true)
 				break;
+			newList1.clear();
 		}
+		
 		MobileActionGesture.flingToBegining_Android();
-		boolean isDate = false, isText = false, isURL = false, isEmail = false, isCountry = false, isEmployee = false,
-				isDateTime = false, isTime = false, isPickList = false, isMultiPickList = false, isPhone = false,
-				isMultiSelectDropdown = false, isLocation = false, isCurrency = false, isNumber = false,
-				isDropdown = false, isYesNo = false, isCustomer = false, isForm = false, isCustomEntity = false,
-				isSignature = false;
-
+		boolean isName = false, isStreet = false, isArea = false, isLandmark = false, isCity = false, isState = false,
+				isDistrict = false, isPincode = false, isDate = false, isText = false, isURL = false, isEmail = false,
+				isCountry = false, isEmployee = false, isPhoneNumber = false, isDateTime = false, isTime = false,
+				isPickList = false, isMultiPickList = false, isPhone = false, isMultiSelectDropdown = false,
+				isLocation = false, isCurrency = false, isNumber = false, isDropdown = false, isYesNo = false,
+				isCustomer = false, isForm = false, isCustomEntity = false, isSignature = false;
+		
+		//providing input for customer fields by iterating the customer list
 		for (int j = 0; j < customerFieldsCount; j++) {
 			String originalText = newList.get(j).getText();
 			String cusFieldsText = newList.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
@@ -102,7 +142,7 @@ public class CustomerCreation {
 			switch (cusFieldsText) {
 			case "Type":
 				MobileActionGesture.scrollUsingText(originalText);
-				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + cusFieldsText + "']"))
 						.size() > 0) {
 					MobileActionGesture.scrollUsingText(originalText);
 					MobileElement type = CommonUtils.getdriver().findElement(
@@ -112,16 +152,20 @@ public class CustomerCreation {
 							.size() > 0) {
 						CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
 								.get(1).click();
+						Thread.sleep(500);
 					}
 				}
 				break;
 			case "Name":
-				MobileActionGesture.scrollUsingText(cusFieldsText);
-				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + cusFieldsText + "')]"))
-						.size() > 0) {
+				if (!isName) {
 					MobileActionGesture.scrollUsingText(cusFieldsText);
-					String randomstringCusName = RandomStringUtils.randomAlphabetic(5).toLowerCase();
-					CommonUtils.getdriver().findElement(MobileBy.id("nameEditText")).sendKeys(randomstringCusName);
+					if (CommonUtils.getdriver()
+							.findElements(MobileBy.xpath("//*[contains(@text,'" + cusFieldsText + "')]")).size() > 0) {
+						MobileActionGesture.scrollUsingText(cusFieldsText);
+						String randomstringCusName = RandomStringUtils.randomAlphabetic(5).toLowerCase();
+						CommonUtils.getdriver().findElement(MobileBy.id("nameEditText")).sendKeys(randomstringCusName);
+					}
+					isName = true;
 				}
 				break;
 			case "Territory Type":
@@ -136,79 +180,107 @@ public class CustomerCreation {
 							.size() > 0) {
 						CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
 								.get(1).click();
+						Thread.sleep(100);
 					}
 				}
 				break;
 			case "Phone number":
-				MobileActionGesture.scrollUsingText(originalText);
-				if (CommonUtils.getdriver()
-						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + originalText + "')]")).size() > 0) {
+				if (!isPhoneNumber) {
 					MobileActionGesture.scrollUsingText(originalText);
-					String cusPhoneNum = RandomStringUtils.randomNumeric(10);
-					CommonUtils.getdriver().findElement(MobileBy.id("phoneEditText")).sendKeys(cusPhoneNum);
+					if (CommonUtils.getdriver()
+							.findElements(MobileBy.xpath("//*[starts-with(@text,'" + originalText + "')]"))
+							.size() > 0) {
+						MobileActionGesture.scrollUsingText(originalText);
+						String cusPhoneNum = RandomStringUtils.randomNumeric(10);
+						CommonUtils.getdriver()
+								.findElement(MobileBy.xpath("//*[starts-with(@text,'" + originalText + "')]"))
+								.sendKeys(cusPhoneNum);
+					}
+					isPhoneNumber = true;
 				}
 				break;
 			case "Street":
-				MobileActionGesture.scrollUsingText(originalText);
-				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
-						.size() > 0) {
+				if (!isStreet) {
 					MobileActionGesture.scrollUsingText(originalText);
-					String cusAddressStreet = RandomStringUtils.randomAlphabetic(5).toLowerCase();
-					CommonUtils.getdriver().findElement(MobileBy.id("streetEditText")).sendKeys(cusAddressStreet);
+					if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
+							.size() > 0) {
+						MobileActionGesture.scrollUsingText(originalText);
+						String cusAddressStreet = RandomStringUtils.randomAlphabetic(5).toLowerCase();
+						CommonUtils.getdriver().findElement(MobileBy.id("streetEditText")).sendKeys(cusAddressStreet);
+					}
+					isStreet = true;
 				}
 				break;
 			case "Area":
-				MobileActionGesture.scrollUsingText(originalText);
-				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
-						.size() > 0) {
+				if (!isArea) {
 					MobileActionGesture.scrollUsingText(originalText);
-					String cusArea = RandomStringUtils.randomAlphabetic(5).toLowerCase();
-					CommonUtils.getdriver().findElement(MobileBy.id("areaEditText")).sendKeys(cusArea);
+					if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
+							.size() > 0) {
+						MobileActionGesture.scrollUsingText(originalText);
+						String cusArea = RandomStringUtils.randomAlphabetic(5).toLowerCase();
+						CommonUtils.getdriver().findElement(MobileBy.id("areaEditText")).sendKeys(cusArea);
+					}
+					isArea = true;
 				}
 				break;
 			case "Landmark":
-				MobileActionGesture.scrollUsingText(originalText);
-				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
-						.size() > 0) {
+				if (!isLandmark) {
 					MobileActionGesture.scrollUsingText(originalText);
-					String cusLandmark = RandomStringUtils.randomAlphabetic(5).toLowerCase();
-					CommonUtils.getdriver().findElement(MobileBy.id("landmarkEditText")).sendKeys(cusLandmark);
+					if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
+							.size() > 0) {
+						MobileActionGesture.scrollUsingText(originalText);
+						String cusLandmark = RandomStringUtils.randomAlphabetic(5).toLowerCase();
+						CommonUtils.getdriver().findElement(MobileBy.id("landmarkEditText")).sendKeys(cusLandmark);
+					}
+					isLandmark = true;
 				}
 				break;
 			case "City":
-				MobileActionGesture.scrollUsingText(originalText);
-				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
-						.size() > 0) {
+				if (isCity) {
 					MobileActionGesture.scrollUsingText(originalText);
-					String cusCity = RandomStringUtils.randomAlphabetic(5).toLowerCase();
-					CommonUtils.getdriver().findElement(MobileBy.id("cityEditText")).sendKeys(cusCity);
+					if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
+							.size() > 0) {
+						MobileActionGesture.scrollUsingText(originalText);
+						String cusCity = RandomStringUtils.randomAlphabetic(5).toLowerCase();
+						CommonUtils.getdriver().findElement(MobileBy.id("cityEditText")).sendKeys(cusCity);
+					}
+					isCity = true;
 				}
 				break;
 			case "State":
-				MobileActionGesture.scrollUsingText(originalText);
-				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
-						.size() > 0) {
+				if (!isState) {
 					MobileActionGesture.scrollUsingText(originalText);
-					String cusState = RandomStringUtils.randomAlphabetic(5).toLowerCase();
-					CommonUtils.getdriver().findElement(MobileBy.id("stateEditText")).sendKeys(cusState);
+					if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
+							.size() > 0) {
+						MobileActionGesture.scrollUsingText(originalText);
+						String cusState = RandomStringUtils.randomAlphabetic(5).toLowerCase();
+						CommonUtils.getdriver().findElement(MobileBy.id("stateEditText")).sendKeys(cusState);
+					}
+					isState = true;
 				}
 				break;
 			case "District":
-				MobileActionGesture.scrollUsingText(originalText);
-				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
-						.size() > 0) {
+				if (!isDistrict) {
 					MobileActionGesture.scrollUsingText(originalText);
-					String cusDistrict = RandomStringUtils.randomAlphabetic(5).toLowerCase();
-					CommonUtils.getdriver().findElement(MobileBy.id("districtEditText")).sendKeys(cusDistrict);
+					if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
+							.size() > 0) {
+						MobileActionGesture.scrollUsingText(originalText);
+						String cusDistrict = RandomStringUtils.randomAlphabetic(5).toLowerCase();
+						CommonUtils.getdriver().findElement(MobileBy.id("districtEditText")).sendKeys(cusDistrict);
+					}
+					isDistrict = true;
 				}
 				break;
 			case "PIN code":
-				MobileActionGesture.scrollUsingText(originalText);
-				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
-						.size() > 0) {
+				if (!isPincode) {
 					MobileActionGesture.scrollUsingText(originalText);
-					String cusPincode = RandomStringUtils.randomNumeric(6);
-					CommonUtils.getdriver().findElement(MobileBy.id("pinCodeEditText")).sendKeys(cusPincode);
+					if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
+							.size() > 0) {
+						MobileActionGesture.scrollUsingText(originalText);
+						String cusPincode = RandomStringUtils.randomNumeric(6);
+						CommonUtils.getdriver().findElement(MobileBy.id("pinCodeEditText")).sendKeys(cusPincode);
+					}
+					isPincode = true;
 				}
 				break;
 			case "Phone(Optional)":
@@ -233,11 +305,25 @@ public class CustomerCreation {
 							.findElements(MobileBy.xpath("//*[starts-with(@text,'" + originalText + "')]"))
 							.size() > 0) {
 						MobileActionGesture.scrollUsingText(originalText);
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + originalText
-								+ "')]/parent::*/parent::*/android.widget.Button")).click();
-						if (CommonUtils.getdriver().findElements(MobileBy.id("employeeNameTextView")).size() > 0) {
-							CommonUtils.getdriver().findElements(MobileBy.id("employeeNameTextView")).get(0).click();
-							Thread.sleep(500);
+						if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + originalText
+								+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A EMPLOYEE')]"))
+								.isDisplayed()) {
+							CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + originalText
+									+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A EMPLOYEE')]"))
+									.click();
+							if (CommonUtils.getdriver().findElements(MobileBy.id("employeeNameTextView")).size() > 0) {
+								CommonUtils.getdriver().findElements(MobileBy.id("employeeNameTextView")).get(0)
+										.click();
+								Thread.sleep(500);
+							}
+						} else {
+							CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + originalText
+									+ "')]/parent::*/parent::*/android.widget.Button")).click();
+							if (CommonUtils.getdriver().findElements(MobileBy.id("employeeNameTextView")).size() > 0) {
+								CommonUtils.getdriver().findElements(MobileBy.id("employeeNameTextView")).get(0)
+										.click();
+								Thread.sleep(500);
+							}
 						}
 					}
 					isEmployee = true;
@@ -720,6 +806,7 @@ public class CustomerCreation {
 				break;
 			} // switch close
 		} // for loop close
+		return newList;
 	} // method close
 	
 	
