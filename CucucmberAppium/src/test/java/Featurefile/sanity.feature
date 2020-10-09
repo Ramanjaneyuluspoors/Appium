@@ -76,5 +76,5 @@ Scenario: Regular Expression Validations
 @Highlighting_Background_Field_Based_on_FieldValue 
 Scenario: Highlighting Background Field Based on FieldValue 
 	Given scroll to specified color form
-		|DeleteForm-3| 
+		|High lighting background color| 
 	When user enters the field value 10 for datatype "Number"  
