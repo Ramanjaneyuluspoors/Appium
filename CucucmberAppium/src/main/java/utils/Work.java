@@ -4,9 +4,9 @@ import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.text.RandomStringGenerator;
@@ -21,10 +21,11 @@ import io.appium.java_client.android.nativekey.KeyEvent;
 public class Work {
 	private static String generateWorkName;
 
-	// go to work page from home fab icon '+'
+	// go to work page from home fab icon '+' then swipe and click on the specified work
 	public static void goToWorkPage(String workName) throws MalformedURLException {
 		CommonUtils.homeFabClick();
 		CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Work']")).click();
+		//swipe and click on the specified work
 		MobileActionGesture.scrollTospecifiedElement("" + workName + "");
 		CommonUtils.waitForElementVisibility("//*[contains(@text,'Create')]");
 	}
@@ -36,16 +37,19 @@ public class Work {
 		CommonUtils.waitForElementVisibility("//*[@text='" + workName + "']");
 	}
 
+	//verify work in home screen if work not exist then click on home fab to create a work
 	public static void checkWorkExistInHomePageorNot(String workName)
 			throws InterruptedException, MalformedURLException {
-		MobileActionGesture.scrollUsingText("" + workName + "");
-		if (CommonUtils.getdriver()
-				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().textContains(\"" + workName + "\")"))
-				.isDisplayed()) {
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + workName + "')]")).click();
-			CommonUtils.interruptSyncAndLetmeWork();
-			CommonUtils.waitForElementVisibility("//*[contains(@text,'" + workName + "')]");
-		} else {
+		try {
+			MobileActionGesture.scrollUsingText("" + workName + "");
+			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + workName + "')]"))
+					.size() > 0) {
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + workName + "')]"))
+						.click();
+				CommonUtils.interruptSyncAndLetmeWork();
+				CommonUtils.waitForElementVisibility("//*[contains(@text,'" + workName + "')]");
+			}
+		} catch (Exception e) {
 			goToWorkPage(workName);
 		}
 	}
@@ -104,9 +108,9 @@ public class Work {
 
 	// work end time added as given hours extra because End time should be greater
 	public static void workEndTime(int timeCount, int minsCount) throws MalformedURLException, InterruptedException {
-
 		// retrieving time
 		Date date = new Date();
+		//time 12hrs format 
 		SimpleDateFormat DateFor = new SimpleDateFormat("h:mm a");
 		String stringDate = DateFor.format(date);
 		System.out.println("Hours Format : " + stringDate);
@@ -126,15 +130,15 @@ public class Work {
 		String getAmPm = splitAMPM[1];
 		String getMins = splitAMPM[0];
 		System.out.println("AmPm :" + getAmPm);
-		System.out.println("CurrMinutes :" + getMins);
+		System.out.println(" .... CurrMinutes .... :" + getMins);
 
 		// adding extra hours to the current hours and splitting into hrs and mins
 		date = DateUtils.addHours(date, timeCount);
 		String workAddhrs = DateFor.format(date);
-		System.out.println("After adding hours time is : " + workAddhrs);
+		System.out.println(" ===== After adding hours time is ===== : " + workAddhrs);
 		String[] splitValueExtendedHrs = workAddhrs.split(":");
 		String extendedHours = splitValueExtendedHrs[0];
-		System.out.println("addedHours: " + extendedHours);
+		System.out.println(" **** addedHours **** : " + extendedHours);
 
 		// adding minutes
 		date = DateUtils.addMinutes(date, minsCount);
@@ -144,12 +148,12 @@ public class Work {
 		String[] splitMins = DateFor.format(date).split(":");
 		// retrieving minutes
 		String addedMins = splitMins[1];
-		System.out.println("After adding Mins: " + addedMins);
+		System.out.println("----- After adding Mins ------ : " + addedMins);
 
 		// retrieving AM & PM after adding hours and mins
 		String[] splitAmPm = workAddhrs.split(" ");
 		String getAddhrsOfAmPm = splitAmPm[1];
-		System.out.println("After added hrs AmPm is: " + getAddhrsOfAmPm);
+		System.out.println("===== After added hrs AmPm is ===== : " + getAddhrsOfAmPm);
 
 		// get xpath of current hour and pass variable of current,added hours
 		MobileElement sourceHour = CommonUtils.getdriver()
@@ -181,9 +185,10 @@ public class Work {
 				if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@resource-id='android:id/button1']"))
 						.isDisplayed()) {
 					CommonUtils.OkButton("CONTINUE");
+					System.out.println(" ---- work is saved successfully!! ----");
 				}
 			} catch (Exception e) {
-				System.out.println("work time is not override");
+				System.out.println(" **** work time is not override **** ");
 			}
 		}
 		CommonUtils.interruptSyncAndLetmeWork();
@@ -221,7 +226,7 @@ public class Work {
 				"//*[@id='workStatusText' and ./parent::*[(./preceding-sibling::* | ./following-sibling::*)[@text='Work Name: "
 						+ workName + "']]]"));
 		String workStatus = getWorkStatus.getText();
-		System.out.println("status of work is " + workStatus);
+		System.out.println(" ----- status of work is ----- : " + workStatus);
 	}
 
 	// move to homepage from work
@@ -236,78 +241,99 @@ public class Work {
 	}
 
 	public static String workCreation() throws MalformedURLException, InterruptedException {
-		List<MobileElement> workLabelElements = CommonUtils.getdriver().findElements(MobileBy.xpath(
-				"//android.widget.LinearLayout/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		//Declaring the workInputElements list
 		List<MobileElement> workInputElements = CommonUtils.getdriver()
-				.findElements(MobileBy.xpath("//android.widget.EditText[@text]"));
-//		List<MobileElement> newList = ListUtils.union(workLabelElements, workInputElements);
-		workLabelElements.addAll(workInputElements);
-		int workFieldsCount = workLabelElements.size();
-		System.out.println("Work Fields Count: " + workFieldsCount);
+						.findElements(MobileBy.className("android.widget.EditText"));
+		//Declaring the workLabelElements list
+		List<MobileElement> workLabelElements = CommonUtils.getdriver().findElements(MobileBy.xpath(
+				"//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']"));
+		
+		//merging the both list
+		List<MobileElement> newList = workLabelElements;
+		newList.addAll(workInputElements);
+		//retrieving the list count aa
+		int workFieldsCount = newList.size();
+		System.out.println(" ===== Work Fields Count ===== : " + workFieldsCount);
+		//clear the elements from list
+		newList.clear();
 		workLabelElements.clear();
-
+		workInputElements.clear();
 
 		String workLastElement = null;
-		// scroll to bottom and add worklist fields
+		// scroll to bottom and add work fields to list
 		MobileActionGesture.flingVerticalToBottom_Android();
-		workLabelElements.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
-				"//android.widget.LinearLayout/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 		workInputElements
-				.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//android.widget.EditText[@text]")));
+				.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
+		workLabelElements.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
+				"//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']")));
 		// merge the list
-//			newList = ListUtils.union(workLabelElements, workInputElements);
+       //  newList = ListUtils.union(workLabelElements, workInputElements);
 		workLabelElements.addAll(workInputElements);
+		newList = workLabelElements;
 		// get work last element
-		workLastElement = workLabelElements.get(workLabelElements.size() - 1).getText();
-		System.out.println("Work Last Element is: " + workLastElement);
+		workLastElement = newList.get(newList.size() - 1).getText();
+		System.out.println(" ***** Work Last Element is ***** : " + workLastElement);
 		// remove the elements from the list
+		newList.clear();
 		workLabelElements.clear();
+		workInputElements.clear();
 		// scroll to top
 		MobileActionGesture.flingToBegining_Android();
 		
-
+		
 		// adding the work fields present in the first screen
-		workLabelElements.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
-				"//android.widget.LinearLayout/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 		workInputElements
-				.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//android.widget.EditText[@text]")));
+				.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
+		workLabelElements.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
+				"//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']")));
 		// merge the list
-//		newList = ListUtils.union(workLabelElements, workInputElements);
-		workLabelElements.addAll(workInputElements);
+		newList = workLabelElements;
+		newList.addAll(workInputElements);
 		// get the count of work fields present in the first screen
-		workFieldsCount = workLabelElements.size();
-		System.out.println("Before swiping the screen fields count is: " + workFieldsCount);
+		workFieldsCount = newList.size();
+		System.out.println(" ---- Before swiping the device screen fields count is ---- : " + workFieldsCount); 
 
+		
 		// swipe and retrieve the work fields until the last element found
-		while (!workLabelElements.isEmpty()) {
+		while (!newList.isEmpty() && newList != null) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
-			workLabelElements.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
-					"//android.widget.LinearLayout/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			workInputElements
-					.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//android.widget.EditText[@text]")));
+					.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
+			workLabelElements.addAll(CommonUtils.getdriver().findElements(MobileBy
+					.xpath("//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']")));
 			// merge the list
 //			newList = ListUtils.union(workLabelElements, workInputElements);
-			workLabelElements.addAll(workInputElements);
+			newList = workLabelElements;
+			newList.addAll(workInputElements);
+			
 			// get the count of work fields
-			workFieldsCount = workLabelElements.size();
-			System.out.println("After swiping the screen fields count is: " + workFieldsCount);
+			workFieldsCount = newList.size();
+			System.out.println(" .... After swiping the device screen fields count is .... : " + workFieldsCount);
+			// if work last element matches with newList then break the for loop
 			for (int i = 0; i < workFieldsCount; i++) {
-				if (workLabelElements.get(i).getText().equals(workLastElement)) {
+				System.out.println("***** Print work fields elements text ***** : "
+						+ newList.get(workFieldsCount - (i + 1)).getText());
+				System.out.println("======= Work fields text ======= : " + newList.get(i).getText());
+				if (newList.get(i).getText().equals(workLastElement)) {
+					System.out.println("----- Work fields text inside elements ----- : " + newList.get(i).getText());
 					flag = true;
 				}
-				if (flag == true)
-					break;
 			}
+			// break the while loop if the work last element found
+			if (flag == true)
+				break;
 		}
+		
 		MobileActionGesture.flingToBegining_Android();
-		boolean isMultipicklist = false, isMultiselectdropdown = false, isyesNo = false, isSignature = false;
+		boolean isMultipicklist = false, isMultiselectdropdown = false, isyesNo = false, isSignature = false, isPriority = false;
 
+		//providing input for work fields by iterating using the workList(newList)
 		for (int j = 0; j < workFieldsCount; j++) {
-			String workOriginalFields = workLabelElements.get(j).getText();
-			String workFieldsText = workLabelElements.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Before removing special character: " + workOriginalFields
-					+ "\nAfter removing special character: " + workFieldsText);
+			String workOriginalFields = newList.get(j).getText();
+			String workFieldsText = newList.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println("***** Before removing special character ***** : " + workOriginalFields
+					+ "\n----- After removing special character ----- : " + workFieldsText);
 
 			switch (workFieldsText) {
 
@@ -338,14 +364,26 @@ public class Work {
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
-					CommonUtils.getdriver().findElement(MobileBy.id("pick_date_button")).click();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText
+									+ "')]/parent::*/parent::*/android.widget.LinearLayout/*[@resource-id='in.spoors.effortplus:id/pick_date_button']"))
+							.click();
+					CommonUtils.alertContentXpath();
+					Forms.dateScriptInForms(2);
+					Thread.sleep(500);
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText
+									+ "')]/parent::*/parent::*/android.widget.LinearLayout/*[@resource-id='in.spoors.effortplus:id/pick_time_buton']"))
+							.click();
 					CommonUtils.alertContentXpath();
 					workEndTime(2, 5);
+					Thread.sleep(100);
 				}
 				break;
 			case "Customer":
+			case "Customer-SYS":
 				MobileActionGesture.scrollUsingText(workFieldsText);
-				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contins(@text,'" + workFieldsText + "')]"))
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]"))
 						.size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
 					if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text ,'" + workFieldsText
@@ -374,6 +412,7 @@ public class Work {
 				}
 				break;
 			case "Employee":
+			case "Employee-SYS":
 				MobileActionGesture.scrollUsingText(workFieldsText);
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
@@ -388,19 +427,25 @@ public class Work {
 				}
 				break;
 			case "Priority":
-				MobileActionGesture.scrollUsingText(workFieldsText);
-				if (CommonUtils.getdriver()
-						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
+				if(!isPriority) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
-					MobileElement country = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
-							+ workFieldsText
-							+ "')]/parent::*/parent::*/android.widget.Spinner/*[contains(@text,'Pick a value')]"));
-					MobileActionGesture.singleLongPress(country);
-					if (CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
+					if (CommonUtils.getdriver()
+							.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]"))
 							.size() > 0) {
-						CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
-								.get(1).click();
+						MobileActionGesture.scrollUsingText(workFieldsText);
+						MobileActionGesture.scrollUsingText("Pick a value");
+						MobileElement country = CommonUtils.getdriver()
+								.findElement(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText
+										+ "')]/parent::*/parent::*/android.widget.Spinner/*[contains(@text,'Pick a value')]"));
+						MobileActionGesture.singleLongPress(country);
+						if (CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
+								.size() > 0) {
+							CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
+									.get(1).click();
+						}
+
 					}
+					isPriority = true;
 				}
 				break;
 			case "Address same as customer":
@@ -425,7 +470,7 @@ public class Work {
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
 					String phoneNumber = RandomStringUtils.randomNumeric(10);
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]"))
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]"))
 							.sendKeys(phoneNumber);
 				}
 				break;
@@ -434,7 +479,7 @@ public class Work {
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
-					String street = RandomStringUtils.random(5).toLowerCase();
+					String street = RandomStringUtils.randomAlphabetic(5).toLowerCase();
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]"))
 							.sendKeys(street);
 				}
@@ -444,7 +489,7 @@ public class Work {
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
-					String area = RandomStringUtils.random(5).toLowerCase();
+					String area = RandomStringUtils.randomAlphabetic(5).toLowerCase();
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]"))
 							.sendKeys(area);
 				}
@@ -454,7 +499,7 @@ public class Work {
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
-					String city = RandomStringUtils.random(5).toLowerCase();
+					String city = RandomStringUtils.randomAlphabetic(5).toLowerCase();
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]"))
 							.sendKeys(city);
 				}
@@ -464,12 +509,13 @@ public class Work {
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
-					String landmark = RandomStringUtils.random(5).toLowerCase();
+					String landmark = RandomStringUtils.randomAlphabetic(5).toLowerCase();
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]"))
 							.sendKeys(landmark);
 				}
 				break;
 			case "Country":
+			case "Country-SYS":
 				MobileActionGesture.scrollUsingText(workFieldsText);
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
@@ -486,7 +532,7 @@ public class Work {
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
-					String state = RandomStringUtils.random(5).toLowerCase();
+					String state = RandomStringUtils.randomAlphabetic(5).toLowerCase();
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]"))
 							.sendKeys(state);
 				}
@@ -502,13 +548,13 @@ public class Work {
 				}
 				break;
 			case "Location":
+			case "Location-SYS":
 				MobileActionGesture.scrollUsingText(workFieldsText);
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
-					CommonUtils.getdriver()
-							.findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText
-									+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"))
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText
+							+ "')]/parent::*/parent::*/parent::*/parent::*/*[@resource-id='in.spoors.effortplus:id/pick_location_button']"))
 							.click();
 					Thread.sleep(5000);
 					CommonUtils.waitForElementVisibility("//*[@text='MARK MY LOCATION']");
@@ -522,7 +568,7 @@ public class Work {
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
-					String text = RandomStringUtils.random(5).toLowerCase();
+					String text = RandomStringUtils.randomAlphabetic(5).toLowerCase();
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]"))
 							.sendKeys(text);
 				}
@@ -618,8 +664,8 @@ public class Work {
 									+ "']/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[2]"))
 									.click();
 							CommonUtils.alertContentXpath();
-							Forms.TimeScriptInForms(2, 5);
-							Thread.sleep(500);
+							workEndTime(2, 5);
+							Thread.sleep(100);
 						}
 					} else {
 						System.out.println("DateTime is already picked");
@@ -639,8 +685,8 @@ public class Work {
 								+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A TIME')]"))
 								.click();
 						CommonUtils.alertContentXpath();
-						Forms.TimeScriptInForms(2, 5);
-						Thread.sleep(500);
+						workEndTime(2, 5);
+						Thread.sleep(100);
 					} else {
 						System.out.println("Time already picked");
 					}
@@ -894,8 +940,9 @@ public class Work {
 					isSignature = true;
 				}
 				break;
-			}
-		}
+			} //switch statement close
+			
+		}  //for loop close
 		return workLastElement;
 	}
 }
