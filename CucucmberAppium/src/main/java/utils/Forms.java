@@ -1,6 +1,7 @@
 package utils;
 
 import java.net.MalformedURLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,6 +29,7 @@ public class Forms {
 		CommonUtils.waitForElementVisibility("//*[@text='" + formName + "']");
 	}
 
+	//if specified form is in homepage click on it else click on home fab '+' and go to forms
 	public static void verifyForminHomePage(String form) throws MalformedURLException {
 		try {
 			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
@@ -45,24 +47,21 @@ public class Forms {
 		}
 	}
 
-	// click on form save button
+	// click on form save button and if i understood alert display then click on it
 	public static void formSaveButton() throws InterruptedException {
-		CommonUtils.getdriver()
-				.findElement(MobileBy
-						.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/saveForm\")"))
-				.click();
+		AndroidLocators.resourceId("in.spoors.effortplus:id/saveForm").click();
 		CommonUtils.alertContentXpath();
 		if (CommonUtils.getdriver()
-				.findElement(MobileBy
-						.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveButton\")"))
-				.isDisplayed()) {
+				.findElements(MobileBy
+						.AndroidUIAutomator("new UiSelector().resourceId(\"'in.spoors.effortplus:id/formSaveButton\")"))
+				.size() > 0) {
 			CommonUtils.getdriver().findElement(MobileBy
-					.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveButton\")"))
+					.AndroidUIAutomator("new UiSelector().resourceId(\"'in.spoors.effortplus:id/formSaveButton\")"))
 					.click();
 		} else if (CommonUtils.getdriver()
-				.findElement(MobileBy.AndroidUIAutomator(
+				.findElements(MobileBy.AndroidUIAutomator(
 						"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveWorkflowButton\")"))
-				.isDisplayed()) {
+				.size() > 0) {
 			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 					"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveWorkflowButton\")")).click();
 		}
@@ -70,19 +69,79 @@ public class Forms {
 		// verify if popup with i understand message is display then click on it
 		try {
 			if (CommonUtils.getdriver()
-					.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"))
-					.isDisplayed()) {
-				CommonUtils.getdriver()
-						.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"))
-						.click();
+					.findElements(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"))
+					.size() > 0) {
+				AndroidLocators.resourceId("android:id/button1").click();
 				System.out.println("I understand message is displayed");
 			}
 		} catch (Exception e) {
 			System.out.println("I understand message is not displayed");
 		}
-		CommonUtils.waitForElementVisibility("//*[@content-desc='Edit']");
+		Thread.sleep(500);
 	}
-
+	
+	//click on form save and new
+	public static void form_Save_And_New() throws InterruptedException {
+		AndroidLocators.resourceId("in.spoors.effortplus:id/saveForm").click();
+		CommonUtils.alertContentXpath();
+		if (CommonUtils.getdriver()
+				.findElement(MobileBy.AndroidUIAutomator(
+						"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveAndNewButton\")"))
+				.isDisplayed()) 
+		{
+			AndroidLocators.resourceId("in.spoors.effortplus:id/formSaveAndNewButton").click();
+			CommonUtils.interruptSyncAndLetmeWork();
+			CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/saveForm']");
+		}
+	}
+	
+	//form save as draft
+	public static void form_Save_As_Draft() throws InterruptedException {
+		AndroidLocators.resourceId("in.spoors.effortplus:id/saveForm").click();
+		CommonUtils.alertContentXpath();
+		if (CommonUtils.getdriver()
+				.findElement(MobileBy.AndroidUIAutomator(
+						"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveDraftButton\")"))
+				.isDisplayed()) 
+		{
+			AndroidLocators.resourceId("in.spoors.effortplus:id/formSaveDraftButton").click();
+			CommonUtils.interruptSyncAndLetmeWork();
+			CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/action_search']");
+		}
+		verify_Draft_Form_Status();
+	}
+	
+	//form draft status
+	public static String verify_Draft_Form_Status() {
+		CommonUtils.goBackward();
+		MobileActionGesture.flingToBegining_Android();
+		CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/draftsFormItems']");
+		MobileElement saveDraftStatus = CommonUtils.getdriver().findElement(MobileBy
+				.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/draftsFormItems\")"));
+		String getFormDraftStatus = saveDraftStatus.getText();
+		System.out.println("**** Form draft status ****: "+getFormDraftStatus);
+		return getFormDraftStatus;
+	}
+	
+	//form discard
+	public static void form_Discard() throws InterruptedException {
+		AndroidLocators.resourceId("in.spoors.effortplus:id/saveForm").click();
+		CommonUtils.alertContentXpath();
+		if (CommonUtils.getdriver().findElement(MobileBy
+				.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/formDiscardButton\")"))
+				.isDisplayed()) {
+			AndroidLocators.resourceId("in.spoors.effortplus:id/formDiscardButton").click();
+			CommonUtils.alertContentXpath();
+			if (CommonUtils.getdriver()
+					.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/message\")"))
+					.isDisplayed()) {
+				AndroidLocators.xpath("//*[@text='DELETE']").click();
+			}
+			CommonUtils.interruptSyncAndLetmeWork();
+			CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/action_search']");
+		}
+	}
+	
 	// if form has section fields then click on Add
 	public static void checkRepeatablefields() {
 		try {
@@ -127,9 +186,9 @@ public class Forms {
 
 		// retrieving current time into hours and minutes
 		String presentHours = CurrentTimesplitValue[0];
-		System.out.println(" **** CurrentHours ***** : " + presentHours);
+		System.out.println(" **** Current Hours ***** : " + presentHours);
 		String CurrentMin = CurrentTimesplitValue[1];
-		System.out.println(" ===== CurrentMins ===== : " + CurrentMin);
+		System.out.println(" ===== Current Minutes ===== : " + CurrentMin);
 
 		// splitting AMPM from mins
 		String[] splitAMPM = CurrentMin.split(" ");
@@ -137,8 +196,8 @@ public class Forms {
 		// retrieving mins and AM PM
 		String getMins = splitAMPM[0];
 		String getAmPm = splitAMPM[1];
-		System.out.println(" ---- CurrMinutes ---- :" + getMins);
-		System.out.println("AmPm :" + getAmPm);
+		System.out.println(" ---- Current Minutes ---- :" + getMins);
+		System.out.println(".... Before adding hours AmPm.... :" + getAmPm);
 
 		// adding extra hours to the current hours and splitting into hrs and mins
 		date = DateUtils.addHours(date, hoursCount);
@@ -147,13 +206,13 @@ public class Forms {
 		String[] splitValueExtendedHrs = DateFor.format(date).split(":");
 		// retrieving extended hours
 		String extendedHours = splitValueExtendedHrs[0];
-		System.out.println(" ---- addedHours ---- : " + extendedHours);
+		System.out.println(" ---- Added Hours ---- : " + extendedHours);
 
 		// adding minutes
 		date = DateUtils.addMinutes(date, minsCount);
-
+		//modifying minute in date
 		date = DateUtils.truncate(date, Calendar.MINUTE);
-		// splitting extended Minutes
+		// After adding hours splitting extended Minutes
 		String[] splitMins = DateFor.format(date).split(":");
 		// retrieving minutes
 		String addedMins = splitMins[1];
@@ -164,7 +223,7 @@ public class Forms {
 		System.out.println(" ==== Minutes ==== : " + plusMins);
 		// retrieving mins and AM PM
 		String getAmPm1 = splitAMPM[1];
-		System.out.println(" **** AmPm **** :" + getAmPm1);
+		System.out.println(" **** After adding hours AmPm **** :" + getAmPm1);
 
 		// get xpath of current hour and pass variable of current,added hours
 		MobileElement sourceHour = CommonUtils.getdriver()
@@ -178,7 +237,7 @@ public class Forms {
 		CommonUtils.waitForElementVisibility("//*[@resource-id='android:id/minutes']");
 
 //		//get xpath of current hour and pass variable of current,added hours
-//		MobileElement currMins=CommonUtils.getdriver().findElementByXPath("//*[@content-desc='"+getMins+"']");
+//		MobileElement currMins=CommonUtils.getdriver().findElementByXPath("//*[@content-desc='"+CurrentMin+"']");
 //		MobileElement pluMins=CommonUtils.getdriver().findElementByXPath("//*[@content-desc='"+plusMins+"']");
 //		//using longpress method moving element from source to destination(i.e current hr to added hr)
 //		MobileActionGesture.Movetoelement(currMins, pluMins);
@@ -187,30 +246,198 @@ public class Forms {
 	}
 
 	// automating date
-	public static void dateScriptInForms(int addedDate) throws MalformedURLException, InterruptedException {
+	public static void dateScriptInForms(int addedDate) throws MalformedURLException, InterruptedException, ParseException {
+		
 		// get the date
 		Date date = new Date();
-		// date formatter
+		// date formatter eg-02 Aug 2020
 		SimpleDateFormat DateFor = new SimpleDateFormat("dd MMMM yyyy");
-
+		//EEE-Day of month, MMM-month, dd-date, yyyy-year
+		SimpleDateFormat New_Date_Format = new SimpleDateFormat("EEE, MMM dd yyyy"); 
+		
+		//get current date
+		String todayDate = DateFor.format(date);
+		
+		System.out.println("**** Today date is**** : "+todayDate);
+		//add date 
 		date = DateUtils.addDays(date, addedDate);
 
 		// conversion of date
 		String ExtendedDate = DateFor.format(date);
 		// printing date
 		System.out.println(" ---- Date Format ---- : " + ExtendedDate);
+		//splitting date
+		String[] splitDate = ExtendedDate.split(" ");
+		//get year
+		String splitYear = splitDate[2];
+		//printing year
+		System.out.println("... Selected Year ... : "+splitYear);
+		
+		// parse the given date
+		Date givenDate = DateFor.parse(ExtendedDate);
+		
+		//click on displaying year on calendar
+		FormAdvanceSettings.clickCalendarYear();
 
+		//select year
+		FormAdvanceSettings.clickElementByText(splitYear);
+		
+		//get year from calendar
+		String year = AndroidLocators.resourceId("android:id/date_picker_header_year").getText();
+		System.out.println("**** Display year is **** : "+year);
+		
+		//get date from calendar
+		String displayDate = AndroidLocators.xpath("//*[@class='android.widget.LinearLayout' and ./*[@text='"
+				+ splitYear + "']]/android.widget.TextView[2]").getText();
+		System.out.println("**** Displaying calendar date **** : " + displayDate);
+
+		//concantenating year and date using string builder class
+		StringBuilder sb = new StringBuilder(displayDate);
+		StringBuilder date_Year_Append  = sb.append(" "+year);
+		System.out.println("==== After appending displaying date and year from calendar ==== : "+date_Year_Append);
+
+		//converting to string
+		String date_Year_Append_to_String = date_Year_Append.toString();
+		
+		//parsing display date
+		Date parse_display_date = New_Date_Format.parse(date_Year_Append_to_String);
+		System.out.println(".... After parsing the display date .... : " +parse_display_date);
+		
+		//formating pared date to calendar format
+		String formatDisplayDate = DateFor.format(parse_display_date);
+		System.out.println("---- Forrmat the new date ---- : "+formatDisplayDate);
+		
 		// get xpath of Date and pass variable of added date and verify date is
 		// available
 		// or not
-		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='" + ExtendedDate + "']"))
-				.size() > 0) {
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='" + ExtendedDate + "']")).click();
-		} else {
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Next month']")).click();
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='" + ExtendedDate + "']")).click();
+		//get list of dates
+		FormAdvanceSettings.selectDate(ExtendedDate);
+		//given date is after display date then move forward
+		if (givenDate.after(parse_display_date)) {
+			while (!(CommonUtils.getdriver()
+					.findElements(MobileBy.xpath("//*[@content-desc='" + ExtendedDate + "']")).size() > 0)) {
+				FormAdvanceSettings.goRight();
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[@content-desc='" + ExtendedDate + "']")).size() > 0) 
+				{
+					break;
+				}
+			}
+			CommonUtils.wait(1);
+			FormAdvanceSettings.selectDate(ExtendedDate);
+		} //given date is before display date then move backword
+		else if (givenDate.before(parse_display_date)) {
+			while (!(CommonUtils.getdriver()
+					.findElements(MobileBy.xpath("//*[@content-desc='" + ExtendedDate + "']")).size() > 0)) {
+				FormAdvanceSettings.goLeft();
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[@content-desc='" + ExtendedDate + "']")).size() > 0) 
+				{
+					break;
+				}
+			}
+			CommonUtils.wait(1);
+			FormAdvanceSettings.selectDate(ExtendedDate);
 		}
 		CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='OK']")).click();
+		CommonUtils.wait(2);
+	}
+
+	//click on given date
+	public static void getCalendarDates(String myGivendate) throws InterruptedException, ParseException {
+		//date format  eg-02 october 2020
+		SimpleDateFormat DateFor = new SimpleDateFormat("dd MMMM yyyy");
+		//EEE-Day of month, MMM-month, dd-date, yyyy-year
+		SimpleDateFormat New_Date_Format = new SimpleDateFormat("EEE, MMM dd yyyy"); 
+		//split the date
+		String[] splitDate = myGivendate.split(" ");
+		//get year from date
+		String splitYear = splitDate[2];
+		//printing year
+		System.out.println("... Selected Year ... : "+splitYear);
+		
+		// parse the given date 
+		Date givenDate = DateFor.parse(myGivendate);
+		// printing parsed given date
+		System.out.println(".... After parsing the given date .... : " + givenDate);
+		
+		//click on displaying year on calendar
+		try {
+			FormAdvanceSettings.clickCalendarYear();
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		//select user input year
+		try {
+			FormAdvanceSettings.clickElementByText(splitYear);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//get year from calendar
+		String year = AndroidLocators.resourceId("android:id/date_picker_header_year").getText();
+		System.out.println("**** Display year is **** : "+year);
+		
+		//get date from calendar
+		String displayDate = AndroidLocators.xpath("//*[@class='android.widget.LinearLayout' and ./*[@text='"
+				+ splitYear + "']]/android.widget.TextView[2]").getText();
+		System.out.println("**** Displaying calendar date **** : " + displayDate);
+
+		//concantenating year and date using string builder class
+		StringBuilder sb = new StringBuilder(displayDate);
+		StringBuilder date_Year_Append  = sb.append(" "+year);
+		System.out.println("==== After appending displaying date and year from calendar ==== : "+date_Year_Append);
+
+		//converting date to string
+		String date_Year_Append_to_String = date_Year_Append.toString();
+		
+		//parsing the display date
+		Date parse_display_date = New_Date_Format.parse(date_Year_Append_to_String);
+		System.out.println(".... After parsing the display date .... : " +parse_display_date);
+		
+		//formating parsed date to calendar format
+		String formatDisplayDate = DateFor.format(parse_display_date);
+		System.out.println("---- Forrmat the new date ---- : "+formatDisplayDate);
+		
+		FormAdvanceSettings.selectDate(myGivendate);
+		//given date is after display date then move forward
+		if (givenDate.after(parse_display_date)) {
+			while (!(CommonUtils.getdriver()
+					.findElements(MobileBy.xpath("//*[@content-desc='" + myGivendate + "']")).size() > 0)) {
+				FormAdvanceSettings.goRight();
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[@content-desc='" + myGivendate + "']")).size() > 0) 
+				{
+					break;
+				}
+			}
+			CommonUtils.wait(1);
+			FormAdvanceSettings.selectDate(myGivendate);
+		} //given date is before display date then move backword
+		else if (givenDate.before(parse_display_date)) {
+			while (!(CommonUtils.getdriver()
+					.findElements(MobileBy.xpath("//*[@content-desc='" + myGivendate + "']")).size() > 0)) {
+				FormAdvanceSettings.goLeft();
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[@content-desc='" + myGivendate + "']")).size() > 0) 
+				{
+					break;
+				}
+			}
+			CommonUtils.wait(1);
+			FormAdvanceSettings.selectDate(myGivendate);
+		}
+		CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='OK']")).click();
+		CommonUtils.wait(2);
 	}
 
 	// form fill by verifying pages
@@ -244,30 +471,31 @@ public class Forms {
 						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 		int countOfFields = formFields1.size();
 		formFields1.clear();
+		
 		// get last element text
 		String lastTxtElement = null;
 		MobileActionGesture.flingVerticalToBottom_Android();
-		formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
-				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 		lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 		System.out.println("Get the last element text: " + lastTxtElement);
 		formFields1.clear();
 		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
-		formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
-				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 		countOfFields = formFields1.size();
-		System.out.println("Before swiping fields count is: " + countOfFields);
+		System.out.println(" ==== Before swiping fields count is ==== : " + countOfFields);
 
 		// scroll and add elements to list until the lastelement
 		while (!formFields1.isEmpty()) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
-			formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
-					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFields1.size();
-			System.out.println("After swiping fields count: " + countOfFields);
+			System.out.println(".... After swiping fields count .... : " + countOfFields);
 			for (int k = 0; k < countOfFields; k++) {
 				System.out.println("***** Print form fields elements text ***** : "
 						+ formFields1.get(countOfFields - (k + 1)).getText());
@@ -506,7 +734,7 @@ public class Forms {
 					if (CommonUtils.getdriver()
 							.findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]")).size() > 0) {
 						MobileActionGesture.scrollUsingText(fieldsText);
-						currency(fieldsText);
+						currency_And_Number_Input(fieldsText);
 					}
 					isCurrency = true;
 				}
@@ -519,7 +747,7 @@ public class Forms {
 					if (CommonUtils.getdriver()
 							.findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]")).size() > 0) {
 						MobileActionGesture.scrollUsingText(fieldsText);
-						number(fieldsText);
+						currency_And_Number_Input(fieldsText);
 					}
 					isNumber = true;
 				}
@@ -867,7 +1095,7 @@ public class Forms {
 					if (CommonUtils.getdriver()
 							.findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]")).size() > 0) {
 						MobileActionGesture.scrollUsingText(fieldsText);
-						currency(fieldsText);
+						currency_And_Number_Input(fieldsText);
 					}
 					isCurrency = true;
 				}
@@ -880,7 +1108,7 @@ public class Forms {
 					if (CommonUtils.getdriver()
 							.findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]")).size() > 0) {
 						MobileActionGesture.scrollUsingText(fieldsText);
-						number(fieldsText);
+						currency_And_Number_Input(fieldsText);
 					}
 					isNumber = true;
 				}
@@ -971,15 +1199,27 @@ public class Forms {
 	
 	//picking formdate
 	public static void formDate(String fieldsText) throws MalformedURLException, InterruptedException {
+		
 		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
 				+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A DATE')]")).size() > 0) {
 			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
 					+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A DATE')]")).click();
 			CommonUtils.alertContentXpath();
-			Forms.dateScriptInForms(2);
+			try {
+				Forms.dateScriptInForms(2);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Thread.sleep(500);
 		} else {
-			System.out.println("Date is already picked");
+			System.out.println(".... Date is already picked .... ");
 		}
 	}
 	
@@ -997,7 +1237,7 @@ public class Forms {
 						.click();
 			}
 		} else {
-			System.out.println("Customer type is already selected");
+			System.out.println("---- Customer type is already selected ---- ");
 		}
 	}
 	
@@ -1045,7 +1285,7 @@ public class Forms {
 						.click();
 			}
 		} else {
-			System.out.println("Territory is already selected");
+			System.out.println("==== Territory is already selected ==== ");
 		}
 	}
 
@@ -1060,7 +1300,7 @@ public class Forms {
 			MobileActionGesture.singleLongPress(country);
 			MobileActionGesture.scrollTospecifiedElement("Australia");
 		} else {
-			System.out.println("Country is already selected");
+			System.out.println("***** Country is already selected ***** ");
 		}
 	}
 	
@@ -1085,7 +1325,18 @@ public class Forms {
 					+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[contains(@text,'PICK A DATE')]"))
 					.click();
 			CommonUtils.alertContentXpath();
-			Forms.dateScriptInForms(2);
+			try {
+				Forms.dateScriptInForms(2);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Thread.sleep(500);
 			if (CommonUtils.getdriver()
 					.findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
@@ -1100,7 +1351,7 @@ public class Forms {
 				Thread.sleep(500);
 			}
 		} else {
-			System.out.println("DateTime is picked");
+			System.out.println("----- DateTime is picked ----- ");
 		}
 	}
 	
@@ -1113,7 +1364,7 @@ public class Forms {
 			Forms.TimeScriptInForms(2, 1);
 			Thread.sleep(500);
 		} else {
-			System.out.println("Time already picked");
+			System.out.println("**** Time already picked **** ");
 		}
 	}
 	
@@ -1133,7 +1384,7 @@ public class Forms {
 			}
 			Thread.sleep(500);
 		} else {
-			System.out.println("Pick List is already picked");
+			System.out.println("..... Pick List is already picked ..... ");
 		}
 	}
 	
@@ -1193,13 +1444,13 @@ public class Forms {
 	}
 	
 	//inputting currency
-	public static void currency(String fieldsText) throws InterruptedException {
+	public static void currency_And_Number_Input(String fieldsText) throws InterruptedException {
 		if (CommonUtils.getdriver()
 				.findElements(MobileBy.xpath("// *[@text='" + fieldsText
 						+ "']/parent::*/parent::*/android.widget.LinearLayout/android.widget.ImageButton"))
 				.size() > 0) {
-			CommonUtils.getdriver().findElement(MobileBy.xpath("// *[@text='" + fieldsText
-					+ "']/parent::*/parent::*/android.widget.LinearLayout/android.widget.ImageButton")).click();
+			CommonUtils.getdriver().findElement(MobileBy.xpath("// *[contains(@text,'" + fieldsText
+					+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.ImageButton")).click();
 			CommonUtils.waitForElementVisibility("//*[@content-desc='Done']");
 			MobileElement currencyClick = CommonUtils.getdriver().findElement(MobileBy.id("incrementButton"));
 			MobileActionGesture.multiTouchByElement(currencyClick);
@@ -1212,25 +1463,6 @@ public class Forms {
 		}
 	}
 	
-	// inputting number
-	public static void number(String fieldsText) throws InterruptedException {
-		if (CommonUtils.getdriver()
-				.findElements(MobileBy.xpath("// *[@text='" + fieldsText
-						+ "']/parent::*/parent::*/android.widget.LinearLayout/android.widget.ImageButton"))
-				.size() > 0) {
-			CommonUtils.getdriver().findElement(MobileBy.xpath("// *[@text='" + fieldsText
-					+ "']/parent::*/parent::*/android.widget.LinearLayout/android.widget.ImageButton")).click();
-			CommonUtils.waitForElementVisibility("//*[@content-desc='Done']");
-			MobileElement currencyClick = CommonUtils.getdriver().findElement(MobileBy.id("incrementButton"));
-			MobileActionGesture.multiTouchByElement(currencyClick);
-			CommonUtils.getdriver().findElement(MobileBy.id("done")).click();
-			Thread.sleep(100);
-		} else {
-			String number1 = RandomStringUtils.randomNumeric(5);
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
-					+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).sendKeys(number1);
-		}
-	}
 	
 	// selecting dropdown
 	public static void selecting_Dropdown(String fieldsText) throws MalformedURLException {
@@ -1243,7 +1475,7 @@ public class Forms {
 			MobileActionGesture.singleLongPress(dropdown);
 			CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView")).get(1).click();
 		} else {
-			System.out.println("Dropdown is already selected");
+			System.out.println("**** Dropdown is already selected **** ");
 		}
 	}
 	
@@ -1258,7 +1490,7 @@ public class Forms {
 			MobileActionGesture.singleLongPress(yesno);
 			CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView")).get(1).click();
 		} else {
-			System.out.println("YesNo is already selected");
+			System.out.println("==== YesNo is already selected ==== ");
 		}
 	}
 	
@@ -1283,7 +1515,7 @@ public class Forms {
 				}
 				System.out.println("Now customer is picked");
 			} else {
-				System.out.println("Customer is already selected!!");
+				System.out.println(".... Customer is already selected .... !!");
 			}
 			Thread.sleep(500);
 		}
@@ -1310,7 +1542,7 @@ public class Forms {
 			}
 			Thread.sleep(500);
 		} else {
-			System.out.println("Custom entity is not present");
+			System.out.println("==== Custom entity is not present ==== ");
 		}
 	}
 	
@@ -1347,7 +1579,7 @@ public class Forms {
 				System.out.println(e);
 			}
 		} else {
-			System.out.println("Form is already picked");
+			System.out.println("**** Form is already picked **** ");
 		}
 	}
 	
@@ -1366,7 +1598,7 @@ public class Forms {
 			CommonUtils.waitForElementVisibility("//*[@text='VIEW']");
 			Thread.sleep(1000);
 		} else {
-			System.out.println("signature is not present");
+            System.out.println("---- Signature is not present ---- ");
 		}
 	}
 	
@@ -1394,8 +1626,8 @@ public class Forms {
 			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Select']")).click();
 		}
 		Thread.sleep(500);
-	}
-	
+	}	
+
 	
 	// create entity item
 	public static void createEntity() throws MalformedURLException, InterruptedException {
@@ -1499,7 +1731,18 @@ public class Forms {
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + allFieldsText
 						+ "']/parent::*/android.widget.LinearLayout/android.widget.Button[1]")).click();
 				CommonUtils.alertContentXpath();
-				Forms.dateScriptInForms(2);
+				try {
+					Forms.dateScriptInForms(2);
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				Thread.sleep(500);
 				break;
 			case "Customer":
@@ -1549,7 +1792,18 @@ public class Forms {
 								+ allFieldsText + "')]/parent::*/android.widget.LinearLayout/android.widget.Button[1]"))
 						.click();
 				CommonUtils.alertContentXpath();
-				Forms.dateScriptInForms(2);
+				try {
+					Forms.dateScriptInForms(2);
+				} catch (MalformedURLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} catch (InterruptedException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} catch (ParseException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
 				Thread.sleep(500);
 				break;
 			case "Date":
@@ -1557,7 +1811,18 @@ public class Forms {
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@id='label_for_view' and contains(@text,'"
 						+ allFieldsText + "')]/parent::*/android.widget.Button")).click();
 				CommonUtils.alertContentXpath();
-				Forms.dateScriptInForms(2);
+				try {
+					Forms.dateScriptInForms(2);
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				Thread.sleep(500);
 				break;
 			case "Customer Type":
@@ -1795,8 +2060,6 @@ public class Forms {
 						.findElement(MobileBy.xpath(
 								"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]"))
 						.sendKeys(email + "@gmail.com");
-			default:
-				break;
 			}
 		}
 	}

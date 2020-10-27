@@ -1,10 +1,10 @@
 package utils;
 
 import java.net.MalformedURLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -251,7 +251,7 @@ public class Work {
 		//merging the both list
 		List<MobileElement> newList = workLabelElements;
 		newList.addAll(workInputElements);
-		//retrieving the list count aa
+		//retrieving the list count 
 		int workFieldsCount = newList.size();
 		System.out.println(" ===== Work Fields Count ===== : " + workFieldsCount);
 		//clear the elements from list
@@ -291,8 +291,7 @@ public class Work {
 		newList.addAll(workInputElements);
 		// get the count of work fields present in the first screen
 		workFieldsCount = newList.size();
-		System.out.println(" ---- Before swiping the device screen fields count is ---- : " + workFieldsCount); 
-
+		System.out.println(" ---- Before swiping the device screen fields count is ---- : " + workFieldsCount);
 		
 		// swipe and retrieve the work fields until the last element found
 		while (!newList.isEmpty() && newList != null) {
@@ -314,7 +313,7 @@ public class Work {
 			for (int i = 0; i < workFieldsCount; i++) {
 				System.out.println("***** Print work fields elements text ***** : "
 						+ newList.get(workFieldsCount - (i + 1)).getText());
-				System.out.println("======= Work fields text ======= : " + newList.get(i).getText());
+				System.out.println("===== Work fields text ===== : " + newList.get(i).getText());
 				if (newList.get(i).getText().equals(workLastElement)) {
 					System.out.println("----- Work fields text inside elements ----- : " + newList.get(i).getText());
 					flag = true;
@@ -369,15 +368,26 @@ public class Work {
 									+ "')]/parent::*/parent::*/android.widget.LinearLayout/*[@resource-id='in.spoors.effortplus:id/pick_date_button']"))
 							.click();
 					CommonUtils.alertContentXpath();
-					Forms.dateScriptInForms(2);
-					Thread.sleep(500);
+					try {
+						Forms.dateScriptInForms(2);
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					CommonUtils.wait(3);
 					CommonUtils.getdriver()
 							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText
 									+ "')]/parent::*/parent::*/android.widget.LinearLayout/*[@resource-id='in.spoors.effortplus:id/pick_time_buton']"))
 							.click();
 					CommonUtils.alertContentXpath();
 					workEndTime(2, 5);
-					Thread.sleep(100);
+					CommonUtils.wait(1);
 				}
 				break;
 			case "Customer":
@@ -404,7 +414,7 @@ public class Work {
 											.xpath("//*[@text='" + CustomerPageActions.randomstringCusName + "']"))
 									.click();
 						}
-						Thread.sleep(500);
+						CommonUtils.wait(5);
 						System.out.println("Now customer is picked");
 					} else {
 						System.out.println("Customer is already selected!!");
@@ -464,7 +474,7 @@ public class Work {
 				}
 				break;
 			case "Phone Number(Optional)":
-			case "Phone(Optional) ":
+			case "Phone(Optional)":
 				MobileActionGesture.scrollUsingText(workFieldsText);
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
@@ -655,7 +665,18 @@ public class Work {
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[contains(@text,'PICK DATE')]"))
 								.click();
 						CommonUtils.alertContentXpath();
-						Forms.dateScriptInForms(2);
+						try {
+							Forms.dateScriptInForms(2);
+						} catch (MalformedURLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						Thread.sleep(500);
 						if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + workFieldsText
 								+ "']/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[2]"))
@@ -705,7 +726,18 @@ public class Work {
 								+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A DATE')]"))
 								.click();
 						CommonUtils.alertContentXpath();
-						Forms.dateScriptInForms(2);
+						try {
+							Forms.dateScriptInForms(2);
+						} catch (MalformedURLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						Thread.sleep(500);
 					} else {
 						System.out.println("Date is already picked");

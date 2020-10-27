@@ -8,6 +8,7 @@ import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
+import utils.AndroidLocators;
 import utils.CommonUtils;
 import utils.MediaPermission;
 
@@ -175,7 +176,28 @@ public class CustomerPageActions {
 		}
 	}
 
-	// click on form
+	//click on '+' to move activity screen from customer screen
+	public static void performAcitivity_using_add_symbol() {
+		CommonUtils.goBackward();
+		CommonUtils.getdriver().findElement(MobileBy.id("addButton")).click();
+		CommonUtils.waitForElementVisibility("//*[contains(@text,'ACTIVITIES')]");
+		//// *[@text='C1']/parent::*/parent::*/ancestor::android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout//*[@id='addLayout']//*[@id='addButton']
+	}
+	
+	//moving to activity screen from home page 
+	public static void perform_Activity_from_homeScreen() {
+		if(CommonUtils.getdriver().findElement(MobileBy.id("checkInCustomerName")).isDisplayed()) {
+			MobileElement getChecked_in_Customer = CommonUtils.getdriver().findElement(MobileBy.id("checkInCustomerName"));
+			System.out.println(".... customer check-in .... :"+getChecked_in_Customer.getText());
+			CommonUtils.getdriver().findElement(MobileBy.id("customerMenuItem")).click();
+			if(AndroidLocators.xpath("//*[@text='Add activity']").isDisplayed()) {
+				AndroidLocators.xpath("//*[@text='Add activity']").click();
+				CommonUtils.waitForElementVisibility("//*[contains(@text,'ACTIVITIES')]");
+			}
+		}
+	}
+	
+	// click on specified form to peform customer activity
 	public static void clickActivity(String formName) throws MalformedURLException, InterruptedException {
 		try {
 			if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + formName + "']")).isDisplayed()) {
@@ -191,8 +213,6 @@ public class CustomerPageActions {
 		CommonUtils.interruptSyncAndLetmeWork();
 		CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/saveForm']");
 	}
-
-
 
 	// checkout customer in homepage
 	public static void HomepageCusCheckout() throws MalformedURLException, InterruptedException {
@@ -218,7 +238,7 @@ public class CustomerPageActions {
 		for (int i = 0; i < checkout.size(); i++) {
 			if (checkout.get(i).getText().contains("Check out")) {
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Check out']")).click();
-				isFound = true;
+				if(isFound == true)
 				break;
 			}
 		}
@@ -238,10 +258,11 @@ public class CustomerPageActions {
 			CommonUtils.getdriver().findElement(MobileBy.className("android.widget.EditText")).sendKeys(randomstring);
 			CommonUtils.keyboardHide();
 			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='SUBMIT']")).click();
-			Thread.sleep(2000);
-		}
+		} 
+		Thread.sleep(2000);
 	}
 
+	//handling customer check-in alert
 	public static void customerCheckInReason() throws InterruptedException {
 		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='Select check in reason']")).size() > 0) {
 			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Meeting']")).click();
@@ -255,4 +276,13 @@ public class CustomerPageActions {
 		Thread.sleep(2000);
 	}
 
+	//customer checkout in customer screen
+	public static void customer_Screen_checkout() throws MalformedURLException, InterruptedException{
+		CommonUtils.goBackward();
+		checkOutOrCheckOutAnyway();	
+	}
+	
+	
+	
+	
 }

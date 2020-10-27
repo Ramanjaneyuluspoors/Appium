@@ -1,6 +1,7 @@
 package Actions;
 
 import java.net.MalformedURLException;
+import java.text.ParseException;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -136,8 +137,8 @@ public class CustomerCreation {
 		for (int j = 0; j < customerFieldsCount; j++) {
 			String originalText = newList.get(j).getText();
 			String cusFieldsText = newList.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println("Before removing special character: " + originalText
-					+ "\nAfter removing special character: " + cusFieldsText);
+			System.out.println("---- Before removing special character ---- : " + originalText
+					+ "\n.... After removing special character .... : " + cusFieldsText);
 
 			switch (cusFieldsText) {
 			case "Type":
@@ -590,8 +591,19 @@ public class CustomerCreation {
 									+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[contains(@text,'PICK DATE')]"))
 									.click();
 							CommonUtils.alertContentXpath();
-							Forms.dateScriptInForms(2);
-							Thread.sleep(500);
+							try {
+								Forms.dateScriptInForms(2);
+							} catch (MalformedURLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							CommonUtils.wait(3);
 						}
 						if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText
 								+ "']/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[2]"))
@@ -624,8 +636,19 @@ public class CustomerCreation {
 									+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A DATE')]"))
 									.click();
 							CommonUtils.alertContentXpath();
-							Forms.dateScriptInForms(2);
-							Thread.sleep(500);
+							try {
+								Forms.dateScriptInForms(2);
+							} catch (MalformedURLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							CommonUtils.wait(5);
 						} else {
 							System.out.println("Date is already picked");
 						}

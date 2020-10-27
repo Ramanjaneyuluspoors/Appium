@@ -1,6 +1,9 @@
 package utils;
 
-public class DatatypesConstants {
+import io.appium.java_client.MobileBy;
+import io.appium.java_client.MobileElement;
+
+public class AndroidLocators {
 	public static final int TYPE_TEXT = 1;
 	public static final int TYPE_NUMBER = 2;
 	public static final int TYPE_DATE = 3;
@@ -35,4 +38,16 @@ public class DatatypesConstants {
 	public static final int TYPE_TERRITORY = 31;
 	public static final int TYPE_CUSTOM_ENTITY = 32;
 	public static final int TYPE_DOCUMENT = 33;
+	
+	//resource id using uiselector
+	public static MobileElement resourceId(String resourceIdLocator) {
+		return CommonUtils.getdriver()
+				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"" + resourceIdLocator + "\")"));
+	}
+	
+	// xpath using MobileBy
+	public static MobileElement xpath(String xpathLocator) 
+	{
+		return CommonUtils.getdriver().findElement(MobileBy.xpath("" + xpathLocator + ""));
+	}
 }

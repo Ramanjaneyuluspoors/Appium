@@ -22,8 +22,9 @@ public class HomepageAction {
 	public static void signInAction() throws MalformedURLException, InterruptedException {
 		try {
 			CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/startStopWorkSwitch']");
-			if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='OFF']")).isDisplayed()) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='OFF']")).click();
+			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@class='android.widget.Switch'][@text='OFF']"))
+					.size() > 0) {
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@class='android.widget.Switch'][@text='OFF']")).click();
 				Thread.sleep(2000);
 				// sign-in form(if sign-in form exist then capturing location page will not
 				// display )
@@ -39,7 +40,7 @@ public class HomepageAction {
 				}
 			} // closing if block
 		} catch (Exception e) {
-			System.out.println("User already begin the day!!");
+			System.out.println("*** User already begin the day *** !!");
 		}
 	}
 
@@ -49,9 +50,9 @@ public class HomepageAction {
 		CommonUtils.waitForElementVisibility("//*[@text='Home']");
 		MobileElement name = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Home']"));
 		if (name.getText().contains("Home")) {
-			System.out.println("User navigation is done");
+			System.out.println("---- User navigation is done ---- ");
 		} else {
-			System.out.println("App is taking more time to load");
+			System.out.println("*** App is taking more time to load *** ");
 		}
 	}
 

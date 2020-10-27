@@ -39,9 +39,9 @@ public class MobileActionGesture {
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Successfully scrolled to specified element and click");
+			System.out.println(".... Successfully scrolled to specified element and click ....");
 		} else {
-			System.out.println("Element unable to found");
+			System.out.println(".... Element unable to found ....");
 		}
 	}
 	
@@ -49,7 +49,7 @@ public class MobileActionGesture {
 		MobileElement eleScroll = CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 				"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textContains(\""
 						+ eleText + "\").instance(0))"));
-		System.out.println("scrolled element is " + eleScroll);
+		System.out.println("*** scrolled element is *** :" + eleScroll);
 	}
 	
 	public static String directScrollToView(String eleText) {
@@ -70,7 +70,6 @@ public class MobileActionGesture {
 			action.perform();
 		}
 	
-
 	// Horizontal Swipe by percentages
 	public static void horizontalSwipeByPercentage(double startPercentage, double endPercentage,
 			double anchorPercentage) throws MalformedURLException {

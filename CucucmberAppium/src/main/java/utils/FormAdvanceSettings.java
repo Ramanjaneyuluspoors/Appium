@@ -4,8 +4,10 @@ import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.text.RandomStringGenerator;
 import org.junit.gen5.api.Assertions;
 import org.openqa.selenium.By;
@@ -405,7 +407,7 @@ public class FormAdvanceSettings {
 				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 		int minMaxFieldsCount = minMaxFields.size();
 		minMaxFields.clear();
-		//swipe and get the last element from the list
+		// swipe and get the last element from the list
 		String lastTxtElement = null;
 		MobileActionGesture.flingVerticalToBottom_Android();
 		minMaxFields.addAll(CommonUtils.getdriver().findElements(MobileBy
@@ -1103,7 +1105,8 @@ public class FormAdvanceSettings {
 		String textInputData = null;
 		String[] criteriaCondition = baseCondition;
 		String[] selectCondition = { "Equals", "Contain", "Does not contain", "Starts with", "Ends with" };
-		String[] myInput = {formFieldsLabelInput,formFieldsLabelInput + "extraWords", "extraWords" + formFieldsLabelInput, "extraWords"};
+		String[] myInput = { formFieldsLabelInput, formFieldsLabelInput + "extraWords",
+				"extraWords" + formFieldsLabelInput, "extraWords" };
 		for (int k = 0; k < 4; k++) {
 			textInputData = myInput[k];
 			if (pagination.size() > 0) {
@@ -1496,7 +1499,11 @@ public class FormAdvanceSettings {
 					verify_mandatory_error();
 				}
 			}
+			// adding the date
 			c.add(Calendar.DAY_OF_MONTH, 2);
+
+			System.out.println("---- After increasing the date ---- :" + DateFor.format(c.getTime()));
+			// click on pages for validation
 			if (pagination.size() > 0) {
 				for (int k = 0; k < pagination.size(); k++) {
 					pagination.get(k).click();
@@ -1505,26 +1512,20 @@ public class FormAdvanceSettings {
 		}
 	}
 
-	// check mandatory error is displaying or not if base condition is mandatory
+	// click on form save or save & submit for approval
 	public static void verify_mandatory_error() throws InterruptedException {
-		CommonUtils.getdriver()
-				.findElement(MobileBy
-						.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/saveForm\")"))
-				.click();
+		AndroidLocators.resourceId("in.spoors.effortplus:id/saveForm").click();
 		CommonUtils.alertContentXpath();
 		if (CommonUtils.getdriver()
-				.findElement(MobileBy
-						.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveButton\")"))
-				.isDisplayed()) {
-			CommonUtils.getdriver().findElement(MobileBy
-					.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveButton\")"))
-					.click();
+				.findElements(MobileBy
+						.AndroidUIAutomator("new UiSelector().resourceId(\"'in.spoors.effortplus:id/formSaveButton\")"))
+				.size() > 0) {
+			AndroidLocators.resourceId("'in.spoors.effortplus:id/formSaveButton").click();
 		} else if (CommonUtils.getdriver()
-				.findElement(MobileBy.AndroidUIAutomator(
+				.findElements(MobileBy.AndroidUIAutomator(
 						"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveWorkflowButton\")"))
-				.isDisplayed()) {
-			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
-					"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveWorkflowButton\")")).click();
+				.size() > 0) {
+			AndroidLocators.resourceId("in.spoors.effortplus:id/formSaveWorkflowButton").click();
 		}
 		Thread.sleep(300);
 	}
@@ -1557,7 +1558,7 @@ public class FormAdvanceSettings {
 		int countOfFields = formFieldsLists.size();
 		formFieldsLists.clear();
 		String lastTxtElement = null;
-		//swipe and get the last element
+		// swipe and get the last element
 		MobileActionGesture.flingVerticalToBottom_Android();
 		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
 				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
@@ -1609,7 +1610,7 @@ public class FormAdvanceSettings {
 		formFields1.clear();
 
 		String lastTxtElement = null;
-		//swipe and get the last element 
+		// swipe and get the last element
 		MobileActionGesture.flingVerticalToBottom_Android();
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
 				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
@@ -1681,7 +1682,7 @@ public class FormAdvanceSettings {
 		int countOfFields = formFieldsLists.size();
 
 		String lastTxtElement = null;
-		//swipe and get the last element
+		// swipe and get the last element
 		MobileActionGesture.flingVerticalToBottom_Android();
 		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
 				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
@@ -1735,7 +1736,7 @@ public class FormAdvanceSettings {
 		formFields1.clear();
 
 		String lastTxtElement = null;
-		//swipe and get the last element
+		// swipe and get the last element
 		MobileActionGesture.flingVerticalToBottom_Android();
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
 				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
@@ -1807,7 +1808,7 @@ public class FormAdvanceSettings {
 		int countOfFields = formFieldsLists.size();
 		formFieldsLists.clear();
 		String lastTxtElement = null;
-		//swipe and get the last element
+		// swipe and get the last element
 		MobileActionGesture.flingVerticalToBottom_Android();
 		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
 				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
@@ -1867,7 +1868,7 @@ public class FormAdvanceSettings {
 		formFields1.clear();
 
 		String lastTxtElement = null;
-		//swipe and get the last element
+		// swipe and get the last element
 		MobileActionGesture.flingVerticalToBottom_Android();
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
 				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
@@ -1945,7 +1946,7 @@ public class FormAdvanceSettings {
 		int countOfFields = formFieldsLists.size();
 		formFieldsLists.clear();
 		String lastTxtElement = null;
-		//swipe and get the last element
+		// swipe and get the last element
 		MobileActionGesture.flingVerticalToBottom_Android();
 		formFieldsLists.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + k
 				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
@@ -1999,7 +2000,7 @@ public class FormAdvanceSettings {
 		formFields1.clear();
 
 		String lastTxtElement = null;
-		//get the last element 
+		// get the last element
 		MobileActionGesture.flingVerticalToBottom_Android();
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
 				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
@@ -2475,8 +2476,7 @@ public class FormAdvanceSettings {
 		System.out.println(" ***** Before swiping fields count is ***** : " + countOfFields);
 
 		// scroll and add elements to list until the lastelement
-		while (formFields1.isEmpty()) 
-		{
+		while (formFields1.isEmpty()) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
@@ -2484,15 +2484,13 @@ public class FormAdvanceSettings {
 							+ fieldLabel + "')]")));
 			countOfFields = formFields1.size();
 			System.out.println(" ..... After swiping fields count ..... : " + countOfFields);
-			for (int j = 0; j < countOfFields; j++) 
-			{
-				System.out.println("***** Print work fields elements text ***** : "
+			for (int j = 0; j < countOfFields; j++) {
+				System.out.println("***** Print form fields elements text ***** : "
 						+ formFields1.get(countOfFields - (j + 1)).getText());
-				System.out.println("====== Work fields text ====== : " + formFields1.get(j).getText());
-				if (formFields1.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) 
-				{
+				System.out.println("====== Form fields text ====== : " + formFields1.get(j).getText());
+				if (formFields1.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
 					System.out
-							.println("----- Work fields text inside elements ----- : " + formFields1.get(j).getText());
+							.println("----- Form fields text inside elements ----- : " + formFields1.get(j).getText());
 					flag = true;
 				}
 			}
@@ -2543,116 +2541,250 @@ public class FormAdvanceSettings {
 						colorFieldInput = colorFieldInput + 2;
 					}
 				}
-				break; //// *[@text='Number']/parent::*/parent::*/android.widget.LinearLayout/android.widget.ImageButton -'+'
+				break; //// *[@text='Number']/parent::*/parent::*/android.widget.LinearLayout/android.widget.ImageButton
+						//// -'+'
 			}
 		}
 		return fieldInput;
 	}
-	
-	//handling warning alert in form
+
+	// validating Error and Warn conditon based on values in other fields
+	public static void Validate_Based_on_Values_in_Other_Fields(String errorCondition, String inputValue)
+			throws MalformedURLException, InterruptedException, ParseException {
+		// get pages
+		List<MobileElement> pagination = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//*[contains(@content-desc,'Page ')]"));
+		// checkif pagination link exists
+		if (pagination.size() > 0) {
+			System.out.println(" **** Pagination exists going to click on pages **** ");
+
+			// click on pagination link
+			for (int i = 0; i < pagination.size(); i++) {
+				pagination.get(i).click();
+				System.out.println("----- Clicked on page ----- : " + pagination.get(i));
+				error_And_WarnMessage_in_pagination(errorCondition, inputValue, i);
+			}
+		} else {
+			System.out.println(" ==== Pagination not exists!! ====");
+			Forms.verifySectionToClickAdd();
+			validating_errorAndWarn_Message_without_pagination(errorCondition, inputValue);
+		}
+//	Forms.formSaveButton();
+	}
+
+	// handling warning alert in form
 	public static void handlingWarningAlert() {
 		CommonUtils.alertContentXpath();
-		if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Warning !']")).isDisplayed()) {
-			MobileElement message = CommonUtils.getdriver()
-					.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/message\")"));
+		if (AndroidLocators.resourceId("android:id/alertTitle").isDisplayed()) {
+			MobileElement message = AndroidLocators.resourceId("android:id/message");
+//					CommonUtils.getdriver()
+//					.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/message\")"));
 			System.out.println(" **** Warning message is **** :" + message.getText());
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='CANCEL']")).click();
+			AndroidLocators.resourceId("android:id/button2").click();
+//			CommonUtils.getdriver()
+//					.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button2\")"))
+//					.click();
 		}
 		CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/saveForm']");
 	}
 
-	//validating error and warn message in form pagination
-	public static void errorAndWarnMessage(String errorCondition, String[] inputValue, int i) throws MalformedURLException, InterruptedException {
-	 int j =i + 1;
+	// validating error and warn message in form pagination
+	public static String error_And_WarnMessage_in_pagination(String errorCondition, String inputValue, int i)
+			throws MalformedURLException, InterruptedException, ParseException {
+		int j = i + 1;
 		List<MobileElement> formFields1 = CommonUtils.getdriver()
 				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
 						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
 		int countOfFields = formFields1.size();
 		formFields1.clear();
-		
+
 		String lastTxtElement = null;
 		// swipe to bottom and get the last element from the list
 		MobileActionGesture.flingVerticalToBottom_Android();
-		formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
-				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
-		lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFields1.get(formFields1.size() - 1).getText();
 		System.out.println("---- Get the last element text ---- : " + lastTxtElement);
 		formFields1.clear();
 		MobileActionGesture.flingToBegining_Android();
 
-		// add the elements to list
-		formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
-				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		// add the elements to list in screen 1
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 		countOfFields = formFields1.size();
 		System.out.println("***** Before swiping fields count is ***** : " + countOfFields);
 
-		// scroll and add elements to list until the lastelement
-		while (!formFields1.isEmpty()) {
+		// scroll and add elements to list until the lastelement found
+		while (!formFields1.isEmpty() && formFields1 != null) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
-			formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
-					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
+					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFields1.size();
 			System.out.println(".... After swiping fields count .... : " + countOfFields);
 			for (int k = 0; k < countOfFields; k++) {
 				System.out.println("***** Print form fields elements text ***** : "
 						+ formFields1.get(countOfFields - (k + 1)).getText());
 				System.out.println("===== Form fields text ===== : " + formFields1.get(k).getText());
-				if (formFields1.get(k).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
-					System.out.println("----- Form fields text inside elements ----- : " + formFields1.get(k).getText());
+				// if last element found then break the for loop
+				if (formFields1.get(k).getText().equals(lastTxtElement)) {
+					System.out
+							.println("----- Form fields text inside elements ----- : " + formFields1.get(k).getText());
+					flag = true;
+				}
+			}
+			// break the while loop after last last element found
+			if (flag == true)
+				break;
+		}
+
+		// swipe to top of rhe screen
+		MobileActionGesture.flingToBegining_Android();
+
+		// iterate and fill the form
+		for (int m = 0; m < countOfFields; m++) {
+			String originalText = formFields1.get(m).getText();
+			String fieldsText = formFields1.get(m).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println(" **** Before removing special character **** : " + originalText
+					+ "\n---- After removing regexp ---- : " + fieldsText);
+			String[] inputArray = inputValue.split(",");
+			String currencyInput = inputArray[0];
+			String dateInput = inputArray[1];
+			int currencyErrorInput = 0;
+			currencyErrorInput = Integer.parseInt(currencyInput);
+
+			if (fieldsText.contains("Text") || fieldsText.contains("G-Text") || fieldsText.contains("S-Text")) {
+				MobileActionGesture.scrollUsingText(fieldsText);
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]"))
+						.size() > 0) {
+					MobileActionGesture.scrollUsingText(fieldsText);
+					Forms.text(fieldsText);
+				}
+			}
+//			else if (fieldsText.contains("Currency") || fieldsText.contains("G-Currency")
+//					|| fieldsText.contains("S-Currency") || fieldsText.contains("Number")
+//					|| fieldsText.contains("G-Number") || fieldsText.contains("S-Number")) 
+//			{
+//				MobileActionGesture.scrollUsingText(fieldsText);
+//				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]"))
+//						.size() > 0) {
+//					MobileActionGesture.scrollUsingText(fieldsText);
+//					// method for validating currency using error and warning condition
+//					currencyValidation_error_And_warn_message(errorCondition, currencyErrorInput, fieldsText);
+//				}
+//			} 
+			else if (fieldsText.contains("Date") || fieldsText.contains("G-Date") || fieldsText.contains("S-Date")) {
+				MobileActionGesture.scrollUsingText(fieldsText);
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]"))
+						.size() > 0) {
+					MobileActionGesture.scrollUsingText(fieldsText);
+					// method for Date validation using error and warning condition
+					dateValidationforError_and_warn_message(errorCondition, dateInput, fieldsText);
+				}
+			}
+		} // closing for loop
+		return errorCondition;
+	}
+
+	// validating error and warn essage without pagination
+	public static String validating_errorAndWarn_Message_without_pagination(String errorCondition, String inputValue)
+			throws MalformedURLException, InterruptedException, ParseException {
+		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(
+				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		int countOfFields = formFields1.size();
+		formFields1.clear();
+
+		String lastTxtElement = null;
+		// get last element text
+		MobileActionGesture.flingVerticalToBottom_Android();
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+		System.out.println(" **** Get the last element text **** : " + lastTxtElement);
+		formFields1.clear();
+		MobileActionGesture.flingToBegining_Android();
+
+		// add the elements to list
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		countOfFields = formFields1.size();
+		System.out.println(" ***** Before swiping fields count is ***** : " + countOfFields);
+
+		// scroll and add elements to list until the lastelement
+		while (!formFields1.isEmpty()) {
+			boolean flag = false;
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
+			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
+					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			countOfFields = formFields1.size();
+			System.out.println(" ..... After swiping fields count ..... : " + countOfFields);
+			for (int j = 0; j < countOfFields; j++) {
+				System.out.println("***** Print form fields elements text ***** : "
+						+ formFields1.get(countOfFields - (j + 1)).getText());
+				System.out.println("====== Form fields text ====== : " + formFields1.get(j).getText());
+				if (formFields1.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "").equals(lastTxtElement)) {
+					System.out
+							.println("----- Form fields text inside elements ----- : " + formFields1.get(j).getText());
 					flag = true;
 				}
 			}
 			if (flag == true)
 				break;
 		}
-				
+
 		// iterate and fill the form
 		for (int m = 0; m < countOfFields; m++) {
 			String originalText = formFields1.get(m).getText();
 			String fieldsText = formFields1.get(m).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println(" **** Before removing special character **** : " + originalText
-					+ "\n----- after removing regexp ---- : " + fieldsText);
-			
-			String currencyInput = inputValue[0];
-			String dateInput = inputValue[1];
+					+ "\n----- After removing regexp ---- : " + fieldsText);
+
+			String[] inputArray = inputValue.split(",");
+			String currencyInput = inputArray[0];
+			String dateInput = null;
+			dateInput = inputArray[1];
 			int currencyErrorInput = 0;
 			currencyErrorInput = Integer.parseInt(currencyInput);
-			switch(fieldsText) {
-			
+
+			switch (fieldsText) {
+
 			case "Currency":
 			case "G-Currency":
 			case "S-Currency":
+			case "Number":
+			case "G-Number":
+			case "S-Number":
 				MobileActionGesture.scrollUsingText(fieldsText);
 				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]"))
-						.size() > 0) 
-				{
+						.size() > 0) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					//method for validating currency using error and warning condition
+					// method for validating currency using error and warning condition
 					currencyValidation_error_And_warn_message(errorCondition, currencyErrorInput, fieldsText);
 				}
-			break;
+				break;
 			case "Date":
 			case "G-Date":
 			case "S-Date":
 				MobileActionGesture.scrollUsingText(fieldsText);
 				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]"))
-						.size() > 0) 
-				{
+						.size() > 0) {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					// method for Date validation using error and warning condition
 					dateValidationforError_and_warn_message(errorCondition, dateInput, fieldsText);
 				}
 				break;
-			} //closing switch satement
-		} //closing for loop
+			} // closing switch satement
+		} // closing for loop
+
+		return errorCondition;
+
 	}
-	
-	//validating currency for error and warning condition
+
+	// validating currency for error and warning condition
 	public static int currencyValidation_error_And_warn_message(String errorCondition, int currencyErrorInput,
 			String fieldsText) throws InterruptedException {
 		for (int p = 0; p < 3; p++) {
-			//decreasing currency input for boundary value testing
+			// decreasing currency input for boundary value testing
 			currencyErrorInput = currencyErrorInput - 1;
 			System.out.println(" **** Enter the currency input **** :" + currencyErrorInput);
 			MobileActionGesture.scrollUsingText(fieldsText);
@@ -2663,102 +2795,183 @@ public class FormAdvanceSettings {
 					.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 					.sendKeys(String.valueOf(currencyErrorInput));
-			MobileActionGesture.scrollUsingText(fieldsText);
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-					+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText")).click();
 			// validating error and warning condition
-			if (errorCondition.equals("Show Error when")) 
-			{
-				MobileActionGesture.scrollUsingText("" + fieldsText + "");
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-						+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText")).click();
+			if (errorCondition.equals("Show Error when")) {
+				MobileActionGesture.scrollUsingText("Text");
+				CommonUtils.getdriver().findElement(MobileBy.xpath(
+						"//*[contains(@text,'Text')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
+						.click();
 				CommonUtils.getdriver().hideKeyboard();
-			} 
-			else if (errorCondition.equals("Show Warning when")) 
-			{
+			} else if (errorCondition.equals("Show Warning when")) {
 				verify_mandatory_error();
 				handlingWarningAlert();
 			}
 			// retrieving error message using OCR
 			String text = CommonUtils.OCR();
-			System.out.println("---- Expected toast message for currency error message is ---- : " + text);
+			System.out.println("---- Expected toast message is ---- : " + text);
 
 			MobileActionGesture.scrollUsingText(fieldsText);
 			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 					+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText")).clear();
+			// increasing the currency value
 			currencyErrorInput = currencyErrorInput + 2;
+			System.out.println(".... After increaing the currency value .... : " + currencyErrorInput);
 		}
 		return currencyErrorInput;
 	}
-	
-	
-	//date validation for error and warning message
-	public static String dateValidationforError_and_warn_message(String errorCondition, String dateInput, String fieldsText) throws InterruptedException {
-		String dateString = null;
-		dateString = dateInput;
-		SimpleDateFormat DateFor = new SimpleDateFormat("dd MMMM yyyy");
-		Calendar c = Calendar.getInstance();
 
-		try {
-			// Setting the date to the given date
-			c.setTime(DateFor.parse(dateString));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		String presentDate = DateFor.format(c.getTime());
-		System.out.println("---- Given date is ---- : " + presentDate);
+	// date validation for error and warning message
+	public static String dateValidationforError_and_warn_message(String errorCondition, String dateInput,
+			String fieldsText) throws InterruptedException, ParseException, MalformedURLException {
+		// date formatter
+		SimpleDateFormat DateFor = new SimpleDateFormat("dd MMMM yyyy");
+
+//		SimpleDateFormat New_Date_Format = new SimpleDateFormat("EEE, MMM dd yyyy"); //EEE-Day of month, MMM-month, dd-date, yyyy-year
+		
+		java.util.Date date = new java.util.Date();
+		// formating current date using date formatter
+		String toDaydate = DateFor.format(date);
+		// printing current date
+		System.out.println("**** Todays date is **** : " + toDaydate);
+
+		// parse the today date
+		Date presentDate = DateFor.parse(toDaydate);
+		// print parsing today date
+		System.out.println("....After parsing today date ... : " + presentDate);
+
+		// converting given date in string format to date format
+		date = DateFor.parse(dateInput);
+		// formating converted date into our date formatter
+		String formatGivenDate = DateFor.format(date);
+		// printing given date
+		System.out.println("---- Given date is ---- : " + formatGivenDate);
 
 		for (int p = 0; p < 3; p++) {
 			// Number of Days to add
-			c.add(Calendar.DAY_OF_MONTH, -1);
+			date = DateUtils.addDays(date, -1);
 			// conversion of date
-			String newDate = DateFor.format(c.getTime());
+			String inputDate = DateFor.format(date);
+			
 			// Printing customized date
-			System.out.println(" **** My Date is **** : " + newDate);
+			System.out.println(" **** My given date is **** : " + inputDate);
+
+//			String[] splitDate = inputDate.split(" ");
+//			
+//			String splitYear = splitDate[2];
+//			//get year
+//			System.out.println("... Selected Year ... : "+splitYear);
+//			
+//			// parse the given date inside loop
+//			Date givenDate = DateFor.parse(inputDate);
+//			// printing parsed given date
+//			System.out.println(".... After parsing the given date .... : " + givenDate);
 
 			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
 							+ fieldsText + "\").instance(0))"));
 			if (CommonUtils.getdriver()
-					.findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
-							+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A DATE')]"))
+					.findElements(MobileBy.xpath(
+							"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button"))
 					.size() > 0) {
 				CommonUtils.getdriver().findElement(MobileBy.xpath(
 						"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button"))
 						.click();
 				CommonUtils.alertContentXpath();
-				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='" + newDate + "']"))
-						.size() > 0) {
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='" + newDate + "']")).click();
-				} else {
-					do {
-						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Next month']")).click();
-					} while (CommonUtils.getdriver()
-							.findElements(MobileBy.xpath("//*[@content-desc='" + newDate + "']")).size() > 0);
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='" + newDate + "']")).click();
-				}
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='OK']")).click();
-				Thread.sleep(200);
+				
+				Forms.getCalendarDates(inputDate);
 			}
 			if (errorCondition.equals("Show Error when")) {
-				verify_mandatory_error();
+				Forms.formSaveButton();
 				// retrieving error message using OCR
 				String dateText = CommonUtils.OCR();
-				System.out.println("---- Expected toast message for currency error message is ---- : " + dateText);
+				System.out.println("---- Expected toast message is ---- : " + dateText);
 			} else if (errorCondition.equals("Show Warning when")) {
-				verify_mandatory_error();
+//				verify_mandatory_error();
+				Forms.formSaveButton();
 				handlingWarningAlert();
 			}
-			
-			//increasing date
-			c.add(Calendar.DAY_OF_MONTH, 2);
-			
+			// adding date
+			date = DateUtils.addDays(date, 2);
+			//format the increased date
+			String newIncreasedDate = DateFor.format(date);
+			//printing the increased date
+			System.out.println("**** After increasing the date **** : " + newIncreasedDate);
+
 		} // closing for loop
-		return presentDate;
+		return toDaydate;
 	} // closing method
+
+	//calendar click next('>' symbol)
+	public static void goRight() {
+		CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Next month']")).click();
+	}
 	
+	//calendar click next('<' symbol)
+	public static void goLeft() throws InterruptedException {
+		CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Previous month']")).click();
+		CommonUtils.wait(1);
+	}
 	
+	//select specified year
+	public static void clickElementByText(String txt) throws InterruptedException, MalformedURLException {
+		CommonUtils.getdriver()
+				.findElement(MobileBy.xpath("//*[@resource-id='android:id/text1'][@text='" + txt + "']")).click();
+		CommonUtils.wait(1);
+	}
 	
+	//click on year
+	public static void clickCalendarYear() throws InterruptedException, MalformedURLException {
+		MobileElement yearClick = AndroidLocators.resourceId("android:id/date_picker_header_year");
+		MobileActionGesture.tapByElement(yearClick);
+	}
 	
+	//select date from dates list
+	public static void selectDate(String inputDate) throws InterruptedException {
+		boolean flag = false;
+		List<MobileElement> allDates = CommonUtils.getdriver()
+				.findElements(MobileBy.xpath("//android.view.View/android.view.View"));
+		for (int l = 0; l < allDates.size(); l++) {
+			String myDateList = allDates.get(l).getAttribute("content-desc");
+			if (myDateList.contains(inputDate)) {
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='" + inputDate + "']")).click();
+				flag = true;
+			}
+			if(flag == true)
+				break;
+		}
+		
+	}
 	
+	//get year
+	public static void checkYear() {
+		final String year = AndroidLocators.resourceId("android:id/date_picker_header_year").getText();
+		System.out.println("**** Display year is **** : "+year);
+	}
+	
+	//calendar display date
+	public static String dateSelection() {
+		String displayDate = AndroidLocators.resourceId("android:id/date_picker_header_date").getText();
+		System.out.println(".... Date displaying in calendar .... : " + displayDate);
+		return displayDate;
+	}
+	 
+	String monthCheck(String MMMM) throws ParseException {
+		// date formatter
+		SimpleDateFormat DateFor = new SimpleDateFormat("dd MMMM yyyy");
+
+		SimpleDateFormat New_Date_Format = new SimpleDateFormat("EEE, MMM dd");
+
+		String displayDate = AndroidLocators.resourceId("android:id/date_picker_header_date").getText();		
+		System.out.println("**** Displaying calendar date **** : " + displayDate);
+		Date parse_display_date = New_Date_Format.parse(displayDate);
+		System.out.println(".... After parsing the display date .... : " +parse_display_date);
+		String formatDate = DateFor.format(parse_display_date);
+		System.out.println("---- Formating the parese date ---- : "+formatDate);
+		
+		String[] splitFormated_Date = formatDate.split(" ");
+		String monthSplit = splitFormated_Date[1];
+		System.out.println(".... Retrieving month from parsed date .... " +monthSplit);
+		return MMMM;
+		
+	}
 }

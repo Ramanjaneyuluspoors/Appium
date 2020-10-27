@@ -144,16 +144,16 @@ public class RoutePlan {
 		CommonUtils.implicitWait();
 		try {
 			if (CommonUtils.getdriver().findElement(MobileBy.id("textview")).isDisplayed()) {
-				System.out.println("Select Customer/Custom Entity popup is displayed");
+				System.out.println("---- Select Customer/Custom Entity popup is displayed ----");
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Customers']")).click();
 				CommonUtils.waitForElementVisibility("//*[@text='Customers']");
 			}
 		} catch (Exception e) {
-			System.out.println("Select Customer/Custom Entity popup is not displayed");
+			System.out.println("**** Select Customer/Custom Entity popup is not displayed ****");
 		}
 		try {
 			if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Customers']")).isDisplayed()) {
-				System.out.println("Day plan with customer are not exist, lets pick customers");
+				System.out.println(".... Day plan with customer are not exist, lets pick customers ....");
 				List<MobileElement> selectCheckbox = CommonUtils.getdriver()
 						.findElements(MobileBy.id("pickCustomerCheck"));
 				MobileActionGesture.singleLongPress(selectCheckbox.get(0));
@@ -163,7 +163,7 @@ public class RoutePlan {
 				calendarClick();
 				veirfyDayPlanCusCheckin();
 			} else {
-				System.out.println("Day plan with customers are exist");
+				System.out.println("**** Day plan with customers are exist ****");
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'Dayplan progress')]"))
 						.isDisplayed();
 				veirfyDayPlanCusCheckin();
@@ -176,13 +176,13 @@ public class RoutePlan {
 	// verify day plan with customer check-in
 	public static void veirfyDayPlanCusCheckin() throws MalformedURLException, InterruptedException {
 		List<MobileElement> daypalnCusCheckin = CommonUtils.getdriver().findElements(MobileBy.id("checkinoutButton"));
-		System.out.println("Daypaln customer count :" + daypalnCusCheckin.size());
+		System.out.println("---- Daypaln customer count ---- :" + daypalnCusCheckin.size());
 		if (daypalnCusCheckin.get(0).getText().contains("OFF")) {
-			System.out.println("User going to checkin to customer");
+			System.out.println("---- User going to checkin to customer ----");
 			daypalnCusCheckin.get(0).click();
 			dayPlancheckInOrCheckOutAnyway();
 		} else {
-			System.out.println("User already checked into customer, perform dayplan customer activity ");
+			System.out.println("**** User already checked into customer, perform dayplan customer activity ****");
 			CommonUtils.getdriver().findElement(MobileBy.id("summaryBtn")).click();
 		}
 		CustomerPageActions.goToActivityScreen();

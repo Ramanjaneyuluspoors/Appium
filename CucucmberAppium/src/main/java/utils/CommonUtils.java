@@ -156,8 +156,7 @@ public class CommonUtils {
 		return result;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static String verify(AppiumDriver driver) {
+	public static String verify() {
 		String result = null;
 		File srcFile = driver.getScreenshotAs(OutputType.FILE);
 		ITesseract instance = new Tesseract();
@@ -169,7 +168,7 @@ public class CommonUtils {
 		return result;
 	}
 
-	public static String image(AppiumDriver<MobileElement> driver) {
+	public static String image() {
 		File targetFile = null;
 		try {
 			File srcFile = driver.getScreenshotAs(OutputType.FILE);
@@ -185,13 +184,11 @@ public class CommonUtils {
 
 	// keyboard events
 	public static void pressKeycode(KeyEvent keyEvent) {
-
 		driver.pressKey(keyEvent);
 	}
 
 	// long press using keyboard
 	public static void LongPressHardware(KeyEvent keyEvent) {
-
 		driver.longPressKey(keyEvent);
 	}
 
@@ -252,6 +249,7 @@ public class CommonUtils {
 
 	// clicks on Home in menu bar to move homepage
 	public static void clickHomeInMenubar() throws InterruptedException {
+        boolean	  isElementFound = false;
 		Thread.sleep(1000);
 		List<MobileElement> Homepage = driver.findElements(MobileBy.id("design_menu_item_text"));
 		for (int i = 0; i < Homepage.size(); i++) {
@@ -259,7 +257,10 @@ public class CommonUtils {
 				driver.findElement(MobileBy.xpath("//android.widget.CheckedTextView[@text='Home']")).click();
 				waitForElementVisibility("//*[@text='Home']");
 			}
-			break;
+			if(isElementFound == true)
+			{
+			  break;
+			}
 		}
 	}
 
@@ -277,19 +278,21 @@ public class CommonUtils {
 		Thread.sleep(2000);
 	}
 
+	//click on interrupt sync popup
 	public static void interruptSyncAndLetmeWork() throws InterruptedException {
 		try {
 			if (driver.findElement(MobileBy.xpath("//*[@text='INTERRUPT SYNC & LET ME WORK']")).isDisplayed()) {
 				driver.findElement(MobileBy.xpath("//*[@text='INTERRUPT SYNC & LET ME WORK']")).click();
-				System.out.println("INTERRUPT SYNC & LET ME WORK Is clicked Successfully!!");
+				System.out.println("---- INTERRUPT SYNC & LET ME WORK Is clicked Successfully!! ----");
 			} else {
-				System.out.println("INTERRUPT SYNC & LET ME WORK Is not displayed!!");
+				System.out.println(".... INTERRUPT SYNC & LET ME WORK Is not displayed!! ....");
 			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 
+	//hide keyboard
 	public static void keyboardHide() {
 		try {
 			CommonUtils.getdriver().hideKeyboard();
@@ -297,4 +300,14 @@ public class CommonUtils {
 		}
 	}
 
+	//wait method in seconds
+	public static void wait(final int sec) throws InterruptedException {
+		try {
+			TimeUnit.SECONDS.sleep(sec);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	
 }
