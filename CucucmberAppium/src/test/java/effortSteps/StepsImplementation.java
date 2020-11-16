@@ -1,6 +1,7 @@
 package effortSteps;
 
 import java.net.MalformedURLException;
+import java.text.ParseException;
 
 import Actions.CustomerCreation;
 import Actions.CustomerPageActions;
@@ -26,14 +27,7 @@ public class StepsImplementation {
 
 	@When("user click on signin")
 	public void user_click_on_signin() throws MalformedURLException, InterruptedException {
-		Work.checkWorkExistInHomePageorNot("Sanity");
-		Work.workSearch("Sanity");
-		Work.verifyWorkExistOrNot("Sanity");
-//		MobileActionGesture.scrollTospecifiedElement("Customers");
-//		CustomerPageActions.customerFab();
-//		CustomerPageActions.captureImage();
-//		CustomerCreation.createCustomerWithAllFields();
-//		HomepageAction.signInAction(); // need to optimize taking 37s time to signin using location if sign-in form
+		HomepageAction.signInAction(); // need to optimize taking 37s time to signin using location if sign-in form
 //    	Forms.createEntity();										// does'nt exist
 	}
 
@@ -44,7 +38,7 @@ public class StepsImplementation {
 	
 	@Given("^Scroll to customer card and click$")
 	public void scroll_to_customer_card_and_click(String customers) throws MalformedURLException {
-		MobileActionGesture.scrollTospecifiedElement("" + customers + "");
+		CustomerPageActions.verifyCustomerInHomePage("" + customers + "");
 	}
 
 	@When("^user search for customer with$")
@@ -54,12 +48,13 @@ public class StepsImplementation {
 
 	@Then("verify customer exist or not {string}")
 	public void verify_customer_exist_or_not(String cus) throws MalformedURLException, InterruptedException {
-		CustomerPageActions.verifyCusExistOrNot(cus);
+		CustomerPageActions.verifyCusExistOrNot(cus);	
 	}
 
 	@And("verfiy customer checkin")
 	public void verfiy_customer_checkin() throws MalformedURLException, InterruptedException {
 		CustomerPageActions.veirfyCusCheckin();
+		CustomerPageActions.goToActivityScreen();
 	}
 
 	@And("^Do customer activity and checkout$")
@@ -71,7 +66,8 @@ public class StepsImplementation {
 
 	@Given("^Scroll to route plan and click$")
 	public void scroll_to_route_plan_and_click(String Routeplans) throws MalformedURLException {
-		RoutePlan.GoingToRoutes(Routeplans);
+		CustomerPageActions.verifyCustomerInHomePage(Routeplans);
+		CommonUtils.waitForElementVisibility("//*[@text='Route plans']");
 	}
 
 	@When("^user search for route$")
@@ -97,7 +93,8 @@ public class StepsImplementation {
 
 	@Given("^Scroll to Day planner$")
 	public void scroll_to_Day_planner(String Dayplanner) throws MalformedURLException {
-		RoutePlan.goToDayPlan(Dayplanner);
+		CustomerPageActions.verifyCustomerInHomePage(Dayplanner);
+		CommonUtils.waitForElementVisibility("//*[@text='Day planner']");
 	}
 
 	@When("user click on currentday in Day plan calendar")
@@ -107,7 +104,8 @@ public class StepsImplementation {
 
 	@Then("verify day plan exist or not")
 	public void verify_day_plan_exist_or_not() throws MalformedURLException, InterruptedException {
-		RoutePlan.verifyDayPlanInCustomer();
+//		RoutePlan.verifyDayPlanInCustomer();
+		RoutePlan.day_Plan_Page();
 	}
 
 	@And("^Do day plan activity and checkout$")
@@ -117,27 +115,21 @@ public class StepsImplementation {
 
 	@Given("Scroll to work {string}")
 	public void scroll_to_work(String workName) throws MalformedURLException, InterruptedException {
-//		Work.goToWorkPage(workName);
 		Work.checkWorkExistInHomePageorNot(workName);
 	}
 
-	@When("^user search for work$")
-	public void user_search_for_work(String workname) throws MalformedURLException, InterruptedException {
-		Work.workSearch(workname);
+	@When("^user create work$")
+	public void user_create_work() throws MalformedURLException, InterruptedException {
+		Work.createWork();
+		Work.save_And_StartAction();
 	}
 
-	@Then("^verify work exist or not$")
-	public void verify_work_exist_or_not(String workname) throws MalformedURLException, InterruptedException {
-		Work.verifyWorkExistOrNot(workname);
-	}
-
-	@And("perform workaction and move to homepage")
-	public void perform_workaction_and_move_to_homepage() throws MalformedURLException, InterruptedException {
-		// PerformAction();
+	@Then("perform workaction")
+	public void perform_workaction() throws MalformedURLException, InterruptedException {
 		Work.WorkAction();
 //		workSearch(workName);
 //		workStatus(workName);
-		Work.moveToHomepageFromWork();
+//		Work.moveToHomepageFromWork();
 	}
 
 	@Given("^Scroll to form and click$")
@@ -158,7 +150,7 @@ public class StepsImplementation {
 	
 	@Given("^Swipe to MinMax form$")
 	public void Swipe_to_MinMax_form(String MinMaxform) throws InterruptedException, MalformedURLException {
-		Forms.goToFormPage(MinMaxform);
+		Forms.verifyForminHomePage(MinMaxform);
 	}
 	
 	@Then("user enters Min value {int} and Max value {int}")
@@ -169,7 +161,7 @@ public class StepsImplementation {
 	
 	@Given("^scroll to specified form$")
 	public static void scroll_to_specified_form(String fieldDepency_form) throws MalformedURLException {
-		Forms.goToFormPage(fieldDepency_form);
+		Forms.verifyForminHomePage(fieldDepency_form);
 	}
 	
 	@Then("user gives the basecondition {string} and dependencyfield {string} and input is {string}")
@@ -180,7 +172,7 @@ public class StepsImplementation {
 	
 	@Given("move to specified form")
 	public void move_to_specified_form(String regularExpression_form) throws MalformedURLException {
-		Forms.goToFormPage(regularExpression_form);
+		Forms.verifyForminHomePage(regularExpression_form);
 	}
 
 	@When("user enters the Regular Expression {string} for datatype {string}")
@@ -191,12 +183,23 @@ public class StepsImplementation {
 	
 	@Given("^scroll to specified color form$")
 	public static void scroll_to_specified_color_form(String colorForm) throws MalformedURLException {
-		Forms.goToFormPage(colorForm);
+		Forms.verifyForminHomePage(colorForm);
 	}
 	
 	@When("user enters the field value {int} for datatype {string}")
 	public static void user_enters_the_field_value_for_datatype(int fieldValue, String fieldLabel) throws MalformedURLException, InterruptedException {
 		FormAdvanceSettings.clickSectionInPages();
 		FormAdvanceSettings.testing_highlighting_background_field_basedOn_fieldValue(fieldValue, fieldLabel);
+	}
+	
+	@Given("^swipe to specified form$")
+	public static void swipe_to_specified_form(String errorAndWarnMessageForm) throws MalformedURLException {
+		Forms.verifyForminHomePage(errorAndWarnMessageForm);
+	}
+	
+	@When("user provide the condition {string} and gives input as {string}")
+	public static void user_provide_the_condition_and_gives_input_as(String errorCondition, String inputValue) throws MalformedURLException, InterruptedException, ParseException {
+		FormAdvanceSettings.clickSectionInPages();
+		FormAdvanceSettings.Validate_Based_on_Values_in_Other_Fields(errorCondition, inputValue);
 	}
 }

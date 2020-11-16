@@ -15,7 +15,7 @@ Scenario: Customer Activity
 	Then verify customer exist or not "beens" 
 	And  verfiy customer checkin 
 	And Do customer activity and checkout 
-		|formNormal fields|
+		|Form-1|
 		
 @Routeplan 
 Scenario: Route Activity 
@@ -39,11 +39,8 @@ Scenario: Day plan Activity
 @Workcompletion 
 Scenario: Work Creation 
 	Given Scroll to work "Sanity" 
-	When user search for work 
-		|Sanity|
-	Then verify work exist or not 
-		|Sanity|
-	And perform workaction and move to homepage 
+	When user create work
+	Then perform workaction
 	
 @Form 
 Scenario: Form completion with allFields 
@@ -55,26 +52,3 @@ Scenario: Form completion with allFields
 Scenario: Signout
 	Given user wants to signout	
 
-@formMinMax	
-Scenario: Form MinMax Validations
-	Given Swipe to MinMax form
-		|MInMaxForm|
-	When user enters Min value 5 and Max value 9
-	
-@FieldDependencyBasedOnOtherFields	
-Scenario: Form Field Dependency Based on Values in Other Fields
-	Given scroll to specified form
-		|formPagination|
-	When user gives the basecondition "Hide when" and dependencyfield "Text" and input is "ramu"
-
-@RegularExpression	
-Scenario: Regular Expression Validations	
-	Given move to specified form
-		|Form-5|
-	When user enters the Regular Expression "[0-9A-Za-z]" for datatype "Text"
-	
-@Highlighting_Background_Field_Based_on_FieldValue 
-Scenario: Highlighting Background Field Based on FieldValue 
-	Given scroll to specified color form
-		|High lighting background color| 
-	When user enters the field value 10 for datatype "Number"  
