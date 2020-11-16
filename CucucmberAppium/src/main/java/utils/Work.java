@@ -10,13 +10,12 @@ import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.text.RandomStringGenerator;
+import org.openqa.selenium.By;
 
 import Actions.CustomerPageActions;
 import Actions.MobileActionGesture;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.nativekey.AndroidKey;
-import io.appium.java_client.android.nativekey.KeyEvent;
 
 public class Work {
 	private static String generateWorkName;
@@ -37,17 +36,20 @@ public class Work {
 		CommonUtils.waitForElementVisibility("//*[@text='" + workName + "']");
 	}
 
-	//verify work in home screen if work not exist then click on home fab to create a work
+	// verify work in home screen if work not exist then click on home fab to create
+	// a work
 	public static void checkWorkExistInHomePageorNot(String workName)
 			throws InterruptedException, MalformedURLException {
 		try {
-			MobileActionGesture.scrollUsingText("" + workName + "");
-			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + workName + "')]"))
-					.size() > 0) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + workName + "')]"))
-						.click();
+			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
+					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
+							+ workName + "\").instance(0))"));
+			if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workName + "')]"))
+					.isDisplayed()) {
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workName + "')]")).click();
 				CommonUtils.interruptSyncAndLetmeWork();
 				CommonUtils.waitForElementVisibility("//*[contains(@text,'" + workName + "')]");
+				workFab();
 			}
 		} catch (Exception e) {
 			goToWorkPage(workName);
@@ -58,7 +60,7 @@ public class Work {
 	public static void workSearch(String workName) throws MalformedURLException, InterruptedException {
 		CommonUtils.getdriver().findElement(MobileBy.id("action_search")).click();
 		CommonUtils.getdriver().findElement(MobileBy.id("search_src_text")).sendKeys(workName);
-		CommonUtils.getdriver().pressKey(new KeyEvent(AndroidKey.ENTER));
+		CommonUtils.pressEnterKeyInAndroid();
 		CommonUtils.interruptSyncAndLetmeWork();
 		CommonUtils.keyboardHide();
 	}
@@ -76,8 +78,8 @@ public class Work {
 		} catch (Exception e) {
 			System.out.println("Going to create work!!");
 			workFab();
-			workCreation();
-//			createWork();
+//			workCreation();
+			createWork();
 			workSearch(generateWorkName);
 			verifyWorkExistOrNot(generateWorkName);
 		}
@@ -99,11 +101,10 @@ public class Work {
 				.sendKeys(generateWorkName);
 		// click on end time
 		CommonUtils.getdriver().findElement(MobileBy.xpath(
-				"//*[contains(@text,'Ends')]/parent::*/parent::*/android.widget.LinearLayout/*[@id='pick_time_buton']"))
+				"//*[contains(@text,'Ends')]/parent::*/parent::*/android.widget.LinearLayout/*[@resource-id='in.spoors.effortplus:id/pick_time_buton']"))
 				.click();
 		CommonUtils.alertContentXpath();
 		workEndTime(1, 5);
-		saveWork();
 	}
 
 	// work end time added as given hours extra because End time should be greater
@@ -194,18 +195,40 @@ public class Work {
 		CommonUtils.interruptSyncAndLetmeWork();
 		CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/action_search']");
 	}
+	
+	//worksave and startaction
+	public static void save_And_StartAction() throws MalformedURLException, InterruptedException {
+		CommonUtils.getdriver().findElement(MobileBy.id("saveWork")).click();
+		CommonUtils.alertContentXpath();
+		if(CommonUtils.getdriver().findElement(By.id("workSaveAndStartActionButton")).isDisplayed()) {
+			CommonUtils.getdriver().findElement(By.id("workSaveAndStartActionButton")).click();
+			try {
+				if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@resource-id='android:id/button1']"))
+						.isDisplayed()) {
+					CommonUtils.OkButton("CONTINUE");
+					System.out.println(" ---- work is saved successfully!! ----");
+				}
+			} catch (Exception e) {
+				System.out.println(" **** work time is not override **** ");
+			}
+		}
+	}
 
-	// click on created work and perform action
+	//perform action
 	public static void WorkAction() throws InterruptedException, MalformedURLException {
 		do {
-			CommonUtils.getdriver().findElement(MobileBy.id("button1")).click();
-			Thread.sleep(1000);
+			if (CommonUtils.getdriver().findElements(MobileBy.id("button1")).size() > 0) {
+				if (CommonUtils.getdriver().findElement(MobileBy.id("button1")).isEnabled()) {
+					CommonUtils.getdriver().findElement(MobileBy.id("button1")).click();
+				}
+			}
+			CommonUtils.alertContentXpath();
 			if (CommonUtils.getdriver().findElement(MobileBy.className("android.widget.Button")).isDisplayed()) {
 				CommonUtils.getdriver().findElement(MobileBy.className("android.widget.Button")).click();
 				CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 				// perform action until next action displayed
 				Forms.verifyFormPagesAndFill();
-				workActionSaveButton();
+//				workActionSaveButton();
 			}
 		} while (CommonUtils.getdriver().findElementsById("button1").size() > 0);
 	}
@@ -330,7 +353,7 @@ public class Work {
 		//providing input for work fields by iterating using the workList(newList)
 		for (int j = 0; j < workFieldsCount; j++) {
 			String workOriginalFields = newList.get(j).getText();
-			String workFieldsText = newList.get(j).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			String workFieldsText = newList.get(j).getText().replaceAll("[!@#$%&*,.?\":{}|<>]", "");
 			System.out.println("***** Before removing special character ***** : " + workOriginalFields
 					+ "\n----- After removing special character ----- : " + workFieldsText);
 
@@ -392,10 +415,9 @@ public class Work {
 				break;
 			case "Customer":
 			case "Customer-SYS":
-				MobileActionGesture.scrollUsingText(workFieldsText);
+				MobileActionGesture.directScrollToView(workFieldsText);
 				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]"))
 						.size() > 0) {
-					MobileActionGesture.scrollUsingText(workFieldsText);
 					if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text ,'" + workFieldsText
 							+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A CUSTOMER')]"))
 							.isEnabled()) {
@@ -419,11 +441,34 @@ public class Work {
 					} else {
 						System.out.println("Customer is already selected!!");
 					}
+				} else {
+					MobileActionGesture.directScrollToView(workFieldsText);
+					if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text ,'" + workFieldsText
+							+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A CUSTOMER')]"))
+							.isEnabled()) {
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text ,'" + workFieldsText
+								+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A CUSTOMER')]"))
+								.click();
+						CommonUtils.waitForElementVisibility("//*[@text='Customers']");
+						if (CommonUtils.getdriver().findElements(MobileBy.id("item_id")).size() > 0) {
+							CommonUtils.getdriver().findElements(MobileBy.id("item_id")).get(0).click();
+						} else {
+							CustomerPageActions.customerFab();
+							CustomerPageActions.createCustomer();
+							CustomerPageActions.customerSearch(CustomerPageActions.randomstringCusName);
+							CommonUtils.getdriver()
+									.findElement(MobileBy
+											.xpath("//*[@text='" + CustomerPageActions.randomstringCusName + "']"))
+									.click();
+						}
+						CommonUtils.wait(5);
+						System.out.println("Now customer is picked");
+					}
 				}
 				break;
 			case "Employee":
 			case "Employee-SYS":
-				MobileActionGesture.scrollUsingText(workFieldsText);
+				MobileActionGesture.directScrollToView(workFieldsText);
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
@@ -444,10 +489,10 @@ public class Work {
 							.size() > 0) {
 						MobileActionGesture.scrollUsingText(workFieldsText);
 						MobileActionGesture.scrollUsingText("Pick a value");
-						MobileElement country = CommonUtils.getdriver()
+						MobileElement priority = CommonUtils.getdriver()
 								.findElement(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText
 										+ "')]/parent::*/parent::*/android.widget.Spinner/*[contains(@text,'Pick a value')]"));
-						MobileActionGesture.singleLongPress(country);
+						MobileActionGesture.singleLongPress(priority);
 						if (CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
 								.size() > 0) {
 							CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
@@ -463,9 +508,9 @@ public class Work {
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
-					MobileElement country = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
+					MobileElement address_Same_As_customer = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
 							+ workFieldsText + "')]/parent::*/parent::*/android.widget.Spinner"));
-					MobileActionGesture.singleLongPress(country);
+					MobileActionGesture.singleLongPress(address_Same_As_customer);
 					if (CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
 							.size() > 0) {
 						CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
@@ -475,7 +520,7 @@ public class Work {
 				break;
 			case "Phone Number(Optional)":
 			case "Phone(Optional)":
-				MobileActionGesture.scrollUsingText(workFieldsText);
+				MobileActionGesture.directScrollToView(workFieldsText);
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
@@ -526,10 +571,16 @@ public class Work {
 				break;
 			case "Country":
 			case "Country-SYS":
-				MobileActionGesture.scrollUsingText(workFieldsText);
+				MobileActionGesture.directScrollToView(workFieldsText);
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
-					MobileActionGesture.scrollUsingText(workFieldsText);
+					MobileElement country = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
+							+ workFieldsText
+							+ "')]/parent::*/parent::*/android.widget.Spinner/*[contains(@text,'Pick a country')]"));
+					MobileActionGesture.singleLongPress(country);
+					MobileActionGesture.scrollTospecifiedElement("Australia");
+				} else {
+					MobileActionGesture.directScrollToView(workFieldsText);
 					MobileElement country = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
 							+ workFieldsText
 							+ "')]/parent::*/parent::*/android.widget.Spinner/*[contains(@text,'Pick a country')]"));
@@ -538,7 +589,7 @@ public class Work {
 				}
 				break;
 			case "State":
-				MobileActionGesture.scrollUsingText(workFieldsText);
+				MobileActionGesture.directScrollToView(workFieldsText);
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
@@ -559,10 +610,20 @@ public class Work {
 				break;
 			case "Location":
 			case "Location-SYS":
-				MobileActionGesture.scrollUsingText(workFieldsText);
+				MobileActionGesture.directScrollToView(workFieldsText);
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText
+							+ "')]/parent::*/parent::*/parent::*/parent::*/*[@resource-id='in.spoors.effortplus:id/pick_location_button']"))
+							.click();
+					Thread.sleep(5000);
+					CommonUtils.waitForElementVisibility("//*[@text='MARK MY LOCATION']");
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='MARK MY LOCATION']")).click();
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='USE MARKED LOCATION']")).click();
+					Thread.sleep(500);
+				} else {
+					MobileActionGesture.directScrollToView(workFieldsText);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText
 							+ "')]/parent::*/parent::*/parent::*/parent::*/*[@resource-id='in.spoors.effortplus:id/pick_location_button']"))
 							.click();
@@ -649,12 +710,22 @@ public class Work {
 									.get(1).click();
 						}
 					} else {
-						System.out.println("Customer type is aready picked");
+						MobileActionGesture.directScrollToView(workFieldsText);
+						MobileElement cusType = CommonUtils.getdriver()
+								.findElement(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText
+										+ "')]/parent::*/parent::*/android.widget.Spinner/*[contains(@text,'Pick customer type')]"));
+						MobileActionGesture.singleLongPress(cusType);
+						if (CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
+								.size() > 0) {
+							CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
+									.get(1).click();
+						}
 					}
+					System.out.println("Customer type is aready picked");
 				}
 				break;
 			case "DateTime":
-				MobileActionGesture.scrollUsingText(workFieldsText);
+				MobileActionGesture.directScrollToView(workFieldsText);
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
@@ -846,6 +917,18 @@ public class Work {
 							.sendKeys(email + "@gmail.com");
 				}
 				break;
+			case "URL(Optional)":
+				MobileActionGesture.scrollUsingText(workFieldsText);
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
+					MobileActionGesture.scrollUsingText(workFieldsText);
+					RandomStringGenerator urlGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z')
+							.build();
+					String url = urlGenerator.generate(5);
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]"))
+							.sendKeys("www." + url + ".com");
+				}
+				break;
 			case "Multi Pick List":
 				if (!isMultipicklist) {
 					MobileActionGesture.scrollUsingText(workFieldsText);
@@ -950,24 +1033,10 @@ public class Work {
 							.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]"))
 							.size() > 0) {
 						MobileActionGesture.scrollUsingText(workFieldsText);
-						if (CommonUtils.getdriver()
-								.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText
-										+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"))
-								.size() > 0) {
-							MobileElement signature = CommonUtils.getdriver()
-									.findElement(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText
-											+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"));
-							MobileActionGesture.tapByElement(signature);
-							MediaPermission.mediaPermission();
-							CommonUtils.waitForElementVisibility("//*[@text='Signature']");
-							MobileElement signatureCapture = CommonUtils.getdriver()
-									.findElement(MobileBy.xpath("//*[@text='CAPTURE']")); // id("saveButton")
-							MobileActionGesture.singleLongPress(signatureCapture);
-							CommonUtils.waitForElementVisibility("//*[@text='VIEW']");
-							Thread.sleep(500);
-						} else {
-							System.out.println("signature is not present");
-						}
+						Forms.capturing_Signature(workFieldsText);
+					} else {
+						MobileActionGesture.scrollUsingText(workFieldsText);
+						Forms.capturing_Signature(workFieldsText);
 					}
 					isSignature = true;
 				}

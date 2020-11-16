@@ -16,20 +16,12 @@ public class MediaPermission {
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Allow']")).click();
 				System.out.println("media permission is allowed");
 			} else {
-				System.out.println("media is not found");
+				System.out.println("media permission is not found");
 			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		Thread.sleep(1000);
-		if (CommonUtils.getdriver().findElement(MobileBy.id("signInButton")).isDisplayed()) {
-			CommonUtils.getdriver().findElement(MobileBy.id("signInButton")).click();
-		} else if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='SIGN IN']")).isDisplayed()) {
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='SIGN IN']")).click();
-		} else {
-			System.out.println("Location not found");
-		}
-
+		Thread.sleep(800);
 	}
 
 	// media permission

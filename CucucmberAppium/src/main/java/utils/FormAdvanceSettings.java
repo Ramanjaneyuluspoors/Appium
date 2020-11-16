@@ -2896,7 +2896,6 @@ public class FormAdvanceSettings {
 			String newIncreasedDate = DateFor.format(date);
 			//printing the increased date
 			System.out.println("**** After increasing the date **** : " + newIncreasedDate);
-
 		} // closing for loop
 		return toDaydate;
 	} // closing method
@@ -2939,39 +2938,8 @@ public class FormAdvanceSettings {
 			if(flag == true)
 				break;
 		}
-		
 	}
 	
-	//get year
-	public static void checkYear() {
-		final String year = AndroidLocators.resourceId("android:id/date_picker_header_year").getText();
-		System.out.println("**** Display year is **** : "+year);
-	}
-	
-	//calendar display date
-	public static String dateSelection() {
-		String displayDate = AndroidLocators.resourceId("android:id/date_picker_header_date").getText();
-		System.out.println(".... Date displaying in calendar .... : " + displayDate);
-		return displayDate;
-	}
+
 	 
-	String monthCheck(String MMMM) throws ParseException {
-		// date formatter
-		SimpleDateFormat DateFor = new SimpleDateFormat("dd MMMM yyyy");
-
-		SimpleDateFormat New_Date_Format = new SimpleDateFormat("EEE, MMM dd");
-
-		String displayDate = AndroidLocators.resourceId("android:id/date_picker_header_date").getText();		
-		System.out.println("**** Displaying calendar date **** : " + displayDate);
-		Date parse_display_date = New_Date_Format.parse(displayDate);
-		System.out.println(".... After parsing the display date .... : " +parse_display_date);
-		String formatDate = DateFor.format(parse_display_date);
-		System.out.println("---- Formating the parese date ---- : "+formatDate);
-		
-		String[] splitFormated_Date = formatDate.split(" ");
-		String monthSplit = splitFormated_Date[1];
-		System.out.println(".... Retrieving month from parsed date .... " +monthSplit);
-		return MMMM;
-		
-	}
 }

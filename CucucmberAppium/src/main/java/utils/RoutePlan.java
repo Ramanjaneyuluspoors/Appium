@@ -6,6 +6,8 @@ import java.time.Month;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.openqa.selenium.By;
+
 import Actions.CustomerPageActions;
 import Actions.MobileActionGesture;
 import io.appium.java_client.MobileBy;
@@ -23,12 +25,16 @@ public class RoutePlan {
 	// verify today route with name
 	public static void verifyRoute(String routeName) {
 		CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='TODAYS']")).click();
-		if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + routeName + "']")).isDisplayed()) {
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + routeName + "']")).click();
-		} else if (CommonUtils.getdriver().findElement(MobileBy.id("loadMoreButton")).isDisplayed()) {
-			CommonUtils.getdriver().findElement(MobileBy.id("loadMoreButton")).click();
-			CommonUtils.waitForElementVisibility("//*[@text='" + routeName + "']");
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + routeName + "']")).click();
+		try {
+			if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + routeName + "']")).isDisplayed()) {
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + routeName + "']")).click();
+			} else if (CommonUtils.getdriver().findElement(MobileBy.id("loadMoreButton")).isDisplayed()) {
+				CommonUtils.getdriver().findElement(MobileBy.id("loadMoreButton")).click();
+				CommonUtils.waitForElementVisibility("//*[@text='" + routeName + "']");
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + routeName + "']")).click();
+			}
+		} catch (Exception e) {
+			CommonUtils.getdriver().findElements(MobileBy.id("card_view")).get(0).click();
 		}
 		CommonUtils.waitForElementVisibility("//*[@content-desc='Navigate up']");
 	}
@@ -49,21 +55,17 @@ public class RoutePlan {
 
 	// check-in or checkout anyway alert
 	public static void routeCheckInOrCheckOutAnyway() throws MalformedURLException, InterruptedException {
-//		Thread.sleep(3000);
 		CommonUtils.alertContentXpath();
 		MobileElement checkin = CommonUtils.getdriver()
 				.findElement(MobileBy.xpath("//*[@resource-id='android:id/button1']"));
 		if (checkin.getText().contains("CHECK IN")) {
 			MobileActionGesture.tapByElement(checkin);
-
+			CustomerPageActions.customerCheckInReason();
 		} else if (checkin.getText().contains("CHECK-OUT ANYWAY")) {
 			MobileActionGesture.tapByElement(checkin);
 			String randomstring = RandomStringUtils.randomAlphabetic(5).toLowerCase();
 			CommonUtils.getdriver().findElement(MobileBy.className("android.widget.EditText")).sendKeys(randomstring);
-			try {
-				CommonUtils.getdriver().hideKeyboard();
-			} catch (Exception e) {
-			}
+			CommonUtils.keyboardHide();
 			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='SUBMIT']")).click();
 			CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/completeRoutePlan']");
 			CommonUtils.implicitWait();
@@ -88,7 +90,7 @@ public class RoutePlan {
 				CommonUtils.OkButton("OK");
 				CommonUtils.implicitWait();
 			} else {
-				System.out.println("Route visit is already Completed");
+				System.out.println("Route visit is already completed");
 			}
 		} catch (Exception e) {
 			System.out.println(e);
@@ -98,19 +100,26 @@ public class RoutePlan {
 	// complete route visit and check-out customer
 	public static void routeCusCheckout() throws InterruptedException, MalformedURLException {
 		completeClientVisit();
-		do {
+		while (!(CommonUtils.getdriver().findElements(MobileBy.id("completeRoutePlan")).size() > 0)) {
 			CommonUtils.getdriver().navigate().back();
-		} while (CommonUtils.getdriver().findElements(MobileBy.id("completeRoutePlan")).size() > 0);
-		CommonUtils.getdriver().findElement(MobileBy.id("completeRoutePlan")).click();
-		CommonUtils.waitForElementVisibility("//*[@content-desc='Open drawer']");
-		CommonUtils.openMenu();
-		CommonUtils.clickHomeInMenubar();
-		try {
-			CustomerPageActions.cusCheckoutInHomepage();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+			if (CommonUtils.getdriver().findElements(MobileBy.id("completeRoutePlan")).size() > 0) {
+				break;
+			}
+		}
+		if (CommonUtils.getdriver().findElement(MobileBy.id("completeRoutePlan")).isEnabled()) {
+			CommonUtils.getdriver().findElement(MobileBy.id("completeRoutePlan")).click();
+		} else {
+			CommonUtils.getdriver().navigate().back();
+			CommonUtils.waitForElementVisibility("//*[@content-desc='Open drawer']");
+			CommonUtils.openMenu();
+			CommonUtils.clickHomeInMenubar();
+			try {
+				CustomerPageActions.cusCheckoutInHomepage();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -139,6 +148,17 @@ public class RoutePlan {
 		clicktDate.click();
 	}
 
+	//verify dayplan page
+	public static void day_Plan_Page() throws MalformedURLException, InterruptedException {
+		try {
+			if (AndroidLocators.resourceId("in.spoors.effortplus:id/progressText").isDisplayed()) {
+				veirfyDayPlanCusCheckin();
+			}
+		} catch (Exception e) {
+			verifyDayPlanInCustomer();
+		}
+	}
+	
 	// verify customer with day plan exist or not
 	public static void verifyDayPlanInCustomer() throws InterruptedException, MalformedURLException {
 		CommonUtils.implicitWait();
@@ -175,8 +195,8 @@ public class RoutePlan {
 
 	// verify day plan with customer check-in
 	public static void veirfyDayPlanCusCheckin() throws MalformedURLException, InterruptedException {
-		List<MobileElement> daypalnCusCheckin = CommonUtils.getdriver().findElements(MobileBy.id("checkinoutButton"));
-		System.out.println("---- Daypaln customer count ---- :" + daypalnCusCheckin.size());
+		List<MobileElement> daypalnCusCheckin = CommonUtils.getdriver().findElements(By.id("checkinoutButton"));
+		System.out.println("---- Dayplan customer count ---- :" + daypalnCusCheckin.size());
 		if (daypalnCusCheckin.get(0).getText().contains("OFF")) {
 			System.out.println("---- User going to checkin to customer ----");
 			daypalnCusCheckin.get(0).click();
@@ -195,15 +215,12 @@ public class RoutePlan {
 				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"));
 		if (checkin.getText().contains("CHECK IN")) {
 			MobileActionGesture.tapByElement(checkin);
-
+			CustomerPageActions.customerCheckInReason();
 		} else if (checkin.getText().contains("CHECK-OUT ANYWAY")) {
 			MobileActionGesture.tapByElement(checkin);
 			String randomstring = RandomStringUtils.randomAlphabetic(5).toLowerCase();
 			CommonUtils.getdriver().findElement(MobileBy.className("android.widget.EditText")).sendKeys(randomstring);
-			try {
-				CommonUtils.getdriver().hideKeyboard();
-			} catch (Exception e) {
-			}
+			CommonUtils.keyboardHide();
 			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='SUBMIT']")).click();
 			CommonUtils.waitForElementVisibility("//*[@text='Day plan']");
 			veirfyDayPlanCusCheckin();

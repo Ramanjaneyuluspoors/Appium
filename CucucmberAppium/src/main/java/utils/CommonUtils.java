@@ -28,6 +28,7 @@ import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
@@ -207,22 +208,32 @@ public class CommonUtils {
 
 	// click on sync button in homepage
 	public static void waitForSyncButton() {
-		MobileElement sync = driver.findElement(MobileBy.id("syncButton"));
-		WebDriverWait waitforSync = new WebDriverWait(driver, 30);
-		waitforSync.until(ExpectedConditions.visibilityOf(sync));
-		sync.isDisplayed();
-		sync.click();
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (driver.findElement(MobileBy.id("syncButton")).isDisplayed()) {
+			MobileElement sync = driver.findElement(MobileBy.id("syncButton"));
+			WebDriverWait waitforSync = new WebDriverWait(driver, 30);
+			waitforSync.until(ExpectedConditions.visibilityOf(sync));
+			if (sync.isDisplayed()) {
+				sync.click();
+				try {
+					Thread.sleep(12000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} else {
+			try {
+				CommonUtils.wait(5);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
 	// click on menu bar
 	public static void openMenu() throws MalformedURLException, InterruptedException {
-		Thread.sleep(1000);
+		Thread.sleep(500);
 		driver.findElement(MobileBy.xpath("//*[@content-desc='Open drawer']")).click();
 	}
 
@@ -249,18 +260,9 @@ public class CommonUtils {
 
 	// clicks on Home in menu bar to move homepage
 	public static void clickHomeInMenubar() throws InterruptedException {
-        boolean	  isElementFound = false;
-		Thread.sleep(1000);
-		List<MobileElement> Homepage = driver.findElements(MobileBy.id("design_menu_item_text"));
-		for (int i = 0; i < Homepage.size(); i++) {
-			if (Homepage.get(i).getText().contains("Home")) {
-				driver.findElement(MobileBy.xpath("//android.widget.CheckedTextView[@text='Home']")).click();
-				waitForElementVisibility("//*[@text='Home']");
-			}
-			if(isElementFound == true)
-			{
-			  break;
-			}
+		if (driver.findElement(MobileBy.xpath("//*[@text='Home']")).isDisplayed()) {
+			driver.findElement(MobileBy.xpath("//*[@text='Home']")).click();
+			waitForElementVisibility("//*[@text='Home']");
 		}
 	}
 
@@ -309,5 +311,49 @@ public class CommonUtils {
 		}
 	}
 	
-	
+	// click on search icon
+	public void clickonSearchBox(String searchBox) {
+		driver.findElementById(searchBox).click();
+		try {
+			CommonUtils.wait(3);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	//verify element exist or not 
+	public boolean isElementExists(String uname) {
+        List<MobileElement> ele = driver.findElementsByXPath(uname);
+        if (ele.size() > 0)
+            return true;
+        else
+            return false;
+    }
+
+	//press enter
+    public static void pressEnterKeyInAndroid() {
+    	driver.pressKey(new KeyEvent(AndroidKey.ENTER));
+    }
+    //move back
+    public static void pressBackKeyInAndroid() {
+        driver.pressKey(new KeyEvent(AndroidKey.BACK));
+    }
+    //moving home
+    public static void pressHomeKeyInAndroid() {
+    	driver.pressKey(new KeyEvent(AndroidKey.HOME));
+    }
+    
+    //send text using id
+    public static void enterTextusingID(String locator, String sText) {
+        driver.findElementById(locator).clear();
+        driver.findElementById(locator).sendKeys(sText);
+        driver.hideKeyboard();
+    }
+    
+    //get text using xpath
+    public String getTextUsingXpath(String locator) {
+        return driver.findElementByXPath(locator).getText();
+    }
+
+
 }

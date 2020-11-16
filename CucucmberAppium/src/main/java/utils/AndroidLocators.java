@@ -50,4 +50,21 @@ public class AndroidLocators {
 	{
 		return CommonUtils.getdriver().findElement(MobileBy.xpath("" + xpathLocator + ""));
 	}
+	
+	//click using findElementByClassName
+	public static void clickElementusingClassName(String className) {
+	        CommonUtils.getdriver().findElementByClassName(className).click();
+	    }
+	 
+	// click element using id
+	public static void clickElementusingID(String ID) {
+			CommonUtils.getdriver().findElementById(ID).click();
+		}
+	
+	//click element using xpath
+	public static void clickElementusingXPath(String continueButton) {
+		    CommonUtils.getdriver().findElementByXPath(continueButton).click();
+	    }
+
+
 }

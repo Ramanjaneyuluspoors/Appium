@@ -12,6 +12,7 @@ import org.apache.commons.text.RandomStringGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import Actions.CustomerPageActions;
+import Actions.HomepageAction;
 import Actions.MobileActionGesture;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
@@ -53,10 +54,10 @@ public class Forms {
 		CommonUtils.alertContentXpath();
 		if (CommonUtils.getdriver()
 				.findElements(MobileBy
-						.AndroidUIAutomator("new UiSelector().resourceId(\"'in.spoors.effortplus:id/formSaveButton\")"))
+						.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveButton\")"))
 				.size() > 0) {
 			CommonUtils.getdriver().findElement(MobileBy
-					.AndroidUIAutomator("new UiSelector().resourceId(\"'in.spoors.effortplus:id/formSaveButton\")"))
+					.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveButton\")"))
 					.click();
 		} else if (CommonUtils.getdriver()
 				.findElements(MobileBy.AndroidUIAutomator(
@@ -64,6 +65,8 @@ public class Forms {
 				.size() > 0) {
 			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 					"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveWorkflowButton\")")).click();
+		}else {
+			HomepageAction.form_SignIn_SignOut();
 		}
 		CommonUtils.interruptSyncAndLetmeWork();
 		// verify if popup with i understand message is display then click on it
