@@ -56,10 +56,10 @@ public class CustomerCreation {
 		newList = labelElements;
 		newList.addAll(inputTextElements);
 		customerFieldsCount = newList.size();
-		System.out.println("****** Last screen elements count ****** : "+customerFieldsCount);
+		System.out.println("**** Last screen elements count **** : "+customerFieldsCount);
 		// get customer last textelement
 		customerLastListElement = newList.get(newList.size() - 1).getText();
-		System.out.println("Customer last element: " + customerLastListElement);
+		System.out.println("==== Customer last element ==== : " + customerLastListElement);
 		// remove the elements from the list
 		newList.clear();
 		labelElements.clear();
@@ -69,12 +69,13 @@ public class CustomerCreation {
 		
 
 		// adding the customer fields present in the first screen
+		////android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/parent::*/parent::*/android.widget.LinearLayout/android.widget.TextView
 		labelElements.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
-				"//android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/parent::*/parent::*/android.widget.LinearLayout/android.widget.TextView")));
+				"//*[@resource-id='in.spoors.effortplus:id/nameEditLayout']/parent::android.widget.LinearLayout/android.widget.LinearLayout/android.widget.TextView")));
 		inputTextElements.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
 		
 		labelElements1.addAll(CommonUtils.getdriver().findElements(MobileBy
-				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/parent::*/parent::*/android.widget.LinearLayout/android.widget.TextView")));
+				.xpath("//*[@resource-id='in.spoors.effortplus:id/nameEditLayout']/parent::android.widget.LinearLayout/android.widget.LinearLayout/android.widget.TextView")));
 		inputTextElements1
 				.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
 		// merging both list
@@ -84,8 +85,8 @@ public class CustomerCreation {
 		// get customer fields count present in the first screen
 		customerFieldsCount = newList.size();
 		customerFieldsCount1= newList1.size();
-		System.out.println("Before swiping customer fields count: " + customerFieldsCount);
-		System.out.println("Before swiping customer fields count for another list: " + customerFieldsCount1);
+		System.out.println("---- Before swiping customer fields count ---- : " + customerFieldsCount);
+		System.out.println(".... Before swiping customer fields count for another list .... : " + customerFieldsCount1);
 
 		
 		// scroll and add elelemnts to list until last element found
@@ -93,7 +94,7 @@ public class CustomerCreation {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			labelElements.addAll(CommonUtils.getdriver().findElements(MobileBy
-					.xpath("//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']")));
+					.xpath("//*[@resource-id='in.spoors.effortplus:id/label_for_view']")));
 			inputTextElements
 					.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
 			
@@ -113,7 +114,7 @@ public class CustomerCreation {
 			customerFieldsCount1 = newList1.size();
 			System.out.println("..... After swiping fields count ..... : " + customerFieldsCount);
 			for (int i = 1; i <= customerFieldsCount1; i++) {
-				System.out.println("***** print text ***** : "+newList.get(customerFieldsCount - i).getText());
+				System.out.println("**** print text **** : "+newList.get(customerFieldsCount - i).getText());
 				System.out.println("===== Field Text ===== : " + newList1.get(i - 1).getText());
 				if (newList1.get(i - 1).getText().equals(customerLastListElement)) {
 					System.out.println("----- Field Text Inside elements ----- : "+newList1.get(i - 1).getText());
@@ -153,7 +154,7 @@ public class CustomerCreation {
 							.size() > 0) {
 						CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
 								.get(1).click();
-						Thread.sleep(500);
+						CommonUtils.wait(5);
 					}
 				}
 				break;
@@ -237,7 +238,7 @@ public class CustomerCreation {
 				}
 				break;
 			case "City":
-				if (isCity) {
+				if (!isCity) {
 					MobileActionGesture.scrollUsingText(originalText);
 					if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + originalText + "']"))
 							.size() > 0) {
@@ -306,24 +307,25 @@ public class CustomerCreation {
 							.findElements(MobileBy.xpath("//*[starts-with(@text,'" + originalText + "')]"))
 							.size() > 0) {
 						MobileActionGesture.scrollUsingText(originalText);
-						if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + originalText
+						if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + originalText
 								+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A EMPLOYEE')]"))
-								.isDisplayed()) {
+								.size() > 0) {
 							CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + originalText
 									+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A EMPLOYEE')]"))
 									.click();
 							if (CommonUtils.getdriver().findElements(MobileBy.id("employeeNameTextView")).size() > 0) {
 								CommonUtils.getdriver().findElements(MobileBy.id("employeeNameTextView")).get(0)
 										.click();
-								Thread.sleep(500);
+								CommonUtils.wait(3);
 							}
-						} else {
+						} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
+								+ originalText + "')]/parent::*/parent::*/android.widget.Button")).size() > 0) {
 							CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + originalText
 									+ "')]/parent::*/parent::*/android.widget.Button")).click();
 							if (CommonUtils.getdriver().findElements(MobileBy.id("employeeNameTextView")).size() > 0) {
 								CommonUtils.getdriver().findElements(MobileBy.id("employeeNameTextView")).get(0)
 										.click();
-								Thread.sleep(500);
+								CommonUtils.wait(3);
 							}
 						}
 					}
@@ -351,7 +353,7 @@ public class CustomerCreation {
 							MobileActionGesture.singleLongPress(pickMultiPickList.get(1));
 						}
 						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='OK']")).click();
-						Thread.sleep(500);
+						CommonUtils.wait(3);
 					}
 					isMultiPickList = true;
 				}
@@ -378,7 +380,7 @@ public class CustomerCreation {
 									.isDisplayed()) {
 								CommonUtils.getdriver().findElements(MobileBy.id("item_id")).get(1).click();
 							}
-							Thread.sleep(500);
+							CommonUtils.wait(3);
 						} else {
 							System.out.println("Pick List is already picked");
 						}
@@ -426,7 +428,7 @@ public class CustomerCreation {
 										}
 									}
 								}
-								Thread.sleep(500);
+								CommonUtils.wait(3);
 							} catch (Exception e) {
 								System.out.println(e);
 							}
@@ -450,7 +452,7 @@ public class CustomerCreation {
 						CommonUtils.waitForElementVisibility("//*[@text='MARK MY LOCATION']");
 						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='MARK MY LOCATION']")).click();
 						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='USE MARKED LOCATION']")).click();
-						Thread.sleep(500);
+						CommonUtils.wait(3);
 					}
 					isLocation = true;
 				}
@@ -568,7 +570,7 @@ public class CustomerCreation {
 									+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A TIME')]"))
 									.click();
 							Forms.TimeScriptInForms(2, 1);
-							Thread.sleep(500);
+							CommonUtils.wait(3);
 						} else {
 							System.out.println("Time is already picked");
 						}
@@ -613,7 +615,7 @@ public class CustomerCreation {
 									.click();
 							CommonUtils.alertContentXpath();
 							Forms.TimeScriptInForms(2, 5);
-							Thread.sleep(500);
+							CommonUtils.wait(3);
 						} else {
 							System.out.println("DateTime is already picked");
 						}
@@ -694,7 +696,7 @@ public class CustomerCreation {
 												.xpath("//*[@text='" + CustomerPageActions.randomstringCusName + "']"))
 										.click();
 							}
-							Thread.sleep(500);
+							CommonUtils.wait(3);
 							System.out.println("Now customer is picked");
 						} else {
 							System.out.println("Customer is already selected!!");
@@ -728,7 +730,7 @@ public class CustomerCreation {
 								// write entity item creation method
 								Forms.createEntity();
 							}
-							Thread.sleep(500);
+							CommonUtils.wait(3);
 						} else {
 							System.out.println("Custom entity is already picked");
 						}
@@ -754,7 +756,7 @@ public class CustomerCreation {
 								.findElement(MobileBy.xpath("//*[@text='CAPTURE']")); // id("saveButton")
 						MobileActionGesture.singleLongPress(signatureCapture);
 						CommonUtils.waitForElementVisibility("//*[@text='VIEW']");
-						Thread.sleep(500);
+						CommonUtils.wait(3);
 						// CommonUtils.getdriver().pressKey(new KeyEvent(AndroidKey.CAMERA));
 					}
 					isSignature = true;
@@ -822,7 +824,7 @@ public class CustomerCreation {
 							MobileActionGesture.singleLongPress(pickValues.get(1));
 						}
 						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='OK']")).click();
-						Thread.sleep(500);
+						CommonUtils.wait(3);
 					}
 					isMultiSelectDropdown = true;
 				}

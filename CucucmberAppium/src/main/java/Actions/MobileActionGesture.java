@@ -70,17 +70,19 @@ public class MobileActionGesture {
 			action.perform();
 		}
 	
-	// Horizontal Swipe by percentages
-	public static void horizontalSwipeByPercentage(double startPercentage, double endPercentage,
-			double anchorPercentage) throws MalformedURLException {
-		Dimension size = CommonUtils.getdriver().manage().window().getSize();
-		int anchor = (int) (size.height * anchorPercentage);
-		int startPoint = (int) (size.width * startPercentage);
-		int endPoint = (int) (size.width * endPercentage);
-
-		new TouchAction(CommonUtils.getdriver()).press(point(startPoint, anchor)).waitAction(waitOptions(ofMillis(25)))
-				.moveTo(point(endPoint, anchor)).release().perform();
-	}
+		 //Horizontal Swipe by percentages
+	    public static void horizontalSwipeByPercentage (double startPercentage, double endPercentage, double anchorPercentage) {
+	        Dimension size = CommonUtils.getdriver().manage().window().getSize();
+	        int anchor = (int) (size.height * anchorPercentage);
+	        int startPoint = (int) (size.width * startPercentage);
+	        int endPoint = (int) (size.width * endPercentage);
+	 
+	        new TouchAction(CommonUtils.getdriver())
+	                .press(point(startPoint, anchor))
+	                .waitAction(waitOptions(ofMillis(100)))
+	                .moveTo(point(endPoint, anchor))
+	                .release().perform();
+	    }
 
 	// Vertical Swipe by percentages
 	public static void verticalSwipeByPercentages(double startPercentage, double endPercentage, double anchorPercentage)
@@ -112,16 +114,6 @@ public class MobileActionGesture {
 	public static void Movetoelement1(MobileElement moveEle) throws MalformedURLException {
 		new TouchAction(CommonUtils.getdriver()).longPress(longPressOptions().withDuration(ofSeconds(1)))
 				.moveTo(element(moveEle)).release().perform();
-	}
-
-	public static void scrollToBottom(double start, double end) {
-		int x = CommonUtils.getdriver().manage().window().getSize().width / 2;
-		int start_y = (int) (CommonUtils.getdriver().manage().window().getSize().height * start);
-		int end_y = (int) (CommonUtils.getdriver().manage().window().getSize().height * end);
-		TouchAction dragNDrop = new TouchAction(CommonUtils.getdriver()).press(PointOption.point(x, start_y))
-				.waitAction(WaitOptions.waitOptions(Duration.ofMillis(50))).moveTo(PointOption.point(x, end_y))
-				.release();
-		dragNDrop.perform();
 	}
 
 	// Swipe by elements
@@ -163,36 +155,7 @@ public class MobileActionGesture {
 		}
 	}
 	
-	public static void scrollDown() {
-//        Dimension dimension = CommonUtils.getdriver().manage().window().getSize();
-//        int scrollStart = (int) (dimension.getHeight() * 0.7);
-//        int scrollEnd = (int) (dimension.getHeight() * 0.2);
-//
-//        new TouchAction(CommonUtils.getdriver())
-//                .press(PointOption.point(0, scrollStart))
-//                .waitAction(WaitOptions.waitOptions(Duration.ofNanos(10)))
-//                .moveTo(PointOption.point(0, scrollEnd))
-//                .release().perform();
 
-		// Get the dimensions of the device under test
-		Dimension dimensions = CommonUtils.getdriver().manage().window().getSize();
-		// Get the width
-		int screenWidth = dimensions.getWidth();
-		// Get the Height
-		int screenHeight = dimensions.getHeight();
-
-		// Change the width and height to where the first press will be
-		screenWidth = screenWidth / 2;
-		int scrollDistance = screenHeight / 2;
-		screenHeight = screenHeight - 40;
-
-		TouchAction actions = new TouchAction(CommonUtils.getdriver());
-		actions.press(PointOption.point(screenWidth, screenHeight))   // point to press
-				.waitAction(WaitOptions.waitOptions(Duration.ofNanos(5)))  // wait for specified seconds
-				.moveTo(PointOption.point(screenWidth, scrollDistance))  // down.moveTo(PointOption.point(screenWidth,scrollDistance)) 
-				.release() // release
-				.perform(); // preform the touch action
-	}
 
 	// Generic function for Scroll
 	public static void scrollUsingTouchActions_ByElements(MobileElement startElement, MobileElement endElement) {

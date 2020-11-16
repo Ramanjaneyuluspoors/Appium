@@ -16,11 +16,11 @@ public class ReceiptActions {
 	public static void PageVerification() throws InterruptedException {
 		Thread.sleep(2000);
 		MobileElement verifySignin = CommonUtils.getdriver()
-				.findElement(MobileBy.xpath("//android.widget.Switch[@text='ON']"));
+				.findElement(MobileBy.xpath("//*[@class='android.widget.Switch'][@text='ON']"));
 		if (verifySignin.getText().contains("ON")) {
-			System.out.println("Sucessfull signed in");
+			System.out.println("... Sucessfull signed in ...");
 		} else {
-			System.out.println("error Occured");
+			System.out.println("*** error Occured ***");
 		}
 
 	}
