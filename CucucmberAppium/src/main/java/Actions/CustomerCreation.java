@@ -16,7 +16,7 @@ import utils.MediaPermission;
 
 public class CustomerCreation {
 
-	public static List<MobileElement> createCustomerWithAllFields() throws MalformedURLException, InterruptedException {
+	public static List<MobileElement> createCustomerWithAllFields() throws MalformedURLException, InterruptedException, ParseException {
 		// get labelview elements
 		List<MobileElement> labelElements = CommonUtils.getdriver().findElements(
 				By.xpath("//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']"));
