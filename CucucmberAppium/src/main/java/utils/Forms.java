@@ -20,7 +20,7 @@ import io.appium.java_client.MobileElement;
 public class Forms {
 	private static final List<MobileElement> MobileElements = null;
 	static String formName = "Form-2";
-
+ 
 	// go to form page from home page
 	public static void goToFormPage(String formName) throws MalformedURLException {
 		CommonUtils.homeFabClick();
@@ -444,7 +444,7 @@ public class Forms {
 	}
 
 	// form fill by verifying pages
-	public static void verifyFormPagesAndFill() throws MalformedURLException, InterruptedException {
+	public static void verifyFormPagesAndFill() throws MalformedURLException, InterruptedException, ParseException {
 		// get pages
 		List<MobileElement> pagination = CommonUtils.getdriver()
 				.findElements(MobileBy.xpath("//*[contains(@content-desc,'Page ')]"));
@@ -467,7 +467,7 @@ public class Forms {
 	}
 
 	// form fill with pagination
-	public static void fill_Form_With_Pagination(int i) throws MalformedURLException, InterruptedException {
+	public static void fill_Form_With_Pagination(int i) throws MalformedURLException, InterruptedException, ParseException {
 		int j = i + 1;
 		List<MobileElement> formFields1 = CommonUtils.getdriver()
 				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
@@ -526,7 +526,7 @@ public class Forms {
 			String fieldsText = formFields1.get(k).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("==== Before removeing special character ==== : " + OriginalfieldsText
 					+ "\n----- after removing regexp ----- : " + fieldsText);
-
+			
 			switch (fieldsText) {
 			case "Date":
 			case "G-Date":
@@ -855,7 +855,7 @@ public class Forms {
 	}
 
 	// form fill with out pagination
-	public static void formfill() throws InterruptedException, MalformedURLException {
+	public static void formfill() throws InterruptedException, MalformedURLException, ParseException {
 		// get all formfields elements xpath
 		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(
 				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
@@ -908,7 +908,7 @@ public class Forms {
 			String fieldsText = formFields1.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("----- Before removeing special character ----- : " + OriginalfieldsText
 					+ "\n======after removing regexp ===== : " + fieldsText);
-
+			CommonUtils.interruptSyncAndLetmeWork();
 			switch (fieldsText) {
 			case "Date":
 			case "G-Date":
@@ -1525,7 +1525,7 @@ public class Forms {
 	}
 	
 	//picking customEntity
-	public static void picking_CustomEntity(String fieldsText) throws MalformedURLException, InterruptedException {
+	public static void picking_CustomEntity(String fieldsText) throws MalformedURLException, InterruptedException, ParseException {
 		if (CommonUtils.getdriver()
 				.findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
 						+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A CUSTOM ENTITY')]"))
@@ -1633,7 +1633,7 @@ public class Forms {
 
 	
 	// create entity item
-	public static void createEntity() throws MalformedURLException, InterruptedException {
+	public static void createEntity() throws MalformedURLException, InterruptedException, ParseException {
 		MobileActionGesture.scrollTospecifiedElement("Abc");
 		CommonUtils.getdriver().findElement(MobileBy.id("customEntitiesFab")).click();
 		CommonUtils.waitForElementVisibility("//*[contains(@text,'Create')]");
@@ -1643,7 +1643,7 @@ public class Forms {
 	}
 
 	// fill entity
-	public static void fillEntity() throws MalformedURLException, InterruptedException {
+	public static void fillEntity() throws MalformedURLException, InterruptedException, ParseException {
 		// label list fields
 		List<MobileElement> labelViews = CommonUtils.getdriver().findElements(
 				MobileBy.xpath("//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']"));
@@ -1814,18 +1814,9 @@ public class Forms {
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@id='label_for_view' and contains(@text,'"
 						+ allFieldsText + "')]/parent::*/android.widget.Button")).click();
 				CommonUtils.alertContentXpath();
-				try {
+
 					Forms.dateScriptInForms(2);
-				} catch (MalformedURLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				
 				Thread.sleep(500);
 				break;
 			case "Customer Type":
