@@ -1,9 +1,8 @@
-package effortSteps;
+package stepDefinition1;
 
 import java.net.MalformedURLException;
 import java.text.ParseException;
 
-import Actions.CustomerCreation;
 import Actions.CustomerPageActions;
 import Actions.HomepageAction;
 import Actions.MobileActionGesture;
@@ -22,11 +21,11 @@ public class StepsImplementation {
  
 	@Given("Navigate to Home page")
 	public void navigate_to_Home_page() throws InterruptedException {
-	    HomepageAction.NavigationVerfication();
+	    HomepageAction.NavigationVerfication(); 
 	}
 
 	@When("user click on signin")
-	public void user_click_on_signin() throws MalformedURLException, InterruptedException {
+	public void user_click_on_signin() throws MalformedURLException, InterruptedException, ParseException {
 		HomepageAction.signInAction(); // need to optimize taking 37s time to signin using location if sign-in form
 //    	Forms.createEntity();										// does'nt exist
 	}
@@ -58,7 +57,7 @@ public class StepsImplementation {
 	}
 
 	@And("^Do customer activity and checkout$")
-	public void Do_customer_activity_and_checkout(String formName) throws MalformedURLException, InterruptedException {
+	public void Do_customer_activity_and_checkout(String formName) throws MalformedURLException, InterruptedException, ParseException {
 		CustomerPageActions.clickActivity(formName);
 		Forms.verifyFormPagesAndFill();
 		CustomerPageActions.HomepageCusCheckout();
@@ -81,7 +80,7 @@ public class StepsImplementation {
 	}
 
 	@And("perform routeactivity")
-	public void perform_routeactivity() throws MalformedURLException, InterruptedException {
+	public void perform_routeactivity() throws MalformedURLException, InterruptedException, ParseException {
 		RoutePlan.performRouteActivity();
 		Forms.verifyFormPagesAndFill();
 	}
@@ -109,7 +108,7 @@ public class StepsImplementation {
 	}
 
 	@And("^Do day plan activity and checkout$")
-	public void Do_day_plan_activity_and_checkout(String formName) throws MalformedURLException, InterruptedException {
+	public void Do_day_plan_activity_and_checkout(String formName) throws MalformedURLException, InterruptedException, ParseException {
 		Do_customer_activity_and_checkout(formName);
 	}
 
@@ -125,7 +124,7 @@ public class StepsImplementation {
 	}
 
 	@Then("perform workaction")
-	public void perform_workaction() throws MalformedURLException, InterruptedException {
+	public void perform_workaction() throws MalformedURLException, InterruptedException, ParseException {
 		Work.WorkAction();
 //		workSearch(workName);
 //		workStatus(workName);
@@ -138,13 +137,31 @@ public class StepsImplementation {
 	}
 
 	@Then("fill form to complete")
-	public void fill_form_to_complete() throws MalformedURLException, InterruptedException {
+	public void fill_form_to_complete() throws MalformedURLException, InterruptedException, ParseException {
 		Forms.verifyFormPagesAndFill();
 		CommonUtils.goBackward();
 	}
 
+	@Given("Swipe to settings")
+	public void Swipe_to_settings() throws MalformedURLException, InterruptedException {
+		CommonUtils.openMenu();
+		MobileActionGesture.scrollTospecifiedElement("Settings");
+		CommonUtils.allow_bluetooth();
+	}
+	
+	@When("user click on send debug info")
+	public void user_click_on_send_debug_info() {
+		CommonUtils.click_on_send_debug_info();
+	}
+	
+	@Then("send debug information with remarks")
+	public void send_debug_information_with_remarks() throws InterruptedException {
+		CommonUtils.send_debug_info_details();
+		CommonUtils.initiate_full_sync();
+	}
+	
 	@Given("user wants to signout")
-	public void user_wants_to_signout() throws MalformedURLException, InterruptedException {
+	public void user_wants_to_signout() throws MalformedURLException, InterruptedException, ParseException {
 		HomepageAction.signOutAction();
 	}
 	
