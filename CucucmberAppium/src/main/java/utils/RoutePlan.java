@@ -81,7 +81,7 @@ public class RoutePlan {
 		CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/saveForm']");
 	}
 
-	// click complete route visit
+	// click complete route visit 
 	public static void completeClientVisit() throws InterruptedException {
 		try {
 			CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/completeClientVisit']");
@@ -111,15 +111,15 @@ public class RoutePlan {
 		} else {
 			CommonUtils.getdriver().navigate().back();
 			CommonUtils.waitForElementVisibility("//*[@content-desc='Open drawer']");
-			CommonUtils.openMenu();
-			CommonUtils.clickHomeInMenubar();
-			try {
-				CustomerPageActions.cusCheckoutInHomepage();
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		}
+		CommonUtils.openMenu();
+		CommonUtils.clickHomeInMenubar();
+		try {
+			CustomerPageActions.cusCheckoutInHomepage();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 
