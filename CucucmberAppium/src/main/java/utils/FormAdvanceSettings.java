@@ -402,6 +402,7 @@ public class FormAdvanceSettings {
 		}
 	}
 
+	
 	public static void min_max_withoutPages(int min, int max) throws MalformedURLException {
 		List<MobileElement> minMaxFields = CommonUtils.getdriver().findElements(
 				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
