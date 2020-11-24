@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.text.RandomStringGenerator;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
@@ -97,7 +98,6 @@ public class CommonUtils {
 		capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, PLATFORM_NAME);
 //		capabilities.setCapability("unlockType", "pin");
 //		capabilities.setCapability("unlockKey", "6644");
-
 	}
 
 	// connection appium server using port number
@@ -207,34 +207,42 @@ public class CommonUtils {
 	}
 
 	// click on sync button in homepage
-	public static void waitForSyncButton() {
+	public static void waitForSyncButton() throws InterruptedException {
 		if (driver.findElement(MobileBy.id("syncButton")).isDisplayed()) {
 			MobileElement sync = driver.findElement(MobileBy.id("syncButton"));
 			WebDriverWait waitforSync = new WebDriverWait(driver, 30);
 			waitforSync.until(ExpectedConditions.visibilityOf(sync));
 			if (sync.isDisplayed()) {
 				sync.click();
-				try {
-					Thread.sleep(12000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		} else {
-			try {
+				CommonUtils.wait(15);
+			} else {
 				CommonUtils.wait(5);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
+		} 
+	}
+	
+	//sync progress
+	public static void sync_in_progress() throws InterruptedException {
+		if (CommonUtils.getdriver().findElements(By.id("syncHeading")).size() > 0) {
+			CommonUtils.wait(5);
+		} else {
+			CommonUtils.wait(5);
 		}
 	}
 
 	// click on menu bar
 	public static void openMenu() throws MalformedURLException, InterruptedException {
-		Thread.sleep(500);
-		driver.findElement(MobileBy.xpath("//*[@content-desc='Open drawer']")).click();
+		if (driver.findElements(MobileBy.xpath("//*[@content-desc='Open drawer']")).size() > 0) {
+			driver.findElement(MobileBy.xpath("//*[@content-desc='Open drawer']")).click();
+		} else if (driver.findElements(By.xpath("//*[@contentDescription='Open drawer']")).size() > 0) {
+			driver.findElement(MobileBy.xpath("//*[@contentDescription='Open drawer']")).click();
+		} else if (driver.findElements(By.xpath("//android.widget.ImageButton[@content-desc='Open drawer']"))
+				.size() > 0) {
+			driver.findElement(By.xpath("//android.widget.ImageButton[@content-desc='Open drawer']")).click();
+		} else {
+			driver.findElement(MobileBy.xpath("//*[@content-desc='Open drawer']")).click();
+		}
+		CommonUtils.wait(2);
 	}
 
 	// javascript executor using id
@@ -260,7 +268,7 @@ public class CommonUtils {
 
 	// clicks on Home in menu bar to move homepage
 	public static void clickHomeInMenubar() throws InterruptedException {
-		if (driver.findElement(MobileBy.xpath("//*[@text='Home']")).isDisplayed()) {
+		if (driver.findElements(MobileBy.xpath("//*[@text='Home']")).size() > 0) {
 			driver.findElement(MobileBy.xpath("//*[@text='Home']")).click();
 			waitForElementVisibility("//*[@text='Home']");
 		}
@@ -283,11 +291,23 @@ public class CommonUtils {
 	//click on interrupt sync popup
 	public static void interruptSyncAndLetmeWork() throws InterruptedException {
 		try {
-			if (driver.findElement(MobileBy.xpath("//*[@text='INTERRUPT SYNC & LET ME WORK']")).isDisplayed()) {
+			if (driver.findElements(By.id("button2")).size() > 0) {
+				driver.findElement(By.id("button2")).click();
+			} else if (driver
+					.findElements(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"))
+					.size() > 0) { 
+				driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"))
+						.click();
+			} else if (driver
+					.findElements(By.xpath("//*[@class='android.widget.Button'][@text='INTERRUPT SYNC & LET ME WORK']"))
+					.size() > 0) {
+				driver.findElement(
+						By.xpath("//*[@class='android.widget.Button'][@text='INTERRUPT SYNC & LET ME WORK']")).click();
+			} else if (driver.findElements(MobileBy.xpath("//*[@text='INTERRUPT SYNC & LET ME WORK']")).size() > 0) {
 				driver.findElement(MobileBy.xpath("//*[@text='INTERRUPT SYNC & LET ME WORK']")).click();
 				System.out.println("---- INTERRUPT SYNC & LET ME WORK Is clicked Successfully!! ----");
 			} else {
-				System.out.println(".... INTERRUPT SYNC & LET ME WORK Is not displayed!! ....");
+				driver.findElement(MobileBy.xpath("//*[@text='INTERRUPT SYNC & LET ME WORK']")).click();
 			}
 		} catch (Exception e) {
 			System.out.println(e);
@@ -301,6 +321,20 @@ public class CommonUtils {
 		} catch (Exception e) {
 		}
 	}
+	
+	// allow bluetooth
+	public static void allow_bluetooth() throws InterruptedException {
+		if (CommonUtils.getdriver().findElements(By.id("button1")).size() > 0) {
+			AndroidLocators.clickElementusingID("button1");
+		} else if (AndroidLocators.resourceId("android:id/message").isDisplayed()) {
+			CommonUtils.getdriver()
+					.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/message\")"))
+					.click();
+		} else {
+			CommonUtils.getdriver().findElement(By.xpath("//*[@text='Allow']")).click();
+		}
+		CommonUtils.wait(3);
+	}
 
 	//wait method in seconds
 	public static void wait(final int sec) throws InterruptedException {
@@ -309,6 +343,60 @@ public class CommonUtils {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+	}
+	
+	// click on send debug info
+	public static void click_on_send_debug_info() {
+		if (driver.findElements(By.id("sendClientReportToServerButton")).size() > 0) {
+			driver.findElement(By.id("sendClientReportToServerButton")).click();
+		} else if (AndroidLocators.resourceId("in.spoors.effortplus:id/sendClientReportToServerButton").isDisplayed()) {
+			CommonUtils.getdriver()
+					.findElement(MobileBy.AndroidUIAutomator(
+							"new UiSelector().resourceId(\"in.spoors.effortplus:id/sendClientReportToServerButton\")"))
+					.click();
+		} else {
+			AndroidLocators.clickElementusingXPath("SEND DEBUG INFO");
+		}
+	}
+	
+	//send debug info remarks
+	public static void send_debug_info_details() throws InterruptedException {
+		alertContentXpath();
+		RandomStringGenerator emailGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
+		String email = emailGenerator.generate(5);
+		RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
+		String text = textGenerator.generate(5);
+		driver.findElement(By.xpath("//*[@class='android.widget.EditText'][contains(@text,'Please enter the email')]"))
+				.sendKeys(email);
+		driver.findElement(By
+				.xpath("//*[@class='android.widget.EditText'][contains(@text,'Please provide reason for debug info')]"))
+				.sendKeys(text);
+		keyboardHide();
+		if (driver.findElements(By.id("button1")).size() > 0) {
+			AndroidLocators.clickElementusingID("button1");
+		} else if (AndroidLocators.resourceId("android:id/button1").isDisplayed()) {
+			driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"))
+					.click();
+		} else {
+			AndroidLocators.clickElementusingXPath("SEND");
+		}
+		wait(5);
+	}
+	
+	// initiate full sync
+	public static void initiate_full_sync() throws InterruptedException {
+		if (driver.findElements(By.id("initiateFirstSyncButton")).size() > 0) {
+			AndroidLocators.clickElementusingID("initiateFirstSyncButton");
+		} else if (AndroidLocators.resourceId("in.spoors.effortplus:id/initiateFirstSyncButton").isDisplayed()) {
+			driver.findElement(MobileBy.AndroidUIAutomator(
+					"new UiSelector().resourceId(\"in.spoors.effortplus:id/initiateFirstSyncButton\")")).click();
+		} else if (driver.findElements(By.xpath("//*[@class='android.widget.Button'][@text='INITIATE FULL SYNC']"))
+				.size() > 0) {
+			driver.findElement(By.xpath("//*[@class='android.widget.Button'][@text='INITIATE FULL SYNC']")).click();
+		} else {
+			driver.findElement(By.xpath("[@text='INITIATE FULL SYNC']")).click();
+		}
+		Thread.sleep(10000);
 	}
 	
 	// click on search icon
