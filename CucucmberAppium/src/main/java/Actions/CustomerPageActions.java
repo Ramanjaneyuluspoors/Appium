@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.text.RandomStringGenerator;
+import org.openqa.selenium.By;
 
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
@@ -49,12 +50,9 @@ public class CustomerPageActions {
 
 	// if customer not exist then create
 	public static void verifyCusExistOrNot(String customerName) throws MalformedURLException, InterruptedException {
-		try {
-			if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + customerName + "']"))
-					.isDisplayed()) {
-				System.out.println("Customer found!!");
-			}
-		} catch (Exception e) {
+		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + customerName + "']")).size() > 0) {
+			System.out.println("Customer found!!");
+		} else {
 			System.out.println("customer not found create customer!!");
 			customerFab();
 			createCustomer();
@@ -144,6 +142,7 @@ public class CustomerPageActions {
 	public static void searchForCreatedCustomer() throws MalformedURLException, InterruptedException {
 		CommonUtils.openMenu();
 		CommonUtils.waitForSyncButton();
+		CommonUtils.sync_in_progress();
 		MobileActionGesture.horizontalSwipeByPercentage(0.7, 0.3, 0.5);
 		customerSearch(randomstringCusName);
 	}
@@ -160,7 +159,7 @@ public class CustomerPageActions {
 			CommonUtils.getdriver().findElement(MobileBy.id("summaryBtn")).click();
 		}
 	}
-
+ 
 	// check-in or checkout anyway alert
 	public static void checkInOrCheckOutAnyway() throws MalformedURLException, InterruptedException {
 		CommonUtils.alertContentXpath();
@@ -184,27 +183,44 @@ public class CustomerPageActions {
 	// moving to customer activity screen
 	public static void goToActivityScreen() throws MalformedURLException, InterruptedException {
 		try {
-			CommonUtils.wait(1);
-			CommonUtils.getdriver().findElement(MobileBy.id("View_all_details")).click();
-			MobileElement addActivity = CommonUtils.getdriver().findElement(MobileBy.id("addTask"));
-			MobileActionGesture.tapByElement(addActivity);
-			CommonUtils.waitForElementVisibility("//*[contains(@text,'ACTIVITIES')]");
+			CommonUtils.wait(2);
+			if (CommonUtils.getdriver().findElements(MobileBy.id("View_all_details")).size() > 0) {
+				CommonUtils.getdriver().findElement(MobileBy.id("View_all_details")).click();
+			} else {
+				CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/View_all_details']");
+				CommonUtils.getdriver().findElement(MobileBy.id("View_all_details")).click();
+			}
+			if (CommonUtils.getdriver().findElements(MobileBy.id("addTask")).size() > 0) {
+				MobileElement addActivity = CommonUtils.getdriver().findElement(MobileBy.id("addTask"));
+				MobileActionGesture.tapByElement(addActivity);
+				CommonUtils.waitForElementVisibility("//*[contains(@text,'ACTIVITIES')]");
+			} else {
+				CommonUtils.waitForElementVisibility("in.spoors.effortplus:id/addTask");
+				CommonUtils.getdriver().findElement(MobileBy.id("addTask")).click();
+				CommonUtils.waitForElementVisibility("//*[contains(@text,'ACTIVITIES')]");
+			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 
-	//click on '+' to move activity screen from customer screen
+	// click on '+' to move activity screen from customer screen
 	public static void performAcitivity_using_add_symbol() {
 		CommonUtils.goBackward();
-		CommonUtils.getdriver().findElement(MobileBy.id("addButton")).click();
-		CommonUtils.waitForElementVisibility("//*[contains(@text,'ACTIVITIES')]");
+		if (CommonUtils.getdriver().findElements(MobileBy.id("addButton")).size() > 0) {
+			CommonUtils.getdriver().findElement(MobileBy.id("addButton")).click();
+			CommonUtils.waitForElementVisibility("//*[contains(@text,'ACTIVITIES')]");
+		} else {
+			CommonUtils.waitForElementVisibility("in.spoors.effortplus:id/addButton");
+			CommonUtils.getdriver().findElement(MobileBy.id("addButton")).click();
+			CommonUtils.waitForElementVisibility("//*[contains(@text,'ACTIVITIES')]");
+		}
 		//// *[@text='C1']/parent::*/parent::*/ancestor::android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout//*[@id='addLayout']//*[@id='addButton']
 	}
 	
 	//moving to activity screen from home page 
 	public static void perform_Activity_from_homeScreen() {
-		if(CommonUtils.getdriver().findElement(MobileBy.id("checkInCustomerName")).isDisplayed()) {
+		if (CommonUtils.getdriver().findElements(MobileBy.id("checkInCustomerName")).size() > 0) {
 			MobileElement getChecked_in_Customer = CommonUtils.getdriver().findElement(MobileBy.id("checkInCustomerName"));
 			System.out.println(".... customer check-in .... :"+getChecked_in_Customer.getText());
 			CommonUtils.getdriver().findElement(MobileBy.id("customerMenuItem")).click();
@@ -217,14 +233,12 @@ public class CustomerPageActions {
 	
 	// click on specified form to peform customer activity
 	public static void clickActivity(String formName) throws MalformedURLException, InterruptedException {
-		try {
-			if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + formName + "')]"))
-					.isDisplayed()) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + formName + "')]")).click();
-				System.out.println("form with name is displayed and clicked");
-			}
-		} catch (Exception e) {
-			System.out.println("form name is not displayed, clicking on first form");
+		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + formName + "')]"))
+				.size() > 0) {
+			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + formName + "')]")).click();
+			System.out.println("form with name is displayed and clicked");
+		} else {
+			System.out.println("form name is not displayed, clicking on first activity");
 			CommonUtils.getdriver().findElements(MobileBy.id("titleTextView")).get(0).click();
 		}
 		CommonUtils.interruptSyncAndLetmeWork();
@@ -234,7 +248,13 @@ public class CustomerPageActions {
 	// checkout customer in homepage
 	public static void HomepageCusCheckout() throws MalformedURLException, InterruptedException {
 		CommonUtils.goBackward();
-		CommonUtils.openMenu();
+		try {
+			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='Open drawer']")).size() > 0) {
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Open drawer']")).click();
+			}
+		} catch (Exception e) {
+			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Open drawer']")).click();
+		}
 		CommonUtils.clickHomeInMenubar();
 		cusCheckoutInHomepage();
 	}
@@ -298,7 +318,7 @@ public class CustomerPageActions {
 		checkOutOrCheckOutAnyway();	
 	}
 	
-	public static void customerCreation() throws MalformedURLException, InterruptedException {
+	public static void customerCreation() throws MalformedURLException, InterruptedException, ParseException {
 		List<MobileElement> customer_Labelfields = CommonUtils.getdriver().findElements(
 				MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/label_for_view\")"));
 		List<MobileElement> customer_input_fields = CommonUtils.getdriver()
