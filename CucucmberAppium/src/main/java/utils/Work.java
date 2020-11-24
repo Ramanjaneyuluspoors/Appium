@@ -215,7 +215,7 @@ public class Work {
 	}
 
 	//perform action
-	public static void WorkAction() throws InterruptedException, MalformedURLException {
+	public static void WorkAction() throws InterruptedException, MalformedURLException, ParseException {
 		do {
 			if (CommonUtils.getdriver().findElements(MobileBy.id("button1")).size() > 0) {
 				if (CommonUtils.getdriver().findElement(MobileBy.id("button1")).isEnabled()) {
@@ -263,7 +263,7 @@ public class Work {
 		}
 	}
 
-	public static String workCreation() throws MalformedURLException, InterruptedException {
+	public static String workCreation() throws MalformedURLException, InterruptedException, ParseException {
 		//Declaring the workInputElements list
 		List<MobileElement> workInputElements = CommonUtils.getdriver()
 						.findElements(MobileBy.className("android.widget.EditText"));
