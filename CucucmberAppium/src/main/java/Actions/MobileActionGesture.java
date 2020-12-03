@@ -33,7 +33,7 @@ public class MobileActionGesture {
 		MobileElement eleScroll = CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 				"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textContains(\""
 						+ eleText + "\").instance(0))"));
-		if (eleScroll.isDisplayed()) {
+		if (eleScroll.isDisplayed()) { 
 			try {
 				MobileActionGesture.tapByElement(eleScroll);
 			} catch (MalformedURLException e) {

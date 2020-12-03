@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.text.RandomStringGenerator;
-import org.openqa.selenium.By;
-
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.nativekey.AndroidKey;
@@ -248,16 +246,20 @@ public class CustomerPageActions {
 	// checkout customer in homepage
 	public static void HomepageCusCheckout() throws MalformedURLException, InterruptedException {
 		CommonUtils.goBackward();
-		try {
-			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='Open drawer']")).size() > 0) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Open drawer']")).click();
-			}
-		} catch (Exception e) {
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Open drawer']")).click();
-		}
+		CommonUtils.openMenu();
 		CommonUtils.clickHomeInMenubar();
 		cusCheckoutInHomepage();
+	} 
+	
+	//checkout in customer screen
+	public static void checkout_in_customer_screen() throws MalformedURLException, InterruptedException {
+		CommonUtils.goBackward();
+		customer_Screen_checkout();
+		CommonUtils.openMenu();
+		CommonUtils.clickHomeInMenubar();
 	}
+	
+	
 
 	// checkout customer in home page
 	public static void cusCheckoutInHomepage() throws MalformedURLException, InterruptedException {
@@ -312,10 +314,14 @@ public class CustomerPageActions {
 		Thread.sleep(2000);
 	}
 
-	//customer checkout in customer screen
-	public static void customer_Screen_checkout() throws MalformedURLException, InterruptedException{
-		CommonUtils.goBackward();
-		checkOutOrCheckOutAnyway();	
+	// customer checkout in customer screen
+	public static void customer_Screen_checkout() throws MalformedURLException, InterruptedException {
+		CommonUtils.SwitchStatus("checkinoutButton");
+		if (CommonUtils.SwitchStatus("checkinoutButton").contains("ON")) {
+			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@class='android.widget.Switch'][@text='ON']"))
+					.click();
+			checkOutOrCheckOutAnyway();
+		}
 	}
 	
 	public static void customerCreation() throws MalformedURLException, InterruptedException, ParseException {

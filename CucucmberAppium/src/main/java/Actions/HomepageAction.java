@@ -27,7 +27,7 @@ public class HomepageAction {
 		if (CommonUtils.SwitchStatus("startStopWorkSwitch").contains("OFF")) {
 			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@class='android.widget.Switch'][@text='OFF']"))
 					.click();
-			Thread.sleep(1000);
+			Thread.sleep(1000); 
 			sign_in_Options();
 		} // closing if block
 	}
@@ -85,7 +85,7 @@ public class HomepageAction {
 					.click();
 			// verify if sign-out form exist then fill if not signout from map
 			signout_cases();
-		}
+		} 
 	}
 	
 	// signout cases

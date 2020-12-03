@@ -76,18 +76,20 @@ public class RoutePlan {
 
 	// perform route Customer activity
 	public static void performRouteActivity() throws InterruptedException, MalformedURLException {
-		CommonUtils.getdriver().findElements(MobileBy.id("activityItem1")).get(0).click();
-		CommonUtils.interruptSyncAndLetmeWork();
-		CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/saveForm']");
+		if (CommonUtils.getdriver().findElements(MobileBy.id("activityItem1")).size() > 0) {
+			CommonUtils.getdriver().findElements(MobileBy.id("activityItem1")).get(0).click();
+			CommonUtils.interruptSyncAndLetmeWork();
+			CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/saveForm']");
+		}
 	}
-
+ 
 	// click complete route visit 
 	public static void completeClientVisit() throws InterruptedException {
 		try {
 			CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/completeClientVisit']");
 			if (CommonUtils.getdriver().findElement(MobileBy.id("completeClientVisit")).isEnabled()) {
 				CommonUtils.getdriver().findElement(MobileBy.id("completeClientVisit")).click();
-				CommonUtils.OkButton("OK");
+				CommonUtils.OkButton("OK"); 
 				CommonUtils.implicitWait();
 			} else {
 				System.out.println("Route visit is already completed");

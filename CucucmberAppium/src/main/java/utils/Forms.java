@@ -32,7 +32,6 @@ public class Forms {
 
 	//if specified form is in homepage click on it else click on home fab '+' and go to forms
 	public static void verifyForminHomePage(String form) throws MalformedURLException {
-		try {
 			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textContains(\""
 							+ form + "\").instance(0))"));
@@ -41,9 +40,14 @@ public class Forms {
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + form + "')]")).click();
 				MobileElement homeFab = CommonUtils.getdriver().findElementById("fab");
 				MobileActionGesture.tapByElement(homeFab);
-				CommonUtils.interruptSyncAndLetmeWork();
+				try {
+					CommonUtils.interruptSyncAndLetmeWork();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-		} catch (Exception e) {
+		 else {
 			goToFormPage(form);
 		}
 	}
@@ -65,7 +69,7 @@ public class Forms {
 				.size() > 0) {
 			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 					"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveWorkflowButton\")")).click();
-		}else {
+		} else {
 			HomepageAction.form_SignIn_SignOut();
 		}
 		CommonUtils.interruptSyncAndLetmeWork();
@@ -80,7 +84,7 @@ public class Forms {
 		} catch (Exception e) {
 			System.out.println("I understand message is not displayed");
 		}
-		Thread.sleep(500);
+		CommonUtils.wait(3);
 	}
 	
 	//click on form save and new
@@ -88,9 +92,9 @@ public class Forms {
 		AndroidLocators.resourceId("in.spoors.effortplus:id/saveForm").click();
 		CommonUtils.alertContentXpath();
 		if (CommonUtils.getdriver()
-				.findElement(MobileBy.AndroidUIAutomator(
+				.findElements(MobileBy.AndroidUIAutomator(
 						"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveAndNewButton\")"))
-				.isDisplayed()) 
+				.size()>0) 
 		{
 			AndroidLocators.resourceId("in.spoors.effortplus:id/formSaveAndNewButton").click();
 			CommonUtils.interruptSyncAndLetmeWork();
@@ -102,10 +106,9 @@ public class Forms {
 	public static void form_Save_As_Draft() throws InterruptedException {
 		AndroidLocators.resourceId("in.spoors.effortplus:id/saveForm").click();
 		CommonUtils.alertContentXpath();
-		if (CommonUtils.getdriver()
-				.findElement(MobileBy.AndroidUIAutomator(
-						"new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveDraftButton\")"))
-				.isDisplayed()) 
+		if (CommonUtils.getdriver().findElements(MobileBy
+				.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveDraftButton\")"))
+				.size() > 0) 
 		{
 			AndroidLocators.resourceId("in.spoors.effortplus:id/formSaveDraftButton").click();
 			CommonUtils.interruptSyncAndLetmeWork();
@@ -130,14 +133,14 @@ public class Forms {
 	public static void form_Discard() throws InterruptedException {
 		AndroidLocators.resourceId("in.spoors.effortplus:id/saveForm").click();
 		CommonUtils.alertContentXpath();
-		if (CommonUtils.getdriver().findElement(MobileBy
+		if (CommonUtils.getdriver().findElements(MobileBy
 				.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/formDiscardButton\")"))
-				.isDisplayed()) {
+				.size() > 0) {
 			AndroidLocators.resourceId("in.spoors.effortplus:id/formDiscardButton").click();
 			CommonUtils.alertContentXpath();
 			if (CommonUtils.getdriver()
-					.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/message\")"))
-					.isDisplayed()) {
+					.findElements(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/message\")"))
+					.size() > 0) {
 				AndroidLocators.xpath("//*[@text='DELETE']").click();
 			}
 			CommonUtils.interruptSyncAndLetmeWork();
@@ -451,7 +454,7 @@ public class Forms {
 		// checkif pagination link exists
 		if (pagination.size() > 0) {
 			System.out.println(" ----- pagination exists ----- ");
-
+   
 			// click on pagination link
 			for (int i = 0; i < pagination.size(); i++) {
 				pagination.get(i).click();
@@ -460,7 +463,7 @@ public class Forms {
 			}
 		} else {
 			System.out.println(" **** pagination not exists **** ");
-			Forms.verifySectionToClickAdd();
+			verifySectionToClickAdd();
 			formfill();
 		}
 		Forms.formSaveButton();
@@ -559,7 +562,7 @@ public class Forms {
 			case "Text":
 			case "G-Text":
 			case "S-Text":
-				if (!isText) {
+//				if (!isText) {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					if (CommonUtils.getdriver()
 							.findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]")).size() > 0) {
@@ -567,8 +570,8 @@ public class Forms {
 						// inputting text
 						text(fieldsText);
 					}
-					isText = true;
-				}
+//					isText = true;
+//				}
 				break;
 			case "URL":
 			case "G-URL":
@@ -908,7 +911,7 @@ public class Forms {
 			String fieldsText = formFields1.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("----- Before removeing special character ----- : " + OriginalfieldsText
 					+ "\n======after removing regexp ===== : " + fieldsText);
-			CommonUtils.interruptSyncAndLetmeWork();
+			
 			switch (fieldsText) {
 			case "Date":
 			case "G-Date":
