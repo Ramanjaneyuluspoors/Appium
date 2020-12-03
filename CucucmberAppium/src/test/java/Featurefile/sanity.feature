@@ -11,8 +11,8 @@ Scenario: Customer Activity
 	Given Scroll to customer card and click 
 		|Customers|    
 	When user search for customer with 
-		|beens|
-	Then verify customer exist or not "beens" 
+		|Arjun|
+	Then verify customer exist or not "Arjun" 
 	And  verfiy customer checkin 
 	And Do customer activity and checkout 
 		|Form-1|
@@ -24,8 +24,9 @@ Scenario: Route Activity
 	When user search for route 
 		|Check-out Anyway|
 	Then verify customer route checkin validation 
-	And perform routeactivity 
+	And perform routeactivity  
 	Then complete client visit do customer checkout 
+	
 	
 @Dayplan 
 Scenario: Day plan Activity 
@@ -47,6 +48,12 @@ Scenario: Form completion with allFields
 	Given Scroll to form and click 
 		|AllFieldsForm new|
 	Then fill form to complete 
+	
+@Send_Debug_info
+Scenario: Sending Debug information
+	Given Swipe to settings
+	When user click on send debug info
+	Then send debug information with remarks
 	
 @signout
 Scenario: Signout
