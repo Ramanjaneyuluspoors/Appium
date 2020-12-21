@@ -1,7 +1,10 @@
-package utils;
+package common_Steps;
 
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.nativekey.AndroidKey;
+import io.appium.java_client.android.nativekey.KeyEvent;
+import utils.CommonUtils;
 
 public class AndroidLocators {
 	public static final int TYPE_TEXT = 1;
@@ -45,7 +48,7 @@ public class AndroidLocators {
 				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"" + resourceIdLocator + "\")"));
 	}
 	
-	// xpath using MobileBy
+	// xpath using MobileBy 
 	public static MobileElement xpath(String xpathLocator) 
 	{
 		return CommonUtils.getdriver().findElement(MobileBy.xpath("" + xpathLocator + ""));
@@ -65,6 +68,31 @@ public class AndroidLocators {
 	public static void clickElementusingXPath(String continueButton) {
 		    CommonUtils.getdriver().findElementByXPath(continueButton).click();
 	    }
+
+	//press enter
+    public static void pressEnterKeyInAndroid() {
+    	CommonUtils.getdriver().pressKey(new KeyEvent(AndroidKey.ENTER));
+    }
+    //move back
+    public static void pressBackKeyInAndroid() {
+        CommonUtils.getdriver().pressKey(new KeyEvent(AndroidKey.BACK));
+    }
+    //moving home
+    public static void pressHomeKeyInAndroid() {
+    	CommonUtils.getdriver().pressKey(new KeyEvent(AndroidKey.HOME));
+    }
+    
+    //send text using id
+    public static void enterTextusingID(String locator, String sText) {
+        CommonUtils.getdriver().findElementById(locator).clear();
+        CommonUtils.getdriver().findElementById(locator).sendKeys(sText);
+        CommonUtils.getdriver().hideKeyboard();
+    }
+    
+    //get text using xpath
+    public String getTextUsingXpath(String locator) {
+        return CommonUtils.getdriver().findElementByXPath(locator).getText();
+    }
 
 
 }

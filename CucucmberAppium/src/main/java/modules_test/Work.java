@@ -1,4 +1,4 @@
-package utils;
+package modules_test;
 
 import java.net.MalformedURLException;
 import java.text.ParseException;
@@ -12,10 +12,11 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.text.RandomStringGenerator;
 import org.openqa.selenium.By;
 
-import Actions.CustomerPageActions;
+import Actions.HomepageAction;
 import Actions.MobileActionGesture;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
+import utils.CommonUtils;
 
 public class Work {
 	private static String generateWorkName;
@@ -23,7 +24,8 @@ public class Work {
 	// go to work page from home fab icon '+' then swipe and click on the specified work
 	public static void goToWorkPage(String workName) throws MalformedURLException {
 		CommonUtils.homeFabClick();
-		CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Work']")).click();
+		HomepageAction.select_dialog_list("Work");
+//		CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Work']")).click();
 		//swipe and click on the specified work
 		MobileActionGesture.scrollTospecifiedElement("" + workName + "");
 		CommonUtils.waitForElementVisibility("//*[contains(@text,'Create')]");
@@ -228,9 +230,11 @@ public class Work {
 				CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 				// perform action until next action displayed
 				Forms.verifyFormPagesAndFill();
-//				workActionSaveButton();
+				Forms.formSaveButton();
 			}
 		} while (CommonUtils.getdriver().findElementsById("button1").size() > 0);
+		CommonUtils.openMenu();
+		CommonUtils.clickHomeInMenubar();
 	}
 
 	// save workaction

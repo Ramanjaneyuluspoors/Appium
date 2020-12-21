@@ -1,4 +1,4 @@
-package Actions;
+package modules_test;
 
 import java.net.MalformedURLException;
 import java.text.ParseException;
@@ -8,10 +8,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.text.RandomStringGenerator;
 import org.openqa.selenium.By;
 
+import Actions.MobileActionGesture;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import utils.CommonUtils;
-import utils.Forms;
 import utils.MediaPermission;
 
 public class CustomerCreation {

@@ -1,4 +1,4 @@
-package utils;
+package modules_test;
 
 import java.net.MalformedURLException;
 import java.time.LocalDate;
@@ -8,11 +8,12 @@ import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 
-import Actions.CustomerPageActions;
 import Actions.MobileActionGesture;
+import common_Steps.AndroidLocators;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidElement;
+import utils.CommonUtils;
 
 public class RoutePlan {
 
@@ -125,15 +126,9 @@ public class RoutePlan {
 		}
 	}
 
-	// Go to dayplan by swiping to dayplan
-	public static void goToDayPlan(String Dayplanner) throws MalformedURLException {
-		MobileActionGesture.scrollTospecifiedElement("" + Dayplanner + "");
-		CommonUtils.waitForElementVisibility("//*[@text='Day planner']");
-	}
 
 	// click on current day in calendar by using date
 	public static void calendarClick() throws InterruptedException {
-
 		// retrieving date from LocalDate library in java
 		LocalDate CurrentDate = LocalDate.now();
 		System.out.println("Current Date: " + CurrentDate);

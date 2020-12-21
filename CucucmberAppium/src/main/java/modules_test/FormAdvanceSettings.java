@@ -1,4 +1,4 @@
-package utils;
+package modules_test;
 
 import java.net.MalformedURLException;
 import java.text.ParseException;
@@ -10,13 +10,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.text.RandomStringGenerator;
 import org.junit.gen5.api.Assertions;
-import org.openqa.selenium.By;
 
-import Actions.CustomerPageActions;
 import Actions.MobileActionGesture;
+import common_Steps.AndroidLocators;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import nl.flotsam.xeger.Xeger;
+import utils.CommonUtils;
 
 public class FormAdvanceSettings {
 	static String[] baseCondition = { "Hide when", "Disable when", "Mandatory when" };
