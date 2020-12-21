@@ -13,7 +13,7 @@ Scenario: Customer Activity
 	When user search for customer with 
 		|Arjun|
 	Then verify customer exist or not "Arjun" 
-	And  verfiy customer checkin 
+	And verfiy customer checkin 
 	And Do customer activity and checkout 
 		|Form-1|
 		
@@ -35,7 +35,7 @@ Scenario: Day plan Activity
 	When user click on currentday in Day plan calendar 
 	Then verify day plan exist or not 
 	And Do day plan activity and checkout 
-		|formNormal fields|
+		|Form-4|
 		
 @Workcompletion 
 Scenario: Work Creation 
@@ -46,8 +46,10 @@ Scenario: Work Creation
 @Form 
 Scenario: Form completion with allFields 
 	Given Scroll to form and click 
-		|AllFieldsForm new|
-	Then fill form to complete 
+		|Forms|
+	When user click on specified form
+		|New-Form| 	
+	Then fill the form to complete 
 	
 @Send_Debug_info
 Scenario: Sending Debug information
