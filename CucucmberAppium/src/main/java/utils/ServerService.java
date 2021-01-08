@@ -10,7 +10,7 @@ import io.appium.java_client.service.local.AppiumServiceBuilder;
 public class ServerService {
 	static AppiumDriverLocalService service;
 	static boolean flag=checkIfServerIsRunnning(4723);
-	//
+	
 	public static AppiumDriverLocalService services(String excutablePath, String jsPath) {
 		if(!flag) {
 			service = AppiumDriverLocalService.buildService(new AppiumServiceBuilder()

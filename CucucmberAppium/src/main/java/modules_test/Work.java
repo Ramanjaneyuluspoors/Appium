@@ -14,6 +14,7 @@ import org.openqa.selenium.By;
 
 import Actions.HomepageAction;
 import Actions.MobileActionGesture;
+import common_Steps.AndroidLocators;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import utils.CommonUtils;
@@ -62,7 +63,7 @@ public class Work {
 	public static void workSearch(String workName) throws MalformedURLException, InterruptedException {
 		CommonUtils.getdriver().findElement(MobileBy.id("action_search")).click();
 		CommonUtils.getdriver().findElement(MobileBy.id("search_src_text")).sendKeys(workName);
-		CommonUtils.pressEnterKeyInAndroid();
+		AndroidLocators.pressEnterKeyInAndroid();
 		CommonUtils.interruptSyncAndLetmeWork();
 		CommonUtils.keyboardHide();
 	}
@@ -229,8 +230,8 @@ public class Work {
 				CommonUtils.getdriver().findElement(MobileBy.className("android.widget.Button")).click();
 				CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 				// perform action until next action displayed
-				Forms.verifyFormPagesAndFill();
-				Forms.formSaveButton();
+				Forms_basic.verifyFormPagesAndFill();
+				Forms_basic.formSaveButton();
 			}
 		} while (CommonUtils.getdriver().findElementsById("button1").size() > 0);
 		CommonUtils.openMenu();
@@ -396,7 +397,7 @@ public class Work {
 							.click();
 					CommonUtils.alertContentXpath();
 					try {
-						Forms.dateScriptInForms(2);
+						Forms_basic.dateScriptInForms(2);
 					} catch (MalformedURLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -688,7 +689,7 @@ public class Work {
 							CommonUtils.getdriver().findElements(MobileBy.id("custom_entity_card")).get(0).click();
 						} else {
 							// write entity item creation method
-							Forms.createEntity();
+							Forms_basic.createEntity();
 						}
 						Thread.sleep(500);
 					} else {
@@ -741,7 +742,7 @@ public class Work {
 								.click();
 						CommonUtils.alertContentXpath();
 						try {
-							Forms.dateScriptInForms(2);
+							Forms_basic.dateScriptInForms(2);
 						} catch (MalformedURLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -802,7 +803,7 @@ public class Work {
 								.click();
 						CommonUtils.alertContentXpath();
 						try {
-							Forms.dateScriptInForms(2);
+							Forms_basic.dateScriptInForms(2);
 						} catch (MalformedURLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -890,7 +891,7 @@ public class Work {
 								} else {
 									CommonUtils.getdriver().findElement(MobileBy.id("fab")).click();
 									CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
-									Forms.verifyFormPagesAndFill();
+									Forms_basic.verifyFormPagesAndFill();
 									CommonUtils.waitForElementVisibility(
 											"//*[@resource-id='in.spoors.effortplus:id/form_id_text_view']");
 									if (CommonUtils.getdriver().findElements(MobileBy.id("form_id_text_view"))
@@ -1037,10 +1038,10 @@ public class Work {
 							.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]"))
 							.size() > 0) {
 						MobileActionGesture.scrollUsingText(workFieldsText);
-						Forms.capturing_Signature(workFieldsText);
+						Forms_basic.capturing_Signature(workFieldsText);
 					} else {
 						MobileActionGesture.scrollUsingText(workFieldsText);
-						Forms.capturing_Signature(workFieldsText);
+						Forms_basic.capturing_Signature(workFieldsText);
 					}
 					isSignature = true;
 				}

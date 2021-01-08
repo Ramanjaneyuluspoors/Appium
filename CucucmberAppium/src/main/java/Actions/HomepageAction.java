@@ -10,7 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import common_Steps.AndroidLocators;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
-import modules_test.Forms;
+import modules_test.Forms_basic;
 import utils.CommonUtils;
 import utils.MediaPermission;
 
@@ -40,8 +40,8 @@ public class HomepageAction {
 		// display)
 		CommonUtils.interruptSyncAndLetmeWork();
 		if (CommonUtils.getdriver().findElements(By.id("saveForm")).size() > 0) {
-			Forms.verifyFormPagesAndFill();
-			Forms.formSaveButton();
+			Forms_basic.verifyFormPagesAndFill();
+			Forms_basic.formSaveButton();
 		} else if (CommonUtils.getdriver().findElements(By.id("signInButton")).size() > 0) {
 			CommonUtils.getdriver().findElement(By.id("signInButton")).click();
 			if (CommonUtils.getdriver().findElements(By.id("heading")).size() > 0) {
@@ -49,8 +49,8 @@ public class HomepageAction {
 			}
 			CommonUtils.interruptSyncAndLetmeWork();
 			if (CommonUtils.getdriver().findElements(By.id("saveForm")).size() > 0) {
-				Forms.verifyFormPagesAndFill();
-				Forms.formSaveButton();
+				Forms_basic.verifyFormPagesAndFill();
+				Forms_basic.formSaveButton();
 			}
 		} else if (CommonUtils.getdriver().findElements(By.id("heading")).size() > 0) {
 			CommonUtils.getdriver().findElements(By.className("android.widget.Button")).get(0).click();
@@ -96,8 +96,8 @@ public class HomepageAction {
 	public static void signout_cases() throws InterruptedException, MalformedURLException, ParseException {
 		CommonUtils.interruptSyncAndLetmeWork();
 		if (CommonUtils.getdriver().findElements(By.id("saveForm")).size() > 0) {
-			Forms.verifyFormPagesAndFill();
-			Forms.formSaveButton();
+			Forms_basic.verifyFormPagesAndFill();
+			Forms_basic.formSaveButton();
 		} else if (CommonUtils.getdriver().findElements(By.id("signInButton")).size() > 0) {
 			CommonUtils.getdriver().findElement(By.id("signInButton")).click();
 			// capture reason
@@ -105,8 +105,8 @@ public class HomepageAction {
 				CommonUtils.getdriver().findElements(By.className("android.widget.Button")).get(0).click();
 			}
 			if (CommonUtils.getdriver().findElements(By.id("saveForm")).size() > 0) {
-				Forms.verifyFormPagesAndFill();
-				Forms.formSaveButton();
+				Forms_basic.verifyFormPagesAndFill();
+				Forms_basic.formSaveButton();
 			}
 		} else if (CommonUtils.getdriver().findElements(By.xpath("//*[@text='SIGN OUT']")).size() > 0) {
 			CommonUtils.getdriver().findElement(By.xpath("//*[@text='SIGN OUT']")).click();

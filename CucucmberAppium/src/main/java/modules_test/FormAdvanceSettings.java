@@ -36,10 +36,10 @@ public class FormAdvanceSettings {
 			}
 		} else {
 			System.out.println("pagination not exists");
-			Forms.verifySectionToClickAdd();
+			Forms_basic.verifySectionToClickAdd();
 			min_max_withoutPages(min, max);
 		}
-		Forms.formSaveButton();
+		Forms_basic.formSaveButton();
 	}
 
 	public static void fillMinMaxData(int min, int max, int i) throws MalformedURLException, InterruptedException {
@@ -776,13 +776,13 @@ public class FormAdvanceSettings {
 			for (int i = 0; i < pagination.size(); i++) {
 				pagination.get(i).click();
 				// verify section tab exist or not
-				Forms.verifySectionToClickAdd();
+				Forms_basic.verifySectionToClickAdd();
 				// scroll to top
 				MobileActionGesture.flingToBegining_Android();
 			}
 		} else {
 			// verify section tab exist or not
-			Forms.verifySectionToClickAdd();
+			Forms_basic.verifySectionToClickAdd();
 			// scroll to top
 			MobileActionGesture.flingToBegining_Android();
 		}
@@ -2333,7 +2333,7 @@ public class FormAdvanceSettings {
 			}
 		} else {
 			System.out.println(" ==== pagination not exists ====");
-			Forms.verifySectionToClickAdd();
+			Forms_basic.verifySectionToClickAdd();
 			highlighting_BackgroundField_Basedon_fieldValue_WithOut_Pages(colorInput, fieldLabel);
 		}
 //		Forms.formSaveButton();
@@ -2567,7 +2567,7 @@ public class FormAdvanceSettings {
 			}
 		} else {
 			System.out.println(" ==== Pagination not exists!! ====");
-			Forms.verifySectionToClickAdd();
+			Forms_basic.verifySectionToClickAdd();
 			validating_errorAndWarn_Message_without_pagination(errorCondition, inputValue);
 		}
 //	Forms.formSaveButton();
@@ -2659,7 +2659,7 @@ public class FormAdvanceSettings {
 				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]"))
 						.size() > 0) {
 					MobileActionGesture.scrollUsingText(fieldsText);
-					Forms.text(fieldsText);
+					Forms_basic.text(fieldsText);
 				}
 			}
 //			else if (fieldsText.contains("Currency") || fieldsText.contains("G-Currency")
@@ -2879,16 +2879,16 @@ public class FormAdvanceSettings {
 						.click();
 				CommonUtils.alertContentXpath();
 				
-				Forms.getCalendarDates(inputDate);
+				Forms_basic.getCalendarDates(inputDate);
 			}
 			if (errorCondition.equals("Show Error when")) {
-				Forms.formSaveButton();
+				Forms_basic.formSaveButton();
 				// retrieving error message using OCR
 				String dateText = CommonUtils.OCR();
 				System.out.println("---- Expected toast message is ---- : " + dateText);
 			} else if (errorCondition.equals("Show Warning when")) {
 //				verify_mandatory_error();
-				Forms.formSaveButton();
+				Forms_basic.formSaveButton();
 				handlingWarningAlert();
 			}
 			// adding date

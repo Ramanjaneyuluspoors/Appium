@@ -45,7 +45,7 @@ public class CustomerPageActions {
 		CommonUtils.waitForElementVisibility("//*[@text='Customers']");
 		CommonUtils.getdriver().findElement(MobileBy.id("action_search")).click();
 		CommonUtils.getdriver().findElement(MobileBy.id("search_src_text")).sendKeys(customerName);
-		CommonUtils.pressEnterKeyInAndroid();
+		AndroidLocators.pressEnterKeyInAndroid();
 	}
 
 	// if customer not exist then create
@@ -257,7 +257,7 @@ public class CustomerPageActions {
 	// checkout in customer screen
 	public static void checkout_in_customer_screen() throws MalformedURLException, InterruptedException {
 		navigate_back();
-		Thread.sleep(800);
+		Thread.sleep(600);
 		customer_Screen_checkout();
 		CommonUtils.openMenu();
 		CommonUtils.clickHomeInMenubar();
@@ -266,7 +266,7 @@ public class CustomerPageActions {
 	// navigate back
 	public static void navigate_back() {
 		do {
-			CommonUtils.getdriver().findElement(By.xpath("//*[@content-desc='Navigate up']")).click();
+			AndroidLocators.clickElementusingXPath("//*[@content-desc='Navigate up']");
 		} while (CommonUtils.getdriver().findElements(By.xpath("//*[@content-desc='Navigate up']")).size() > 0);
 	}
 
@@ -714,7 +714,7 @@ public class CustomerPageActions {
 									} else {
 										CommonUtils.getdriver().findElement(MobileBy.id("fab")).click();
 										CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
-										Forms.verifyFormPagesAndFill();
+										Forms_basic.verifyFormPagesAndFill();
 										CommonUtils.waitForElementVisibility(
 												"//*[@resource-id='in.spoors.effortplus:id/form_id_text_view']");
 										if (CommonUtils.getdriver().findElements(MobileBy.id("form_id_text_view"))
@@ -865,7 +865,7 @@ public class CustomerPageActions {
 							CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + originalText
 									+ "')]/parent::*/parent::*/android.widget.Button[contains(@text,'PICK A TIME')]"))
 									.click();
-							Forms.TimeScriptInForms(2, 1);
+							Forms_basic.TimeScriptInForms(2, 1);
 							CommonUtils.wait(3);
 						} else {
 							System.out.println("... Time is already picked ...");
@@ -890,7 +890,7 @@ public class CustomerPageActions {
 									.click();
 							CommonUtils.alertContentXpath();
 							try {
-								Forms.dateScriptInForms(2);
+								Forms_basic.dateScriptInForms(2);
 							} catch (MalformedURLException e) {
 								e.printStackTrace();
 							} catch (InterruptedException e) {
@@ -907,7 +907,7 @@ public class CustomerPageActions {
 									+ "']/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[2]"))
 									.click();
 							CommonUtils.alertContentXpath();
-							Forms.TimeScriptInForms(2, 5);
+							Forms_basic.TimeScriptInForms(2, 5);
 							CommonUtils.wait(3);
 						} else {
 							System.out.println("DateTime is already picked");
@@ -932,7 +932,7 @@ public class CustomerPageActions {
 									.click();
 							CommonUtils.alertContentXpath();
 							try {
-								Forms.dateScriptInForms(2);
+								Forms_basic.dateScriptInForms(2);
 							} catch (MalformedURLException e) {
 								e.printStackTrace();
 							} catch (InterruptedException e) {
@@ -1021,7 +1021,7 @@ public class CustomerPageActions {
 								CommonUtils.getdriver().findElements(MobileBy.id("custom_entity_card")).get(0).click();
 							} else {
 								// write entity item creation method
-								Forms.createEntity();
+								Forms_basic.createEntity();
 							}
 							CommonUtils.wait(3);
 						} else {

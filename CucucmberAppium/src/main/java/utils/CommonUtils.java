@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-
 import org.apache.commons.text.RandomStringGenerator;
 
 import org.apache.commons.io.FileUtils;
@@ -31,7 +29,6 @@ import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
@@ -242,9 +239,9 @@ public class CommonUtils {
 				.size() > 0) {
 			driver.findElement(By.xpath("//android.widget.ImageButton[@content-desc='Open drawer']")).click();
 		} else {
-			System.out.println("*** Menu icon is displayed ***");
+			System.out.println("*** Menubar is not displayed ***");
 		}
-		CommonUtils.wait(2);
+		CommonUtils.wait(1);
 	}
 
 	// javascript executor using id
@@ -448,30 +445,12 @@ public class CommonUtils {
             return false;
     }
 
-	//press enter
-    public static void pressEnterKeyInAndroid() {
-    	driver.pressKey(new KeyEvent(AndroidKey.ENTER));
-    }
-    //move back
-    public static void pressBackKeyInAndroid() {
-        driver.pressKey(new KeyEvent(AndroidKey.BACK));
-    }
-    //moving home
-    public static void pressHomeKeyInAndroid() {
-    	driver.pressKey(new KeyEvent(AndroidKey.HOME));
-    }
-    
-    //send text using id
-    public static void enterTextusingID(String locator, String sText) {
-        driver.findElementById(locator).clear();
-        driver.findElementById(locator).sendKeys(sText);
-        driver.hideKeyboard();
-    }
-    
-    //get text using xpath
-    public String getTextUsingXpath(String locator) {
-        return driver.findElementByXPath(locator).getText();
-    }
-
+//	AndroidDriver
+	public static void clickOn(By locator, AndroidDriver<MobileElement> driver, int timeout)
+	{
+	    final WebDriverWait wait = new WebDriverWait(driver, timeout);
+	    wait.until(ExpectedConditions.refreshed(
+	        ExpectedConditions.elementToBeClickable(locator)));
+	}
 
 }
