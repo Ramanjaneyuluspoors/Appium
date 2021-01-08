@@ -1,32 +1,34 @@
-Feature: Performing Form Basic Testing
+@forms_basic_ui 
+Feature: Performing Form Basic Testing 
 
-@formfill 
-Scenario: fill form with all data types 
-	Given scroll to form 
-		|Forms|
-	When user click on the specified form 
-		|formSubmissionReport|
+@formfill_and_modify_form 
+Scenario Outline: fill form with all data types 
+	Given scroll to form "<cardName>" 
+	When user click on the specified form "<formname>" 
 	Then user fill the form and save 
 	And modify the form and save 
 	And Navigate to homepage 
-	
-@form_save_and_new_then_discard_form 
-Scenario: fill the form and click save and new then discard 
-	Given swipe to form 
-		|Forms|
-	When user click on the given formname 
-		|formSubmissionReport|
+	Examples: 
+		|cardName|formname|
+		|Forms|formPagination|
+		
+@form_save_and_new_then_discard_form 		
+Scenario Outline: fill the form and click save and new then discard 
+	Given swipe to form "<cardName>" 
+	When user click on the given formname "<formname>" 
 	Then user fill form and 
-	And click save and new 
-	Then Discard the form 
-	
+	And click save and new  
+	Then Discard the form and navigate back to home
+	Examples: 
+		|cardName|formname|
+		|Forms|formSubmissionReport|
+				
 @form_save_as_draft 
-Scenario: fill the form then save as draft 
-	Given scroll and click on forms 
-		|Forms|
-	When user click on the form available in the forms 
-		|formSubmissionReport|
+Scenario Outline: fill the form then save as draft 
+	Given scroll and click on forms "<cardName>" 
+	When user click on the form available in the forms "<formname>" 
 	Then user insert form data 
 	And save form as draft 
-	
-          
+	Examples: 
+		|cardName|formname|
+		|Forms|formNormal fields|

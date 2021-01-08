@@ -11,12 +11,12 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import modules_test.CustomerPageActions;
-import modules_test.Forms;
+import modules_test.Forms_basic;
 import modules_test.RoutePlan;
 import modules_test.Work;
 import utils.CommonUtils;
 
-public class Sanity {
+public class Sanity_implementation {
  
 	@Given("Navigate to Home page")
 	public void navigate_to_Home_page() throws InterruptedException {
@@ -58,8 +58,8 @@ public class Sanity {
 	@And("^Do customer activity and checkout$")
 	public void Do_customer_activity_and_checkout(String formName) throws MalformedURLException, InterruptedException, ParseException {
 		CustomerPageActions.clickActivity(formName);
-		Forms.verifyFormPagesAndFill();
-		Forms.formSaveButton();
+		Forms_basic.verifyFormPagesAndFill();
+		Forms_basic.formSaveButton();
 		CustomerPageActions.HomepageCusCheckout();
 	}
 
@@ -82,8 +82,8 @@ public class Sanity {
 	@And("perform routeactivity")
 	public void perform_routeactivity() throws MalformedURLException, InterruptedException, ParseException {
 		RoutePlan.performRouteActivity();
-		Forms.verifyFormPagesAndFill();
-		Forms.formSaveButton();
+		Forms_basic.verifyFormPagesAndFill();
+		Forms_basic.formSaveButton();
 	}
 
 	@Then("complete client visit do customer checkout")
@@ -130,7 +130,7 @@ public class Sanity {
 
 	@Given("^Scroll to form and click$")
 	public void scroll_to_form_and_click(String form) throws InterruptedException, MalformedURLException {
-		Forms.verifyForminHomePage(form);
+		Forms_basic.verifyForminHomePage(form);
 	}
 
 	@When("^user click on specified form$")
@@ -141,8 +141,8 @@ public class Sanity {
 	
 	@Then("fill the form to complete")
 	public void fill_the_form_to_complete() throws MalformedURLException, InterruptedException, ParseException {
-		Forms.verifyFormPagesAndFill();
-		Forms.formSaveButton();
+		Forms_basic.verifyFormPagesAndFill();
+		Forms_basic.formSaveButton();
 		CommonUtils.goBackward();
 		CommonUtils.openMenu();
 		CommonUtils.clickHomeInMenubar();

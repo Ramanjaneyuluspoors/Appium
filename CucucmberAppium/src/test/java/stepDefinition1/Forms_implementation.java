@@ -10,16 +10,16 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import modules_test.CustomerPageActions;
 import modules_test.FormAdvanceSettings;
-import modules_test.Forms;
+import modules_test.Forms_basic;
 import utils.CommonUtils;
 
-public class Forms_testing {
-	@Given("^scroll to form$")
+public class Forms_implementation {
+	@Given("scroll to form {string}")
 	public void scroll_to_form(String form) throws MalformedURLException, InterruptedException, ParseException {
-		Forms.verifyForminHomePage(form);
+		Forms_basic.verifyForminHomePage(form);
 	}
 	
-	@When("^user click on the specified form$")
+	@When("user click on the specified form {string}")
 	public static void user_click_on_the_specified_form(String form) {
 		MobileActionGesture.scrollTospecifiedElement("" + form + "");
 		CommonUtils.waitForElementVisibility("//*[@text='" + form + "']");
@@ -27,69 +27,72 @@ public class Forms_testing {
 	
 	@Then("user fill the form and save")
 	public void user_fill_the_form_and_save() throws MalformedURLException, InterruptedException, ParseException {
-		Forms.verifyFormPagesAndFill();
-		Forms.formSaveButton();
+		Forms_basic.verifyFormPagesAndFill();
+		Forms_basic.formSaveButton();
 	}
 	
 	@And("modify the form and save")
 	public void modify_the_form_and_save() throws MalformedURLException, InterruptedException, ParseException {
-		Forms.modify_form();
-//		CustomerPageActions.navigate_back();
+		Forms_basic.modify_form();
+		Forms_basic.formSaveButton();
 	}
 	
 	@And("Navigate to homepage")
 	public void Navigate_to_homepage() throws MalformedURLException, InterruptedException, ParseException {
-		CustomerPageActions.navigate_back();
+		CommonUtils.goBackward();
 	}
 	
-	@Given("^swipe to form$")
+	@Given("swipe to form {string}")
 	public void swipe_to_form(String form) throws MalformedURLException, InterruptedException, ParseException {
-		Forms.verifyForminHomePage(form);
+		Forms_basic.verifyForminHomePage(form);
 	}
 
-	@When("^user click on the given formname$")
+	@When("user click on the given formname {string}")
 	public static void user_click_on_the_given_formname(String form) {
 		user_click_on_the_specified_form(form);
 	}
 	
-	@Then("user fill the form and")
+	@Then("user fill form and")
 	public void user_fill_the_form_and() throws MalformedURLException, InterruptedException, ParseException {
-		Forms.verifyFormPagesAndFill();
+		Forms_basic.verifyFormPagesAndFill();
 	}
 	
 	@And("click save and new")
 	public static void click_save_and_new() throws InterruptedException {
-		Forms.form_Save_And_New();
+		Forms_basic.form_Save_And_New();
 	}
 	
-	@Then("Discard the form")
-	public static void Discard_the_form() throws InterruptedException {
-		Forms.form_Discard();
+	@Then("Discard the form and navigate back to home")
+	public static void Discard_the_form_and_navigate_back_to_home() throws InterruptedException, MalformedURLException {
+		Forms_basic.form_Discard();
+		CommonUtils.goBackward();
+		CommonUtils.openMenu();
+		CommonUtils.clickHomeInMenubar();
 	}
 	
-	@Given("^scroll and click on forms$")
+	@Given("scroll and click on forms {string}")
 	public static void scroll_and_click_on_forms(String form) throws MalformedURLException {
-		Forms.verifyForminHomePage(form);
+		Forms_basic.verifyForminHomePage(form);
 	}
 	
-	@When("user click on the form available in the forms ")
+	@When("user click on the form available in the forms {string}")
 	public static void user_click_on_the_form_available_in_the_forms(String form) {
 		user_click_on_the_specified_form(form);
 	}
 	
 	@Then("user insert form data")
 	public static void user_insert_form_data() throws MalformedURLException, InterruptedException, ParseException {
-		Forms.verifyFormPagesAndFill();
+		Forms_basic.verifyFormPagesAndFill();
 	}
 	
 	@And("save form as draft")
 	public static void save_form_as_draft() throws InterruptedException {
-		Forms.form_Save_As_Draft();
+		Forms_basic.form_Save_As_Draft();
 	}
 	
 	@Given("^Swipe to MinMax form$")
 	public void Swipe_to_MinMax_form(String MinMaxform) throws InterruptedException, MalformedURLException {
-		Forms.verifyForminHomePage(MinMaxform);
+		Forms_basic.verifyForminHomePage(MinMaxform);
 	}
 	
 	@When("^user click on given form$")
@@ -105,7 +108,7 @@ public class Forms_testing {
 	
 	@Given("^scroll to specified form$")
 	public static void scroll_to_specified_form(String form) throws MalformedURLException {
-		Forms.verifyForminHomePage(form);
+		Forms_basic.verifyForminHomePage(form);
 	}
 	
 	@When("^user click on given form name$")
@@ -121,7 +124,7 @@ public class Forms_testing {
 	
 	@Given("move to specified form")
 	public void move_to_specified_form(String form) throws MalformedURLException {
-		Forms.verifyForminHomePage(form);
+		Forms_basic.verifyForminHomePage(form);
 	}
 	
 	@When("^user click on the given form$")
@@ -137,7 +140,7 @@ public class Forms_testing {
 	
 	@Given("^scroll to specified color form$")
 	public static void scroll_to_specified_color_form(String Form) throws MalformedURLException {
-		Forms.verifyForminHomePage(Form);
+		Forms_basic.verifyForminHomePage(Form);
 	}
 	
 	@When("^user click on the form name$")
@@ -153,7 +156,7 @@ public class Forms_testing {
 	 
 	@Given("^swipe to specified form$")
 	public static void swipe_to_specified_form(String Form) throws MalformedURLException {
-		Forms.verifyForminHomePage(Form);
+		Forms_basic.verifyForminHomePage(Form);
 	}
 	
 	@When("^user click on the form given$")
