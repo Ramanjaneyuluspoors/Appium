@@ -2916,7 +2916,6 @@ public class FormAdvanceSettings {
 	public static void clickElementByText(String txt) throws InterruptedException, MalformedURLException {
 		CommonUtils.getdriver()
 				.findElement(MobileBy.xpath("//*[@resource-id='android:id/text1'][@text='" + txt + "']")).click();
-		CommonUtils.wait(1);
 	}
 	
 	//click on year

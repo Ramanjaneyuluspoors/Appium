@@ -170,8 +170,7 @@ public class CustomerPageActions {
 			customerCheckInReason();
 		} else if (checkin.getText().contains("CHECK-OUT ANYWAY")) {
 			MobileActionGesture.tapByElement(checkin);
-			String randomstring = RandomStringUtils.randomAlphabetic(5).toLowerCase();
-			CommonUtils.getdriver().findElement(MobileBy.className("android.widget.EditText")).sendKeys(randomstring);
+			AndroidLocators.sendInputusing_Classname("android.widget.EditText");
 			CommonUtils.keyboardHide();
 			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='SUBMIT']")).click();
 			CommonUtils.waitForElementVisibility("//*[@text='Customers']");

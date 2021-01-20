@@ -10,8 +10,6 @@ import java.util.List;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.text.RandomStringGenerator;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import Actions.HomepageAction;
@@ -226,7 +224,7 @@ public class Forms_basic {
 		}
 	}
 
-	// automating time in 12 hrs format(clicking on hours and AM,PM)
+	// automating time in 24 hrs format(clicking on hours and AM,PM)
 	public static void TimeScriptInForms(int hoursCount, int minsCount)
 			throws MalformedURLException, InterruptedException {
 		CommonUtils.alertContentXpath();
@@ -316,7 +314,7 @@ public class Forms_basic {
 		// get current date
 		String todayDate = DateFor.format(date);
 
-		System.out.println("**** Today date is**** : " + todayDate);
+		System.out.println("**** Today date is **** : " + todayDate);
 		// add date
 		date = DateUtils.addDays(date, addedDate);
 

@@ -1,5 +1,7 @@
 package common_Steps;
 
+import org.apache.commons.text.RandomStringGenerator;
+
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.nativekey.AndroidKey;
@@ -75,6 +77,42 @@ public class AndroidLocators {
 				.click();
 	}
 
+	// sending input using resource-id
+	public static void sendInputusing_ResourceId(String resourceIdLocator) {
+		RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
+		String resourceidInput = textGenerator.generate(5);
+		CommonUtils.getdriver()
+				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"" + resourceIdLocator + "\")"))
+				.clear();
+		CommonUtils.getdriver()
+				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"" + resourceIdLocator + "\")"))
+				.sendKeys(resourceidInput);
+	}
+	
+	// sending input using classname
+	public static void sendInputusing_Classname(String classLocator) {
+		RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
+		String classnameInput = textGenerator.generate(5);
+		CommonUtils.getdriver().findElement(MobileBy.className(classLocator)).clear();
+		CommonUtils.getdriver().findElement(MobileBy.className(classLocator)).sendKeys(classnameInput);
+	}
+	
+	//sending input using id
+	public static void sendInputusing_Id(String idLocator) {
+		RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
+		String IdInput = textGenerator.generate(5);
+		CommonUtils.getdriver().findElement(MobileBy.id(idLocator)).clear();
+		CommonUtils.getdriver().findElement(MobileBy.id(idLocator)).sendKeys(IdInput);
+	}
+
+	// sending input using xpath
+	public static void sendInputusing_XPath(String xpathLocator) {
+		RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
+		String xpath = textGenerator.generate(5);
+		CommonUtils.getdriver().findElementByXPath(xpathLocator).clear();
+		CommonUtils.getdriver().findElementByXPath(xpathLocator).sendKeys(xpath);
+	}
+	
 	// press enter
 	public static void pressEnterKeyInAndroid() {
 		CommonUtils.getdriver().pressKey(new KeyEvent(AndroidKey.ENTER));
