@@ -17,7 +17,7 @@ import utils.ServerService;
 	
 @RunWith(Cucumber.class)
 @CucumberOptions(features = {"C:\\Users\\spoors\\git\\Appium\\CucucmberAppium\\src\\test\\java\\Featurefile"}, 
-glue = "stepDefinition1", dryRun=false, strict=true, monochrome=true, tags= {"@formfill_and_modify_form"}, 
+glue = "stepDefinition1", dryRun=false, strict=true, monochrome=true, tags= {"@Reports_validation or @employee_specifying_reports"}, 
 plugin = {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"})
 public class TestRunner {  
 	public static AndroidDriver<MobileElement> driver;
