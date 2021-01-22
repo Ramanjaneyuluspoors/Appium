@@ -469,10 +469,6 @@ public class CommonUtils {
 						MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"" + resourceId_Locator + "\")"))
 				.size() > 0) {
 			AndroidLocators.clickElementusingResourceId("" + sub_resourceId_Locator + "");
-//			CommonUtils.getdriver()
-//					.findElement(MobileBy
-//							.AndroidUIAutomator("new UiSelector().resourceId(\"" + sub_resourceId_Locator + "\")"))
-//					.click();
 		} else if (CommonUtils.getdriver().findElements(By.xpath("" + xpath_locator + "")).size() > 0) {
 			AndroidLocators.clickElementusingXPath("" + sub_xpath + "");
 		}
