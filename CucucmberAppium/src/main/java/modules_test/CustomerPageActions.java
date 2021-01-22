@@ -172,7 +172,7 @@ public class CustomerPageActions {
 			MobileActionGesture.tapByElement(checkin);
 			AndroidLocators.sendInputusing_Classname("android.widget.EditText");
 			CommonUtils.keyboardHide();
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='SUBMIT']")).click();
+			AndroidLocators.clickElementusingXPath("//*[@text='SUBMIT']");
 			CommonUtils.waitForElementVisibility("//*[@text='Customers']");
 			customerSearch(randomstringCusName); // two ways for search after checkout anyway
 			veirfyCusCheckin();
@@ -184,10 +184,10 @@ public class CustomerPageActions {
 		try {
 			CommonUtils.wait(2);
 			if (CommonUtils.getdriver().findElements(MobileBy.id("View_all_details")).size() > 0) {
-				CommonUtils.getdriver().findElement(MobileBy.id("View_all_details")).click();
+				AndroidLocators.clickElementusingID("View_all_details");
 			} else {
 				CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/View_all_details']");
-				CommonUtils.getdriver().findElement(MobileBy.id("View_all_details")).click();
+				AndroidLocators.clickElementusingID("View_all_details");
 			}
 			if (CommonUtils.getdriver().findElements(MobileBy.id("addTask")).size() > 0) {
 				MobileElement addActivity = CommonUtils.getdriver().findElement(MobileBy.id("addTask"));
@@ -195,7 +195,7 @@ public class CustomerPageActions {
 				CommonUtils.waitForElementVisibility("//*[contains(@text,'ACTIVITIES')]");
 			} else {
 				CommonUtils.waitForElementVisibility("in.spoors.effortplus:id/addTask");
-				CommonUtils.getdriver().findElement(MobileBy.id("addTask")).click();
+				AndroidLocators.clickElementusingID("addTask");
 				CommonUtils.waitForElementVisibility("//*[contains(@text,'ACTIVITIES')]");
 			}
 		} catch (Exception e) {
@@ -207,11 +207,11 @@ public class CustomerPageActions {
 	public static void performAcitivity_using_add_symbol() {
 		CommonUtils.goBackward();
 		if (CommonUtils.getdriver().findElements(MobileBy.id("addButton")).size() > 0) {
-			CommonUtils.getdriver().findElement(MobileBy.id("addButton")).click();
+			AndroidLocators.clickElementusingID("addButton");
 			CommonUtils.waitForElementVisibility("//*[contains(@text,'ACTIVITIES')]");
 		} else {
 			CommonUtils.waitForElementVisibility("in.spoors.effortplus:id/addButton");
-			CommonUtils.getdriver().findElement(MobileBy.id("addButton")).click();
+			AndroidLocators.clickElementusingID("addButton");
 			CommonUtils.waitForElementVisibility("//*[contains(@text,'ACTIVITIES')]");
 		}
 		//// *[@text='C1']/parent::*/parent::*/ancestor::android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout//*[@id='addLayout']//*[@id='addButton']
@@ -235,7 +235,7 @@ public class CustomerPageActions {
 	public static void clickActivity(String formName) throws MalformedURLException, InterruptedException {
 		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + formName + "')]"))
 				.size() > 0) {
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + formName + "')]")).click();
+			AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + formName + "')]");
 			System.out.println("form with name is displayed and clicked");
 		} else {
 			System.out.println("form name is not displayed, clicking on first activity");
@@ -282,7 +282,7 @@ public class CustomerPageActions {
 			List<MobileElement> checkout = CommonUtils.getdriver().findElements(MobileBy.id("title"));
 			for (int i = 0; i < checkout.size(); i++) {
 				if (checkout.get(i).getText().contains("Check out")) {
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Check out']")).click();
+					AndroidLocators.clickElementusingXPath("//*[@text='Check out']");
 					CommonUtils.waitForElementVisibility("//*[@resource-id='android:id/parentPanel']");
 					if (isFound = true)
 						break;
@@ -300,10 +300,9 @@ public class CustomerPageActions {
 			MobileActionGesture.tapByElement(checkOut);
 		} else if (checkOut.getText().contains("CHECK-OUT ANYWAY")) {
 			MobileActionGesture.tapByElement(checkOut);
-			String randomstring = RandomStringUtils.randomAlphabetic(5).toLowerCase();
-			CommonUtils.getdriver().findElement(MobileBy.className("android.widget.EditText")).sendKeys(randomstring);
+			AndroidLocators.sendInputusing_Classname("android.widget.EditText");
 			CommonUtils.keyboardHide();
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='SUBMIT']")).click();
+			AndroidLocators.clickElementusingXPath("//*[@text='SUBMIT']");
 		}
 		Thread.sleep(500);
 	}
@@ -311,13 +310,12 @@ public class CustomerPageActions {
 	// handling customer check-in alert
 	public static void customerCheckInReason() throws InterruptedException {
 		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='Select check in reason']")).size() > 0) {
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Meeting']")).click();
+			AndroidLocators.clickElementusingXPath("//*[@text='Meeting']");
 		} else if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Enter check in reason']"))
 				.isDisplayed()) {
-			String randomstring = RandomStringUtils.randomAlphabetic(5).toLowerCase();
-			CommonUtils.getdriver().findElement(MobileBy.className("android.widget.EditText")).sendKeys(randomstring);
+			AndroidLocators.sendInputusing_Classname("android.widget.EditText");
 			CommonUtils.keyboardHide();
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='OK']")).click();
+			AndroidLocators.clickElementusingXPath("//*[@text='OK']");
 		}
 		Thread.sleep(2000);
 	}
@@ -326,8 +324,7 @@ public class CustomerPageActions {
 	public static void customer_Screen_checkout() throws MalformedURLException, InterruptedException {
 		if (CommonUtils.getdriver().findElements(By.id("checkinoutButton")).size() > 0) {
 			if (CommonUtils.SwitchStatus("checkinoutButton").contains("ON")) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@class='android.widget.Switch'][@text='ON']"))
-						.click();
+				AndroidLocators.clickElementusingXPath("//*[@class='android.widget.Switch'][@text='ON']");
 				checkOutOrCheckOutAnyway();
 			}
 		} else if (CommonUtils.getdriver().findElementsByAndroidUIAutomator(
@@ -337,7 +334,7 @@ public class CustomerPageActions {
 				checkOutOrCheckOutAnyway();
 			}
 		} else {
-			CommonUtils.getdriver().findElement(By.xpath("//*[@class='android.widget.Switch'][@text='ON']")).click();
+			AndroidLocators.clickElementusingXPath("//*[@class='android.widget.Switch'][@text='ON']");
 			checkOutOrCheckOutAnyway();
 		}
 	}
@@ -346,8 +343,7 @@ public class CustomerPageActions {
 	public static void checkout_customer_details_screen() throws MalformedURLException, InterruptedException {
 		if (CommonUtils.getdriver().findElements(By.id("checkinCheckoutSwitch")).size() > 0) {
 			if (CommonUtils.SwitchStatus("checkinCheckoutSwitch").contains("ON")) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@class='android.widget.Switch'][@text='ON']"))
-						.click();
+				AndroidLocators.clickElementusingXPath("//*[@class='android.widget.Switch'][@text='ON']");
 				checkOutOrCheckOutAnyway();
 			}
 		} else if (CommonUtils.getdriver().findElementsByAndroidUIAutomator(
@@ -355,7 +351,7 @@ public class CustomerPageActions {
 			AndroidLocators.resourceId("in.spoors.effortplus:id/checkinCheckoutSwitch").click();
 			checkOutOrCheckOutAnyway();
 		} else {
-			CommonUtils.getdriver().findElement(By.xpath("//*[@class='android.widget.Switch'][@text='ON']")).click();
+			AndroidLocators.clickElementusingXPath("//*[@class='android.widget.Switch'][@text='ON']");
 			checkOutOrCheckOutAnyway();
 		}
 	}
