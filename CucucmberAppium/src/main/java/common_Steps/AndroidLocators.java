@@ -1,5 +1,8 @@
 package common_Steps;
 
+import java.util.List;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.text.RandomStringGenerator;
 
 import io.appium.java_client.MobileBy;
@@ -56,18 +59,33 @@ public class AndroidLocators {
 	}
 
 	// click using findElementByClassName
-	public static void clickElementusingClassName(String className) {
-		CommonUtils.getdriver().findElementByClassName(className).click();
+	public static void clickElementusingClassName(String classNameLocator) {
+		CommonUtils.getdriver().findElement(MobileBy.className(classNameLocator)).click();
+	}
+
+	// findElements with classname
+	public static List<MobileElement> findElements_With_ClassName(String classNameLocator) {
+		return CommonUtils.getdriver().findElements(MobileBy.className(classNameLocator));
 	}
 
 	// click element using id
-	public static void clickElementusingID(String ID) {
-		CommonUtils.getdriver().findElementById(ID).click();
+	public static void clickElementusingID(String IdLocator) {
+		CommonUtils.getdriver().findElement(MobileBy.id(IdLocator)).click();
+	}
+
+	// findElements with Id
+	public static List<MobileElement> findElements_With_Id(String IdLocator) {
+		return CommonUtils.getdriver().findElements(MobileBy.id(IdLocator));
 	}
 
 	// click element using xpath
-	public static void clickElementusingXPath(String continueButton) {
-		CommonUtils.getdriver().findElementByXPath(continueButton).click();
+	public static void clickElementusingXPath(String xpathLocator) {
+		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).click();
+	}
+
+	// find elements using xpath
+	public static List<MobileElement> findElements_With_Xpath(String xpathLocator) {
+		return CommonUtils.getdriver().findElements(MobileBy.xpath(xpathLocator));
 	}
 
 	// click element using resource-id
@@ -75,6 +93,12 @@ public class AndroidLocators {
 		CommonUtils.getdriver()
 				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"" + resourceIdLocator + "\")"))
 				.click();
+	}
+
+	// find elements with resource id locators
+	public static List<MobileElement> findElements_With_ResourceId(String resourceIdLocator) {
+		return CommonUtils.getdriver().findElements(
+				MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"" + resourceIdLocator + "\")"));
 	}
 
 	// sending input using resource-id
@@ -88,7 +112,7 @@ public class AndroidLocators {
 				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"" + resourceIdLocator + "\")"))
 				.sendKeys(resourceidInput);
 	}
-	
+
 	// sending input using classname
 	public static void sendInputusing_Classname(String classLocator) {
 		RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
@@ -96,8 +120,8 @@ public class AndroidLocators {
 		CommonUtils.getdriver().findElement(MobileBy.className(classLocator)).clear();
 		CommonUtils.getdriver().findElement(MobileBy.className(classLocator)).sendKeys(classnameInput);
 	}
-	
-	//sending input using id
+
+	// sending input using id
 	public static void sendInputusing_Id(String idLocator) {
 		RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
 		String IdInput = textGenerator.generate(5);
@@ -108,11 +132,43 @@ public class AndroidLocators {
 	// sending input using xpath
 	public static void sendInputusing_XPath(String xpathLocator) {
 		RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
-		String xpath = textGenerator.generate(5);
-		CommonUtils.getdriver().findElementByXPath(xpathLocator).clear();
-		CommonUtils.getdriver().findElementByXPath(xpathLocator).sendKeys(xpath);
+		String xpathInput = textGenerator.generate(5);
+		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).clear();
+		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).sendKeys(xpathInput);
 	}
-	
+
+	// sending Email input using xpath
+	public static void sendEmailInputusing_XPath(String xpathLocator) {
+		RandomStringGenerator emailGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
+		String email = emailGenerator.generate(5);
+		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).click();
+		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).clear();
+		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).sendKeys(email + "@gmail.com");
+		CommonUtils.keyboardHide();
+	}
+
+	// sending URL input using xpath
+	public static void sendUrlInputusing_XPath(String xpathLocator) {
+		RandomStringGenerator urlGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
+		String url = urlGenerator.generate(5);
+		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).clear();
+		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).sendKeys("www." + url + ".com");
+	}
+
+	// sending number input using xpath for pincode/number/currency
+	public static void sendNumberInputUsing_xpath(String xpathLocator) {
+		String pincodeInput = RandomStringUtils.randomNumeric(6);
+		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).clear();
+		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).sendKeys(pincodeInput);
+	}
+
+	// sending Phonenumber input using xpath
+	public static void sendPhoneNumberInputUsing_xpath(String xpathLocator) {
+		String PhoneNumber = RandomStringUtils.randomNumeric(10);
+		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).clear();
+		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).sendKeys(PhoneNumber);
+	}
+
 	// press enter
 	public static void pressEnterKeyInAndroid() {
 		CommonUtils.getdriver().pressKey(new KeyEvent(AndroidKey.ENTER));
@@ -130,8 +186,8 @@ public class AndroidLocators {
 
 	// send text using id
 	public static void enterTextusingID(String locator, String sText) {
-		CommonUtils.getdriver().findElementById(locator).clear();
-		CommonUtils.getdriver().findElementById(locator).sendKeys(sText);
+		CommonUtils.getdriver().findElement(MobileBy.id(locator)).clear();
+		CommonUtils.getdriver().findElement(MobileBy.id(locator)).sendKeys(sText);
 		CommonUtils.getdriver().hideKeyboard();
 	}
 

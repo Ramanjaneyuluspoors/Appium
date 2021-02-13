@@ -12,32 +12,25 @@ import utils.CommonUtils;
 
 public class CustomerCreation {
 
-	public static List<MobileElement> createCustomerWithAllFields() throws MalformedURLException, InterruptedException, ParseException {
+	public static void createCustomerWithAllFields() throws MalformedURLException, InterruptedException, ParseException {
 		// get labelview elements
 		List<MobileElement> labelElements = CommonUtils.getdriver().findElements(
 				By.xpath("//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']"));
 		// get input text elements
 		List<MobileElement> inputTextElements = CommonUtils.getdriver()
 				.findElements(MobileBy.className("android.widget.EditText"));
-		
-		List<MobileElement> labelElements1 = CommonUtils.getdriver().findElements(MobileBy
-				.xpath("//android.widget.TextView[@resource-id='in.spoors.effortplus:id/label_for_view']"));
-		List<MobileElement> inputTextElements1
-				= CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText"));
-		
-		
-//		// merging both lists
-//		List<MobileElement> newList = labelElements;
-//		newList.addAll(inputTextElements);
-//		
-//		List<MobileElement> newList1 = labelElements;
-		
-//		labelElements.addAll(inputTextElements);
+				
+		// merging both lists
+		List<MobileElement> newList = labelElements;
+		newList.addAll(inputTextElements);
+
 		// get customer fields count
-		int customerFieldsCount = inputTextElements1.size();
-//		int customerFieldsCount1 = newList1.size();
-		System.out.println("fields count: " + customerFieldsCount);
-		return inputTextElements1;
+		int customerFieldsCount1 = newList.size();
+		MobileElement s = newList.get(customerFieldsCount1 - 1);
+		System.out.println(s);
+		
+		
+//		return inputTextElements1;
 		
 		//remove elements from list
 ////		newList.clear();

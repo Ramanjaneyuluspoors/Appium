@@ -275,7 +275,8 @@ public class CommonUtils {
 	public static void clickHomeInMenubar() throws InterruptedException {
 		if (driver.findElements(MobileBy.xpath("//*[@text='Home']")).size() > 0) {
 			driver.findElement(MobileBy.xpath("//*[@text='Home']")).click();
-			MobileActionGesture.scrollUsingText("Home");
+			Thread.sleep(500);
+			MobileActionGesture.scrollTospecifiedElement("Home");
 			waitForElementVisibility("//*[@text='Home']");
 		} else {
 			System.out.println("--- Home button is not displayed ---");
@@ -453,11 +454,6 @@ public class CommonUtils {
 			return false;
 	}
 
-	// AndroidDriver
-	public static void clickOn(By locator, AndroidDriver<MobileElement> driver, int timeout) {
-		final WebDriverWait wait = new WebDriverWait(driver, timeout);
-		wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(locator)));
-	}
 
 	// handling alert
 	public static void handling_alert(String idlocators, String sub_id_locator, String resourceId_Locator,
@@ -473,4 +469,14 @@ public class CommonUtils {
 			AndroidLocators.clickElementusingXPath("" + sub_xpath + "");
 		}
 	}
+	
+	
+	// get element text using xpath and scroll to that text
+	public static void getTextAndScrollToElement(String locator) {
+		if (driver.findElement(By.xpath(locator)).isDisplayed()) {
+			String scrollUsingXpathElement = driver.findElement(By.xpath(locator)).getText();
+			MobileActionGesture.scrollTospecifiedElement(scrollUsingXpathElement);
+		} 
+	}
+
 }

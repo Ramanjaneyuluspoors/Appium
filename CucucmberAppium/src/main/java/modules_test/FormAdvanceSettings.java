@@ -10,6 +10,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.text.RandomStringGenerator;
 import org.junit.gen5.api.Assertions;
+import org.openqa.selenium.By;
 
 import Actions.MobileActionGesture;
 import common_Steps.AndroidLocators;
@@ -87,8 +88,8 @@ public class FormAdvanceSettings {
 		for (int m = 0; m < countOfFields; m++) {
 			String originalText = formFields1.get(m).getText();
 			String fieldsText = formFields1.get(m).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
-			System.out.println(
-					"Before removing special character: " + originalText + "\nafter removing regexp: " + fieldsText);
+			System.out.println("**** Before removing special character **** : " + originalText
+					+ "\n ---- after removing regexp ---- : " + fieldsText);
 
 			int n = 0, p = 0;
 			int min_test = min, max_text = max;
@@ -117,7 +118,7 @@ public class FormAdvanceSettings {
 							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
 					CommonUtils.getdriver().hideKeyboard();
-					if (textMinInput1.length() < textMinInput.length()) {
+					if (textMinInput.length() < textMinInput1.length()) {
 						String text = CommonUtils.OCR();
 						System.out.println("Expected toast message for max input is " + text);
 						Assertions.assertFalse(
@@ -149,7 +150,7 @@ public class FormAdvanceSettings {
 							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
 					CommonUtils.getdriver().hideKeyboard();
-					if (textMaxInput1.length() < textMaxInput.length()) {
+					if (textMaxInput.length() < textMaxInput1.length()) {
 						String text = CommonUtils.OCR();
 						System.out.println("Expected toast message for max input is " + text);
 						Assertions.assertFalse(
@@ -199,7 +200,7 @@ public class FormAdvanceSettings {
 							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
 					CommonUtils.getdriver().hideKeyboard();
-					if (phoneNum1.length() < phoneNum.length()) {
+					if (phoneNum.length() < phoneNum1.length()) {
 						String text = CommonUtils.OCR();
 						System.out.println("Expected toast message for min input is " + text);
 						Assertions.assertFalse(
@@ -228,7 +229,7 @@ public class FormAdvanceSettings {
 							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
 					CommonUtils.getdriver().hideKeyboard();
-					if (phoneNum1.length() > phoneNum.length()) {
+					if (phoneNum.length() > phoneNum1.length()) {
 						String text = CommonUtils.OCR();
 						System.out.println("Expected toast message for max input is " + text);
 						Assertions.assertFalse(
@@ -273,7 +274,7 @@ public class FormAdvanceSettings {
 							"//*[contains(@text,'Number')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
 					CommonUtils.getdriver().hideKeyboard();
-					if (min < min_test) {
+					if (min_test < min) {
 						String text = CommonUtils.OCR();
 						System.out.println("Expected toast message for min value is :" + text);
 						Assertions.assertFalse(text.contains("" + fieldsText + " cannot be less than " + min + "."),
@@ -301,7 +302,7 @@ public class FormAdvanceSettings {
 							"//*[contains(@text,'Number')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
 					CommonUtils.getdriver().hideKeyboard();
-					if (max > max_text) {
+					if (max_text > max) {
 						String text = CommonUtils.OCR();
 						System.out.println("Expected toast message for max value is :" + text);
 						Assertions.assertFalse(text.contains("" + fieldsText + " cannot be greater than " + max + "."),
@@ -345,7 +346,7 @@ public class FormAdvanceSettings {
 							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
 					CommonUtils.getdriver().hideKeyboard();
-					if (min < min_test) {
+					if (min_test < min) {
 						String text = CommonUtils.OCR();
 						System.out.println("Expected toast message for min value is :" + text);
 						Assertions.assertFalse(text.contains("" + fieldsText + " cannot be less than " + min + "."),
@@ -373,7 +374,7 @@ public class FormAdvanceSettings {
 							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
 					CommonUtils.getdriver().hideKeyboard();
-					if (max > max_text) {
+					if (max_text > max) {
 						String text = CommonUtils.OCR();
 						System.out.println("Expected Toast message for max value is :" + text);
 						Assertions.assertFalse(text.contains("" + fieldsText + " cannot be greater than " + max + "."),
@@ -402,7 +403,7 @@ public class FormAdvanceSettings {
 		}
 	}
 
-	
+	//form min max validations without using pages
 	public static void min_max_withoutPages(int min, int max) throws MalformedURLException {
 		List<MobileElement> minMaxFields = CommonUtils.getdriver().findElements(
 				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
@@ -475,7 +476,7 @@ public class FormAdvanceSettings {
 							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
 					CommonUtils.getdriver().hideKeyboard();
-					if (textMinInput1.length() < textMinInput.length()) {
+					if (textMinInput.length() < textMinInput1.length()) {
 						String text = CommonUtils.OCR();
 						System.out.println("Expected toast message for max input is " + text);
 						Assertions.assertFalse(
@@ -507,7 +508,7 @@ public class FormAdvanceSettings {
 							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
 							.click();
 					CommonUtils.getdriver().hideKeyboard();
-					if (textMaxInput1.length() < textMaxInput.length()) {
+					if (textMaxInput.length() < textMaxInput1.length()) {
 						String text = CommonUtils.OCR();
 						System.out.println("Expected toast message for max input is " + text);
 						Assertions.assertFalse(
@@ -966,7 +967,9 @@ public class FormAdvanceSettings {
 		List<MobileElement> formFields2 = CommonUtils.getdriver()
 				.findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
 						+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		//count of field
 		int countOfFields = formFields1.size();
+		
 		// remove fields from list
 		formFields1.clear();
 		String formFieldsLabel = valueOf;
@@ -979,6 +982,7 @@ public class FormAdvanceSettings {
 				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 		lastElementText = formFields1.get(formFields1.size() - 1).getText();
 		System.out.println("Get the element text :" + lastElementText);
+		
 		// remove fields from list
 		formFields1.clear();
 		MobileActionGesture.flingToBegining_Android();
@@ -994,13 +998,14 @@ public class FormAdvanceSettings {
 		while (formFields1.isEmpty()) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
-			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
+		    formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
 					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView[starts-with(@text,'"
 					+ valueOf + "')]")));
 			formFields2.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + i1
 					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 			countOfFields = formFields1.size();
 			System.out.println("After swiping fields count: " + countOfFields);
+			
 			for (int j = 0; j < formFields2.size(); j++) {
 				// if specified element found break the for loop
 				if (formFields1.size() > 0 || formFields2.get(j).getText().equals(lastElementText)) {
@@ -1015,6 +1020,7 @@ public class FormAdvanceSettings {
 
 		boolean isDate = false, isText = false, isPickList = false, isCurrency = false, isNumber = false,
 				isDropdown = false, isCustomer = false;
+		
 		// iterate and fill the form
 		for (int k = 0; k < countOfFields; k++) {
 			String OriginalText = formFields1.get(k).getText();
@@ -1030,7 +1036,7 @@ public class FormAdvanceSettings {
 					if (!isText) {
 						MobileActionGesture.scrollUsingText(fieldsText);
 						// text method
-						textFieldDependencyInput(basecondition, OriginalText, fieldsText, formFieldsLabelInput, i);
+						textFieldDependencyInput(basecondition, OriginalText, formFieldsLabel, formFieldsLabelInput, i);
 						isText = true;
 					}
 					break;
@@ -1043,7 +1049,7 @@ public class FormAdvanceSettings {
 					if (!isNumber || !isCurrency) {
 						MobileActionGesture.scrollUsingText(fieldsText);
 						// currency or number method
-						numberInput(basecondition, OriginalText, fieldsText, formFieldsLabelInput, i);
+						numberInput(basecondition, OriginalText, formFieldsLabel, formFieldsLabelInput, i);
 						isNumber = true;
 						isCurrency = true;
 					}
@@ -2166,7 +2172,7 @@ public class FormAdvanceSettings {
 						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 								.click();
-						CommonUtils.keyboardHide();
+						CommonUtils.getdriver().hideKeyboard();
 						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 								.sendKeys(matchRegExp);
@@ -2174,12 +2180,12 @@ public class FormAdvanceSettings {
 						CommonUtils.getdriver().findElement(MobileBy.xpath(
 								"//*[contains(@text,'Number')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 								.click();
-						CommonUtils.keyboardHide();
+						CommonUtils.getdriver().hideKeyboard();
 						MobileActionGesture.scrollUsingText(OriginalText);
 						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 								.click();
-						CommonUtils.keyboardHide();
+						CommonUtils.getdriver().hideKeyboard();
 						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 								.clear();
@@ -2188,12 +2194,12 @@ public class FormAdvanceSettings {
 						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 								.sendKeys(unMatchRegExp);
-						CommonUtils.keyboardHide();
+						CommonUtils.getdriver().hideKeyboard();
 						MobileActionGesture.scrollUsingText("Number");
 						CommonUtils.getdriver().findElement(MobileBy.xpath(
 								"//*[contains(@text,'Number')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 								.click();
-						CommonUtils.keyboardHide();
+						CommonUtils.getdriver().hideKeyboard();
 						MobileActionGesture.scrollUsingText(OriginalText);
 						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
@@ -2272,7 +2278,7 @@ public class FormAdvanceSettings {
 						.findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 						.click();
-				CommonUtils.keyboardHide();
+				CommonUtils.getdriver().hideKeyboard();
 				CommonUtils.getdriver()
 						.findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
@@ -2281,13 +2287,13 @@ public class FormAdvanceSettings {
 				CommonUtils.getdriver().findElement(MobileBy.xpath(
 						"//*[contains(@text,'Number')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 						.click();
-				CommonUtils.keyboardHide();
+				CommonUtils.getdriver().hideKeyboard();
 				MobileActionGesture.scrollUsingText(OriginalText);
 				CommonUtils.getdriver()
 						.findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 						.click();
-				CommonUtils.keyboardHide();
+				CommonUtils.getdriver().hideKeyboard();
 				CommonUtils.getdriver()
 						.findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
@@ -2298,12 +2304,12 @@ public class FormAdvanceSettings {
 						.findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
 								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 						.sendKeys(unMatchRegExp);
-				CommonUtils.keyboardHide();
+				CommonUtils.getdriver().hideKeyboard();
 				MobileActionGesture.scrollUsingText("Number");
 				CommonUtils.getdriver().findElement(MobileBy.xpath(
 						"//*[contains(@text,'Number')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 						.click();
-				CommonUtils.keyboardHide();
+				CommonUtils.getdriver().hideKeyboard();
 				MobileActionGesture.scrollUsingText(OriginalText);
 				CommonUtils.getdriver()
 						.findElement(MobileBy.xpath("//*[contains(@text,'" + OriginalText
@@ -2920,8 +2926,12 @@ public class FormAdvanceSettings {
 	
 	//click on year
 	public static void clickCalendarYear() throws InterruptedException, MalformedURLException {
-		MobileElement yearClick = AndroidLocators.resourceId("android:id/date_picker_header_year");
-		MobileActionGesture.tapByElement(yearClick);
+		if (CommonUtils.getdriver().findElements(By.id("date_picker_header_year")).size() > 0) {
+			AndroidLocators.clickElementusingID("date_picker_header_year");
+		} else {
+			MobileElement yearClick = AndroidLocators.resourceId("android:id/date_picker_header_year");
+			MobileActionGesture.tapByElement(yearClick);
+		}
 	}
 	
 	//select date from dates list

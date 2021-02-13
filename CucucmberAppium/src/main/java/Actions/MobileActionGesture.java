@@ -45,6 +45,7 @@ public class MobileActionGesture {
 		}
 	}
 	
+	//scroll using text using mobileby
 	public static void scrollUsingText(String eleText) {
 		MobileElement eleScroll = CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 				"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textContains(\""
@@ -55,6 +56,26 @@ public class MobileActionGesture {
 	public static String directScrollToView(String eleText) {
 		CommonUtils.getdriver().findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(textContains(\""+eleText+"\"));");
 		return eleText;
+	}
+	
+	//swipe to element using text
+	public static void scrollUsingDirectText(String textValue) {
+		CommonUtils.getdriver().findElementByAndroidUIAutomator(
+				"new UiScrollable(new UiSelector()).scrollIntoView(text(\"" + textValue + "\"));");
+	}
+	
+	// scroll and click element
+	public static void scrollAndClickElement(String Text) {
+		CommonUtils.getdriver().findElementByAndroidUIAutomator(
+				"new UiScrollable(new UiSelector()).scrollIntoView(" + "new UiSelector().text(\"" + Text + "\"));")
+				.click();
+	}
+	
+	//scroll using resouceid
+	public static void scrollUsingResourceId(String resourceid) {
+		CommonUtils.getdriver()
+				.findElement(MobileBy.AndroidUIAutomator("new UiScrollable(new UiSelector().scrollable(true))"
+						+ ".scrollIntoView(new UiSelector().resourceIdMatches(\""+resourceid+"\"))"));
 	}
 
 	// Tap to an element for 50 milliseconds
@@ -155,7 +176,6 @@ public class MobileActionGesture {
 		}
 	}
 	
-
 
 	// Generic function for Scroll
 	public static void scrollUsingTouchActions_ByElements(MobileElement startElement, MobileElement endElement) {

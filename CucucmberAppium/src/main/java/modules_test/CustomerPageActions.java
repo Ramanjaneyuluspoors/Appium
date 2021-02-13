@@ -356,51 +356,68 @@ public class CustomerPageActions {
 		}
 	}
 
+	//customer creation
 	public static void customerCreation() throws MalformedURLException, InterruptedException, ParseException {
-		List<MobileElement> customer_Labelfields = CommonUtils.getdriver().findElements(
-				MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/label_for_view\")"));
-		List<MobileElement> customer_input_fields = CommonUtils.getdriver()
-				.findElements(MobileBy.className("android.widget.EditText"));
+		// list 1
+		List<MobileElement> customer_Labelfields = AndroidLocators
+				.findElements_With_ResourceId("in.spoors.effortplus:id/label_for_view");
+		// list 2
+		List<MobileElement> customer_input_fields = AndroidLocators
+				.findElements_With_ClassName("android.widget.EditText");
+		//merging the list
 		List<MobileElement> mergeList = customer_Labelfields;
 		mergeList.addAll(customer_input_fields);
+		//get size of list
 		int custFieldsCount = mergeList.size();
+		// removing elements from list (where all elements are not stored directly we
+		// need to swipe till last element, so here removing elements from list)
 		customer_Labelfields.clear();
 		customer_input_fields.clear();
 		mergeList.clear();
 
+		// find the last element to stop continuos scrolling
 		String custLastElement = null;
+		// scroll from top to bottom and add customerlist fields
 		MobileActionGesture.flingVerticalToBottom_Android();
-		customer_Labelfields.addAll(CommonUtils.getdriver().findElements(MobileBy
-				.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/label_for_view\")")));
-		customer_input_fields
-				.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
+		// add customer fields to get last element of the customer fields
+		customer_Labelfields
+				.addAll(AndroidLocators.findElements_With_ResourceId("in.spoors.effortplus:id/label_for_view"));
+		customer_input_fields.addAll(AndroidLocators.findElements_With_ClassName("android.widget.EditText"));
+		// merge both list to get last element
 		mergeList = customer_Labelfields;
 		mergeList.addAll(customer_input_fields);
 		custFieldsCount = mergeList.size();
+		//retrieving the last element of customer
 		custLastElement = mergeList.get(mergeList.size() - 1).getText();
 		System.out.println("==== customer last element ==== : " + custLastElement);
+		// removing elelments from list(here we only need last element after finding
+		// last element we are removing elements from list)
 		mergeList.clear();
 		customer_Labelfields.clear();
 		customer_input_fields.clear();
-
+		
+		// scroll to top
 		MobileActionGesture.flingToBegining_Android();
-		// first screen
-		customer_Labelfields.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
-				"//*[@resource-id='in.spoors.effortplus:id/nameEditLayout']/parent::android.widget.LinearLayout/android.widget.LinearLayout/android.widget.TextView")));
-		customer_input_fields
-				.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
+		
+		// add first screen elements of customer to list android.widget.EditText
+		customer_Labelfields.addAll(AndroidLocators.findElements_With_Xpath(
+				"//*[@resource-id='in.spoors.effortplus:id/nameEditLayout']/parent::android.widget.LinearLayout/android.widget.LinearLayout/android.widget.TextView"));
+		customer_input_fields.addAll(AndroidLocators.findElements_With_ClassName("android.widget.EditText"));
+		//merging the list
 		mergeList = customer_Labelfields;
 		mergeList.addAll(customer_input_fields);
 		custFieldsCount = mergeList.size();
 		System.out.println("*** customer first screen fields count *** : " + custFieldsCount);
-
+		
+		// scroll and add elelemnts to list until last element found
 		while (!mergeList.isEmpty()) {
-			boolean flag = false;
+			boolean flag = false; 
 			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
-			customer_Labelfields.addAll(CommonUtils.getdriver().findElements(MobileBy
-					.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/label_for_view\")")));
-			customer_input_fields
-					.addAll(CommonUtils.getdriver().findElements(MobileBy.className("android.widget.EditText")));
+//			customer_Labelfields.addAll(CommonUtils.getdriver().findElements(MobileBy
+//					.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/label_for_view\")")));
+			customer_Labelfields.addAll(AndroidLocators
+					.findElements_With_Xpath("//*[@resource-id='in.spoors.effortplus:id/label_for_view']"));
+			customer_input_fields.addAll(AndroidLocators.findElements_With_ClassName("android.widget.EditText"));
 			mergeList = customer_Labelfields;
 			mergeList.addAll(customer_input_fields);
 			custFieldsCount = mergeList.size();
@@ -412,6 +429,7 @@ public class CustomerPageActions {
 					flag = true;
 				}
 			}
+			//break the loop once last element found
 			if (flag == true) {
 				break;
 			}

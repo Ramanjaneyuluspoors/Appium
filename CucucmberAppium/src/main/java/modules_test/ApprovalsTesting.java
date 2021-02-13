@@ -48,8 +48,8 @@ public class ApprovalsTesting {
 		CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/toolbar']");
 	}
 
-	// approve ApprovalProcess
-	public static void approve_approvalProcess() {
+	// reject ApprovalProcess
+	public static void reject_approvalProcess() {
 		clickOnApprovalForm();
 		CommonUtils.handling_alert("rejectButton", "rejectButton", "in.spoors.effortplus:id/rejectButton",
 				"in.spoors.effortplus:id/rejectButton", "//*[@text='REJECT']", "//*[@text='REJECT']");
@@ -58,8 +58,8 @@ public class ApprovalsTesting {
 		CommonUtils.goBackward();
 	}
 
-	// reject ApprovalProcess
-	public static void reject_approvalProcess() {
+	// approve ApprovalProcess
+	public static void approve_approvalProcess() {
 		clickOnApprovalForm();
 		CommonUtils.handling_alert("approveButton", "approveButton", "in.spoors.effortplus:id/approveButton",
 				"in.spoors.effortplus:id/approveButton", "//*[@text='APPROVE']", "//*[@text='APPROVE']");
