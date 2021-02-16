@@ -1,4 +1,4 @@
-Feature: Performing Form Regression Test 
+Feature: Performing Forms Regression Test 
 
 @formMinMax 
 Scenario: Form MinMax Validations 
