@@ -2,6 +2,8 @@ package modules_test;
 
 import java.net.MalformedURLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.text.RandomStringGenerator;
@@ -649,15 +651,15 @@ public class Work_advanceSettings {
 		}
 	}
 
-	//Field Dependency based on value in other fields
+	// Field Dependency based on value in other fields
 	public static void fieldDependencyBasedOnValueInOtherFieldsTesing(String conditionName, String dependentFieldType,
 			String inputData) throws MalformedURLException, InterruptedException {
-		
+
 		// initializing and assigning
 		String workBaseCondition = conditionName;
 		String workFieldType = dependentFieldType;
 		String workFieldInput = inputData;
-		
+
 		// dependent work field
 		List<MobileElement> specifiedElement = AndroidLocators.findElements_With_Xpath(
 				"//android.widget.LinearLayout[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@text,'"
@@ -737,6 +739,36 @@ public class Work_advanceSettings {
 						workTextFieldDependency(workBaseCondition, fieldsText, workFieldInput);
 						isText = true;
 					}
+				case "Curreny":
+				case "Number":
+					if (!isCurrency || !isNumber) {
+						MobileActionGesture.scrollUsingText(fieldsText);
+						// currency input
+						currencyInput(workBaseCondition, fieldsText, workFieldInput);
+						isCurrency = true;
+						isNumber = true;
+					}
+				case "Customer":
+					if (!isCustomer) {
+						MobileActionGesture.scrollUsingText(fieldsText);
+						// customer picker
+						customerPicker(workBaseCondition, fieldsText, workFieldInput);
+						isCustomer = true;
+					}
+				case "Pick List":
+					if (!isPickList) {
+						MobileActionGesture.scrollUsingText(fieldsText);
+						// pick list picker
+						workPickList(workBaseCondition, fieldsText, workFieldInput);
+						isPickList = true;
+					}
+				case "Dropdown":
+					if (isDate) {
+						MobileActionGesture.scrollUsingText(fieldsText);
+						// Date picker
+						datePicking(workBaseCondition, fieldsText, workFieldInput);
+						isPickList = true;
+					}
 				}
 			}
 		}
@@ -745,153 +777,417 @@ public class Work_advanceSettings {
 	// work field text input
 	public static void workTextFieldDependency(String workBaseCondition, String fieldsText, String workFieldInput)
 			throws InterruptedException {
-		
-		//initializing string for storing input of the previous
-		String getPreviousElementText = null;
-		
-		// retrieving the text of the input previous element
-		if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+
+		// initializing the string
+		String getAboveOrBelowOfMainElement = null;
+
+		// retrieving the text of the input above/below element
+		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
 				+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
-				.isDisplayed()) {
-			getPreviousElementText = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+				.size() > 0) {
+			getAboveOrBelowOfMainElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
 					+ fieldsText
 					+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
 					.getText();
-			System.out.println("*** Edit Text label name above element is *** : " + getPreviousElementText);
+			getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "").split("\\(")[0];
+			System.out.println("*** Edit Text label name above element is *** : " + getAboveOrBelowOfMainElement);
 		} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + fieldsText
 				+ "']/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
 				.size() > 0) {
-			getPreviousElementText = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+			getAboveOrBelowOfMainElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
 					+ fieldsText
 					+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
 					.getText();
-			System.out.println("*** Text View label name above element is *** : " + getPreviousElementText);
-		} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
-				+ getPreviousElementText
-				+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
-				.size() > 0) {
-			getPreviousElementText = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-					+ getPreviousElementText
+			getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "").split("\\(")[0];
+			System.out.println("*** Text View label name above element is *** : " + getAboveOrBelowOfMainElement);
+		} else {
+			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
 					+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
-					.getText();
-			System.out.println("*** Edit Text label name below element is *** : " + getPreviousElementText);
-		} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
-				+ getPreviousElementText
-				+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
-				.size() > 0) {
-			getPreviousElementText = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-					+ getPreviousElementText
+					.size() > 0) {
+				getAboveOrBelowOfMainElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+						+ fieldsText
+						+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
+						.getText();
+				getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
+						.split("\\(")[0];
+				System.out.println("*** Edit Text label name below element is *** : " + getAboveOrBelowOfMainElement);
+			} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
 					+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
-					.getText();
-			System.out.println("*** Text View label name below element is *** : " + getPreviousElementText);
+					.size() > 0) {
+				getAboveOrBelowOfMainElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+						+ fieldsText
+						+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
+						.getText();
+				getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
+						.split("\\(")[0];
+				System.out.println("*** Text View label name below element is *** : " + getAboveOrBelowOfMainElement);
+			}
 		}
 
-		//initializing string for inputdata
+		// initializing string for inputdata
 		String textInputData = null;
-		
-		//text input data
+
+		// text input data
 		String[] myInput = { workFieldInput, workFieldInput + "extraWords", "extraWords" + workFieldInput,
 				"extraWords" };
-		
-		//iterating the given input
+
+		// iterating the given input
 		for (int k = 0; k < myInput.length; k++) {
 			textInputData = myInput[k];
 			System.out.println("------- Text Input data ------ :" + textInputData);
-			//scolling to previous of main element
-			MobileActionGesture.scrollUsingText(getPreviousElementText);
 			// based previous element inputing the main element
 			if (CommonUtils.getdriver()
-					.findElement(MobileBy.xpath("//*[contains(@text,'" + getPreviousElementText + "')]"))
+					.findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement + "')]"))
 					.isDisplayed()) {
-				if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + getPreviousElementText
-						+ "')]//parent::*//parent::*//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
-						.isDisplayed()) {
-//					getMainEleBasedOnPreviousEle = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
-//							+ getPreviousElementText
-//							+ "')]//parent::*//parent::*//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
-//							.getText();
-//					System.out.println("==== inside if based on above element for editext ==== :"+getMainEleBasedOnPreviousEle);
-//					MobileActionGesture.scrollUsingText(getMainEleBasedOnPreviousEle);
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + getPreviousElementText
-							+ "')]//parent::*//parent::*//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
-							.clear();
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + getPreviousElementText
-							+ "')]//parent::*//parent::*//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
-							.sendKeys(textInputData);
-				} else if (CommonUtils.getdriver().findElements(By.xpath("//*[contains(@text,'" + getPreviousElementText
-						+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
+						+ "')]/parent::*/parent::*/parent::*/parent::*/following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 						.size() > 0) {
-//					getMainEleBasedOnPreviousEle = CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'"
-//							+ getPreviousElementText
-//							+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
-//							.getText();
-//					System.out.println("==== inside if based on above element for textview ==== :"+getMainEleBasedOnPreviousEle);
-//					MobileActionGesture.scrollUsingText(getMainEleBasedOnPreviousEle);
-					CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getPreviousElementText
-							+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]/parent::*/parent::*/parent::*/parent::*/following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 							.clear();
-					CommonUtils.getdriver().hideKeyboard();
-					CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getPreviousElementText
-							+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]/parent::*/parent::*/parent::*/parent::*/following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 							.sendKeys(textInputData);
-				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
-						+ getPreviousElementText
-						+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
+				} else if (CommonUtils.getdriver().findElements(By.xpath("//*[contains(@text,'"
+						+ getAboveOrBelowOfMainElement
+						+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 						.size() > 0) {
-//					getMainEleBasedOnPreviousEle = CommonUtils.getdriver()
-//							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + getPreviousElementText
-//									+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
-//							.getText();
-//					System.out.println("==== inside if based on below element for editext ==== :"+getMainEleBasedOnPreviousEle);
-//					MobileActionGesture.scrollUsingText(getMainEleBasedOnPreviousEle);
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getPreviousElementText
-							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
+					CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 							.clear();
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getPreviousElementText
-							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
-							.sendKeys(textInputData);
-				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
-						+ getPreviousElementText
-						+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
-						.size() > 0) {
-//					getMainEleBasedOnPreviousEle = CommonUtils.getdriver()
-//							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + getPreviousElementText
-//									+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
-//							.getText();
-//					System.out.println("==== inside if based on below element for textview ==== :"+getMainEleBasedOnPreviousEle);
-//					MobileActionGesture.scrollUsingText(getMainEleBasedOnPreviousEle);
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getPreviousElementText
-							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
-							.clear();
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getPreviousElementText
-							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*//android.widget.EditText"))
+					CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 							.sendKeys(textInputData);
 				}
-//				CommonUtils.getdriver()
-//						.findElement(MobileBy.xpath("//*[contains(@text,'" + getMainEleBasedOnPreviousEle + "')]")).clear();
-//				CommonUtils.getdriver()
-//						.findElement(MobileBy.xpath("//*[contains(@text,'" + getMainEleBasedOnPreviousEle + "')]"))
-//						.sendKeys(textInputData);
+			} else {
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
+						+ getAboveOrBelowOfMainElement
+						+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+						.size() > 0) {
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.clear();
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.sendKeys(textInputData);
+				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
+						+ getAboveOrBelowOfMainElement
+						+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+						.size() > 0) {
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.clear();
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.sendKeys(textInputData);
+				}
 			}
 
-				//validating the work fields
-				if (workBaseCondition.equals("Hide when")) {
-					MobileActionGesture.scrollTospecifiedElement("REFRESH");
+			// validating the work fields
+			if (workBaseCondition.equals("Hide when")) {
+				MobileActionGesture.scrollTospecifiedElement("REFRESH");
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath(
+						"//*[@resource-id='in.spoors.effortplus:id/refreshButton']/parent::*//android.widget.EditText"))
+						.size() > 0) {
 					CommonUtils.waitForElementVisibility("//*[@class='android.widget.EditText']");
 					CommonUtils.getdriver().findElement(MobileBy.className("android.widget.EditText")).clear();
 					AndroidLocators.clickElementusingResourceId("in.spoors.effortplus:id/refreshButton");
-					MobileActionGesture.scrollTospecifiedElement(getPreviousElementText);
-					CommonUtils.getdriver().hideKeyboard();
-				} else if (workBaseCondition.equals("Disable when")) {
-
-				} else if (workBaseCondition.equals("Mandatory when")) {
-
 				}
+				MobileActionGesture.scrollTospecifiedElement(getAboveOrBelowOfMainElement);
+				CommonUtils.getdriver().hideKeyboard();
+			} else if (workBaseCondition.equals("Disable when")) {
+				MobileActionGesture.scrollTospecifiedElement("REFRESH");
+				MobileActionGesture.scrollUsingText(getAboveOrBelowOfMainElement);
+			} else if (workBaseCondition.equals("Mandatory when")) {
+				MobileActionGesture.scrollTospecifiedElement("REFRESH");
+				MobileActionGesture.scrollUsingText(getAboveOrBelowOfMainElement);
 			}
 		}
+	}// method close
+
+	//number field dependecy based on value in other field
+	public static void currencyInput(String workBaseCondition, String fieldsText, String workFieldInput) {
+		//initializing and assigning
+		int currencyInput = 0;
+		currencyInput = Integer.parseInt(workFieldInput);
+	
+		// initializing the string
+		String getAboveOrBelowOfMainElement = null;
+
+		// retrieving the text of the input above/below element
+		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+				+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
+				.size() > 0) {
+			getAboveOrBelowOfMainElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+					+ fieldsText
+					+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
+					.getText();
+			getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
+					.split("\\(")[0];
+			System.out.println("*** Edit Text label name above element is *** : " + getAboveOrBelowOfMainElement);
+		} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + fieldsText
+				+ "']/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
+				.size() > 0) {
+			getAboveOrBelowOfMainElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+					+ fieldsText
+					+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
+					.getText();
+			getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
+					.split("\\(")[0];
+			System.out.println("*** Text View label name above element is *** : " + getAboveOrBelowOfMainElement);
+		} else {
+			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+					+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
+					.size() > 0) {
+				getAboveOrBelowOfMainElement = CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+								+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
+						.getText();
+				getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
+						.split("\\(")[0];
+				System.out.println("*** Edit Text label name below element is *** : " + getAboveOrBelowOfMainElement);
+			} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+					+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
+					.size() > 0) {
+				getAboveOrBelowOfMainElement = CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
+								+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
+						.getText();
+				getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
+						.split("\\(")[0];
+				System.out.println("*** Text View label name below element is *** : " + getAboveOrBelowOfMainElement);
+			}
+		}
+
+		for (int j = 0; j < 3; j++) {
+			currencyInput = currencyInput - 1;
+			System.out.println("------- Currency value ------ :" + currencyInput);
+			// based previous element inputing the main element
+			if (CommonUtils.getdriver()
+					.findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement + "')]"))
+					.isDisplayed()) {
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'"
+						+ getAboveOrBelowOfMainElement
+						+ "')]/parent::*/parent::*/parent::*/parent::*/following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+						.size() > 0) {
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]/parent::*/parent::*/parent::*/parent::*/following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.clear();
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]/parent::*/parent::*/parent::*/parent::*/following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.sendKeys(String.valueOf(currencyInput));
+				} else if (CommonUtils.getdriver().findElements(By.xpath("//*[contains(@text,'"
+						+ getAboveOrBelowOfMainElement
+						+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+						.size() > 0) {
+					CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.clear();
+					CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.sendKeys(String.valueOf(currencyInput));
+				}
+			} else {
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
+						+ getAboveOrBelowOfMainElement
+						+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+						.size() > 0) {
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.clear();
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.sendKeys(String.valueOf(currencyInput));
+				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
+						+ getAboveOrBelowOfMainElement
+						+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+						.size() > 0) {
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.clear();
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.sendKeys(String.valueOf(currencyInput));
+				}
+			}
+ 
+			// validating the work fields based on condition
+			if (workBaseCondition.equals("Hide when")) {
+				MobileActionGesture.scrollTospecifiedElement("REFRESH");
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath(
+						"//*[@resource-id='in.spoors.effortplus:id/refreshButton']/parent::*//android.widget.EditText"))
+						.size() > 0) {
+					CommonUtils.waitForElementVisibility("//*[@class='android.widget.EditText']");
+					CommonUtils.getdriver().findElement(MobileBy.className("android.widget.EditText")).clear();
+					AndroidLocators.clickElementusingResourceId("in.spoors.effortplus:id/refreshButton");
+				}
+				MobileActionGesture.scrollTospecifiedElement(getAboveOrBelowOfMainElement);
+				CommonUtils.getdriver().hideKeyboard();
+			} else if (workBaseCondition.equals("Disable when")) {
+				MobileActionGesture.scrollTospecifiedElement("REFRESH");
+				MobileActionGesture.scrollUsingText(getAboveOrBelowOfMainElement);
+			} else if (workBaseCondition.equals("Mandatory when")) {
+				MobileActionGesture.scrollTospecifiedElement("REFRESH");
+				MobileActionGesture.scrollUsingText(getAboveOrBelowOfMainElement);
+			}
+		}
+	} //method close
+	
+	//customer field dependecy based on value in other field
+	public static void customerPicker(String workBaseCondition, String fieldsText, String workFieldInput) throws MalformedURLException {
+		
+		//initializing and assigning
+		String customer = null;
+		customer = workFieldInput;
+		String[] cusArray = customer.split(",");
+		
+		for (int j = 0; j < cusArray.length; j++) {
+			MobileActionGesture.scrollUsingText(fieldsText);
+			AndroidLocators.clickElementusingXPath(
+					"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button");
+			CustomerPageActions.customerSearch(cusArray[j]);
+			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + cusArray[j] + "']")).size() > 0) {
+				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='" + cusArray[j] + "']")).click();
+				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + fieldsText + "')]");
+				System.out.println("---- Customer found ---- !!");
+			}
+		}
+	}
+	
+	
+	
+	// picklist field dependency based on value in other fields
+	public static void workPickList(String workBaseCondition, String fieldsText, String workFieldInput) {
+		// initializing and assigning
+		String pickList = null;
+		pickList = workFieldInput;
+		String[] pickListArray = pickList.split(",");
+		
+		// inputting the list data
+		for (int j = 0; j < pickListArray.length; j++) {
+			MobileActionGesture.scrollUsingText(fieldsText);
+			CommonUtils.getTextAndScrollToElement(pickList);
+			CommonUtils.getTextAndScrollToElement(
+					"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button");
+			AndroidLocators.clickElementusingXPath(
+					"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button");
+			CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
+			AndroidLocators.clickElementusingXPath("//*[@content-desc='Search']");
+			CommonUtils.getdriver()
+					.findElement(MobileBy.xpath("//*[@resource-id='in.spoors.effortplus:id/search_src_text']"))
+					.sendKeys(pickListArray[j]);
+			AndroidLocators.pressEnterKeyInAndroid();
+			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + pickListArray[j] + "']"))
+					.size() > 0) {
+				AndroidLocators.clickElementusingXPath("//*[@text='" + pickListArray[j] + "']");
+				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + fieldsText + "')]");
+				System.out.println("*** Picklist found and picked successfully *** !!");
+			}
+			// validating the conditions
+			if (workBaseCondition.equals("Hide when") || workBaseCondition.equals("Disable when")
+					|| workBaseCondition.equals("Mandatory when")) {
+				MobileActionGesture.scrollTospecifiedElement("REFRESH");
+			}
+		}
+	}
+
+	//dropdown field dependency based on value in other fields
+	public static void dropdownSelection(String workBaseCondition, String fieldsText, String workFieldInput) {
+
+		// initializing and assigning
+		String dropDown = null;
+		dropDown = workFieldInput;
+		String[] dropDownArray = dropDown.split(",");
+
+		for (int j = 0; j < dropDownArray.length; j++) {
+			MobileActionGesture.scrollUsingText(fieldsText);
+			CommonUtils.getTextAndScrollToElement("//*[starts-with(@text,'" + fieldsText
+					+ "')]/parent::*/parent::*/android.widget.Spinner/android.widget.TextView");
+			if (CommonUtils.getdriver()
+					.findElement(MobileBy.xpath(
+							"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Spinner"))
+					.isDisplayed()) {
+				AndroidLocators.clickElementusingXPath(
+						"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Spinner");
+				AndroidLocators
+						.clickElementusingXPath("//android.widget.CheckedTextView[@text='" + dropDownArray[j] + "']");
+				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + fieldsText + "')]");
+			} else {
+				AndroidLocators
+						.clickElementusingXPath("//android.widget.CheckedTextView[@text='" + dropDownArray[j] + "']");
+			}
+
+			// validating the conditions
+			if (workBaseCondition.equals("Hide when") || workBaseCondition.equals("Disable when")
+					|| workBaseCondition.equals("Mandatory when")) {
+				MobileActionGesture.scrollTospecifiedElement("REFRESH");
+			}
+		}
+	}
+	
+	//date field dependency based on value in other fields
+	public static void datePicking(String workBaseCondition, String fieldsText, String workFieldInput) {
+		// initializing and assigning
+		String dateString = null;
+		dateString = workFieldInput;
+		SimpleDateFormat DateFor = new SimpleDateFormat("dd MMMM yyyy");
+		Calendar c = Calendar.getInstance();
+
+		try {
+			// Setting the date to the given date
+			c.setTime(DateFor.parse(dateString));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		System.out.println("---- Given date is ---- : " + DateFor.format(c.getTime()));
+
+		for (int j = 0; j < 3; j++) {
+			// Number of Days to add
+			c.add(Calendar.DAY_OF_MONTH, -1);
+			// conversion of date
+			String newDate = DateFor.format(c.getTime());
+			// Date Printing
+			System.out.println(" **** My Date is **** : " + newDate);
+
+			MobileActionGesture.scrollUsingText(fieldsText);
+			CommonUtils.getTextAndScrollToElement(
+					"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button");
+			AndroidLocators.clickElementusingXPath(
+					"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button");
+			CommonUtils.alertContentXpath();
+			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='" + newDate + "']"))
+					.size() > 0) {
+				AndroidLocators.clickElementusingXPath("//*[@content-desc='" + newDate + "']");
+			} else {
+				do {
+					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Next month']")).click();
+				} while (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='" + newDate + "']"))
+						.size() > 0);
+				AndroidLocators.clickElementusingXPath("//*[@content-desc='" + newDate + "']");
+			}
+			AndroidLocators.clickElementusingXPath("//*[@text='OK']");
+
+			// adding the date
+			c.add(Calendar.DAY_OF_MONTH, 2);
+
+			System.out.println("---- After increasing the date ---- :" + DateFor.format(c.getTime()));
+		}
+	}
+	
+	//work error and warn message 
+	public static void workErrorAndWarnMeassage() {
+		
+	}
+	
 	
 }

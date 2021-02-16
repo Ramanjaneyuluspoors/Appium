@@ -151,11 +151,11 @@ public class CustomerPageActions {
 	public static void veirfyCusCheckin() throws MalformedURLException, InterruptedException {
 		MobileElement cusCheckin = CommonUtils.getdriver().findElement(MobileBy.id("checkinoutButton"));
 		if (cusCheckin.getText().contains("OFF")) {
-			System.out.println("user is going to checkin to customer");
+			System.out.println(".... User is going to checkin to customer .... ");
 			cusCheckin.click();
 			checkInOrCheckOutAnyway();
 		} else {
-			System.out.println("User already checked into customer, perform customer activity");
+			System.out.println("----- User already checked into customer, perform customer activity ----- ");
 			CommonUtils.getdriver().findElement(MobileBy.id("summaryBtn")).click();
 		}
 	}

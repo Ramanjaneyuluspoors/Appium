@@ -1401,11 +1401,11 @@ public class Forms_basic {
 	// capturing signature
 	public static void capturing_Signature(String fieldsText) throws MalformedURLException, InterruptedException {
 		// deleting the existing signature if present
-		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
-				+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[contains(@text,'DELETE')]"))
+		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + fieldsText
+				+ "']/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[contains(@text,'DELETE')]"))
 				.size() > 0) {
-			AndroidLocators.clickElementusingXPath("//*[starts-with(@text,'" + fieldsText
-					+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[contains(@text,'DELETE')]");
+			AndroidLocators.clickElementusingXPath("//*[@text='" + fieldsText
+					+ "']/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[contains(@text,'DELETE')]");
 		}
 		CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + fieldsText
 				+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button");

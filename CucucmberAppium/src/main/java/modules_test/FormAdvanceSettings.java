@@ -1114,7 +1114,7 @@ public class FormAdvanceSettings {
 		String[] selectCondition = { "Equals", "Contain", "Does not contain", "Starts with", "Ends with" };
 		String[] myInput = { formFieldsLabelInput, formFieldsLabelInput + "extraWords",
 				"extraWords" + formFieldsLabelInput, "extraWords" };
-		for (int k = 0; k < 4; k++) {
+		for (int k = 0; k < myInput.length; k++) {
 			textInputData = myInput[k];
 			if (pagination.size() > 0) {
 				CommonUtils.waitForElementVisibility("//*[contains(@text,'PAGE " + i + "')]");
@@ -1239,7 +1239,7 @@ public class FormAdvanceSettings {
 		customer = formFieldsLabelInput;
 		String[] selectCondition = { "In", "Not In" };
 		String[] cusArray = customer.split(",");
-		for (int j = 0; j < 2; j++) {
+		for (int j = 0; j < cusArray.length; j++) {
 			if (pagination.size() > 0) {
 				pagination.get(i).click();
 				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
@@ -1303,7 +1303,7 @@ public class FormAdvanceSettings {
 		String pickList = null;
 		pickList = formFieldsLabelInput;
 		String[] pickListArray = pickList.split(",");
-		for (int j = 0; j < 2; j++) {
+		for (int j = 0; j < pickListArray.length; j++) {
 			if (pagination.size() > 0) {
 				pagination.get(i).click();
 				CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
@@ -1375,7 +1375,7 @@ public class FormAdvanceSettings {
 		String dropDown = null;
 		dropDown = formFieldsLabelInput;
 		String[] dropDownArray = dropDown.split(",");
-		for (int j = 0; j < 2; j++) {
+		for (int j = 0; j < dropDownArray.length; j++) {
 			if (pagination.size() > 0) {
 				Thread.sleep(100);
 				pagination.get(i).click();

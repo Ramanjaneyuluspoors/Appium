@@ -330,80 +330,54 @@ public class Work {
 	}
 
 	// creating work with all fields
-	public static String workCreation() throws MalformedURLException, InterruptedException, ParseException {
-		// Declaring the workInputElements list
-		List<MobileElement> workInputElements = AndroidLocators.findElements_With_ClassName("android.widget.EditText");
-
-		// Declaring the workLabelElements list
-		List<MobileElement> workLabelElements = AndroidLocators.findElements_With_Xpath(
-				"//android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView");
-
-		// merging the both list
-		List<MobileElement> newList = workLabelElements;
-		newList.addAll(workInputElements);
+	public static List<MobileElement> work_Creation()
+			throws MalformedURLException, InterruptedException, ParseException {
+		// work all fields
+		List<MobileElement> workFields = AndroidLocators.findElements_With_Xpath(
+				"//android.widget.LinearLayout[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@class,'Text')]");
 
 		// retrieving the list count
-		int workFieldsCount = newList.size();
+		int workFieldsCount = workFields.size();
 		System.out.println(" ===== Work Fields Count ===== : " + workFieldsCount);
 
 		// clear the elements from list
-		newList.clear();
-		workLabelElements.clear();
-		workInputElements.clear();
+		workFields.clear();
 
 		// Initializing the string to retrieve last element
 		String workLastElement = null;
 
 		// scroll to bottom and add work fields to list
 		MobileActionGesture.flingVerticalToBottom_Android();
-		workInputElements.addAll(AndroidLocators.findElements_With_ClassName("android.widget.EditText"));
-		workLabelElements.addAll(AndroidLocators.findElements_With_Xpath(
-				"//android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
-
-		// merge the list
-		workLabelElements.addAll(workInputElements);
-		newList = workLabelElements;
+		workFields.addAll(AndroidLocators.findElements_With_Xpath(
+				"//android.widget.LinearLayout[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@class,'Text')]"));
 
 		// Store work last element into 'workLastElement string'
-		workLastElement = newList.get(newList.size() - 1).getText();
+		workLastElement = workFields.get(workFields.size() - 1).getText();
 		System.out.println(" ***** Work Last Element is ***** : " + workLastElement);
 
 		// remove the elements from the list
-		newList.clear();
-		workLabelElements.clear();
-		workInputElements.clear();
+		workFields.clear();
 
 		// scroll to top
 		MobileActionGesture.flingToBegining_Android();
 
 		// adding the work fields present in the first screen
-		workInputElements.addAll(AndroidLocators.findElements_With_ClassName("android.widget.EditText"));
-		workLabelElements.addAll(AndroidLocators.findElements_With_Xpath(
-				"//android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
-
-		// merge the list
-		newList = workLabelElements;
-		newList.addAll(workInputElements);
+		workFields.addAll(AndroidLocators.findElements_With_Xpath(
+				"//android.widget.LinearLayout[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@class,'Text')]"));
 
 		// get the count of work fields present in the first screen
-		workFieldsCount = newList.size();
+		workFieldsCount = workFields.size();
 		System.out.println(" ---- Before swiping the device screen fields count are ---- : " + workFieldsCount);
 
 		// swipe and retrieve the work fields until the last element found
-		while (!newList.isEmpty() && newList != null) {
+		while (!workFields.isEmpty() && workFields != null) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
-			workInputElements.addAll(AndroidLocators.findElements_With_ClassName("android.widget.EditText"));
-			workLabelElements.addAll(CommonUtils.getdriver().findElements(MobileBy
-					.xpath("//android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
-
-			// merge the list
-//			newList = ListUtils.union(workLabelElements, workInputElements);
-			newList = workLabelElements;
-			newList.addAll(workInputElements);
+			workFields.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
+					"//android.widget.LinearLayout[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@class,'Text')]")));
 
 			// get the count of work fields
-			workFieldsCount = newList.size();
+			workFieldsCount = workFields.size();
 			System.out.println(" .... After swiping the device screen fields count are .... : " + workFieldsCount);
 
 			// if work last element matches with newList then break the for loop
@@ -411,14 +385,14 @@ public class Work {
 
 				// printing elements from last to first
 				System.out.println("***** Print work fields elements text ***** : "
-						+ newList.get(workFieldsCount - (i + 1)).getText());
+						+ workFields.get(workFieldsCount - (i + 1)).getText());
 
 				// printing the elements in the list
-				System.out.println("===== Work fields text ===== : " + newList.get(i).getText());
+				System.out.println("===== Work fields text ===== : " + workFields.get(i).getText());
 
 				// if list matches with last element the loop will break
-				if (newList.get(i).getText().equals(workLastElement)) {
-					System.out.println("----- Work fields text inside elements ----- : " + newList.get(i).getText());
+				if (workFields.get(i).getText().equals(workLastElement)) {
+					System.out.println("----- Work fields text inside elements ----- : " + workFields.get(i).getText());
 					flag = true;
 				}
 			}
@@ -433,8 +407,8 @@ public class Work {
 
 		// providing input for work fields by iterating using the workList(newList)
 		for (int j = 0; j < workFieldsCount; j++) {
-			String workOriginalFields = newList.get(j).getText();
-			String workFieldsText = newList.get(j).getText().replaceAll("[!@#$%&*,.?\":{}|<>]", "");
+			String workOriginalFields = workFields.get(j).getText();
+			String workFieldsText = workFields.get(j).getText().replaceAll("[!@#$%&*,.?\":{}|<>]", "");
 			System.out.println("***** Before removing special character ***** : " + workOriginalFields
 					+ "\n----- After removing special character ----- : " + workFieldsText);
 
@@ -629,7 +603,6 @@ public class Work {
 				MobileActionGesture.scrollUsingText(workFieldsText);
 				if (CommonUtils.getdriver()
 						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
-					MobileActionGesture.scrollUsingText(workFieldsText);
 					MobileElement address_Same_As_customer = CommonUtils.getdriver()
 							.findElement(MobileBy.xpath("//*[contains(@text,'" + workFieldsText
 									+ "')]/parent::*/parent::*/android.widget.Spinner"));
@@ -1172,9 +1145,7 @@ public class Work {
 				break;
 			case "Signature":
 				if (!isSignature) {
-					MobileActionGesture.scrollUsingText(workFieldsText);
-					CommonUtils.getTextAndScrollToElement("//*[starts-with(@text,'" + workFieldsText
-							+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.Button");
+					MobileActionGesture.scrollUsingText(workFieldsText);					
 					if (CommonUtils.getdriver()
 							.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]"))
 							.size() > 0) {
@@ -1190,8 +1161,9 @@ public class Work {
 			} // switch statement close
 
 		} // for loop close
-		return workLastElement;
+		return workFields;
 	}
+
 
 	// capturing signature
 	public static void work_Capturing_Signature(String fieldsText) throws MalformedURLException, InterruptedException {
@@ -1255,7 +1227,6 @@ public class Work {
 		System.out.println(" ===== Work Fields Count ===== : " + workFieldsCount);
 
 		// clear the elements from list
-		workLabelElements.clear();
 		workLabelElements.clear();
 
 		// Initializing the string to retrieve last element
@@ -1924,4 +1895,6 @@ public class Work {
 			}
 		}
 	}
+	
+	
 }
