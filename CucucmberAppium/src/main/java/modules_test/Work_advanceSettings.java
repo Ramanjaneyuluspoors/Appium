@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.text.RandomStringGenerator;
 import org.junit.gen5.api.Assertions;
 import org.openqa.selenium.By;
@@ -21,15 +22,15 @@ public class Work_advanceSettings {
 	// save work
 	public static void saveWork() throws InterruptedException {
 		AndroidLocators.clickElementusingID("saveWork");
-//		CommonUtils.getdriver().findElement(MobileBy.id("saveWork")).click();
 		CommonUtils.alertContentXpath();
 		MobileElement saveButton = CommonUtils.getdriver().findElement(MobileBy.id("workSaveButton"));
 		if (saveButton.isDisplayed()) {
 			saveButton.click();
 			try {
-				if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@resource-id='android:id/button1']"))
+				if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@resource-id='android:id/alertTitle']"))
 						.isDisplayed()) {
-					CommonUtils.OkButton("CONTINUE");
+					AndroidLocators.clickElementusingXPath("//*[@resource-id='android:id/button1']");
+					CommonUtils.wait(2);
 					System.out.println(" ---- work is saved successfully!! ----");
 				}
 			} catch (Exception e) {
@@ -778,51 +779,7 @@ public class Work_advanceSettings {
 	public static void workTextFieldDependency(String workBaseCondition, String fieldsText, String workFieldInput)
 			throws InterruptedException {
 
-		// initializing the string
-		String getAboveOrBelowOfMainElement = null;
-
-		// retrieving the text of the input above/below element
-		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
-				+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
-				.size() > 0) {
-			getAboveOrBelowOfMainElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-					+ fieldsText
-					+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
-					.getText();
-			getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "").split("\\(")[0];
-			System.out.println("*** Edit Text label name above element is *** : " + getAboveOrBelowOfMainElement);
-		} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + fieldsText
-				+ "']/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
-				.size() > 0) {
-			getAboveOrBelowOfMainElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-					+ fieldsText
-					+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
-					.getText();
-			getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "").split("\\(")[0];
-			System.out.println("*** Text View label name above element is *** : " + getAboveOrBelowOfMainElement);
-		} else {
-			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
-					+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
-					.size() > 0) {
-				getAboveOrBelowOfMainElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-						+ fieldsText
-						+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
-						.getText();
-				getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
-						.split("\\(")[0];
-				System.out.println("*** Edit Text label name below element is *** : " + getAboveOrBelowOfMainElement);
-			} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
-					+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
-					.size() > 0) {
-				getAboveOrBelowOfMainElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-						+ fieldsText
-						+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
-						.getText();
-				getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
-						.split("\\(")[0];
-				System.out.println("*** Text View label name below element is *** : " + getAboveOrBelowOfMainElement);
-			}
-		}
+		String getAboveOrBelowOfMainElement = commonMethodForInput(fieldsText);
 
 		// initializing string for inputdata
 		String textInputData = null;
@@ -840,23 +797,23 @@ public class Work_advanceSettings {
 					.findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement + "')]"))
 					.isDisplayed()) {
 				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-						+ "')]/parent::*/parent::*/parent::*/parent::*/following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+						+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 						.size() > 0) {
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-							+ "')]/parent::*/parent::*/parent::*/parent::*/following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 							.clear();
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-							+ "')]/parent::*/parent::*/parent::*/parent::*/following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 							.sendKeys(textInputData);
 				} else if (CommonUtils.getdriver().findElements(By.xpath("//*[contains(@text,'"
 						+ getAboveOrBelowOfMainElement
-						+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+						+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 						.size() > 0) {
 					CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 							.clear();
 					CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 							.sendKeys(textInputData);
 				}
 			} else {
@@ -908,13 +865,10 @@ public class Work_advanceSettings {
 			}
 		}
 	}// method close
-
-	//number field dependecy based on value in other field
-	public static void currencyInput(String workBaseCondition, String fieldsText, String workFieldInput) {
-		//initializing and assigning
-		int currencyInput = 0;
-		currencyInput = Integer.parseInt(workFieldInput);
 	
+	//using in fields depedency based on value in other field for input
+	public static String commonMethodForInput(String fieldsText) {
+		
 		// initializing the string
 		String getAboveOrBelowOfMainElement = null;
 
@@ -962,6 +916,17 @@ public class Work_advanceSettings {
 				System.out.println("*** Text View label name below element is *** : " + getAboveOrBelowOfMainElement);
 			}
 		}
+		return getAboveOrBelowOfMainElement;
+		
+	}
+
+	//number field dependecy based on value in other field
+	public static void currencyInput(String workBaseCondition, String fieldsText, String workFieldInput) {
+		//initializing and assigning
+		int currencyInput = 0;
+		currencyInput = Integer.parseInt(workFieldInput);
+	
+		String getAboveOrBelowOfMainElement = commonMethodForInput(fieldsText);
 
 		for (int j = 0; j < 3; j++) {
 			currencyInput = currencyInput - 1;
@@ -972,25 +937,25 @@ public class Work_advanceSettings {
 					.isDisplayed()) {
 				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'"
 						+ getAboveOrBelowOfMainElement
-						+ "')]/parent::*/parent::*/parent::*/parent::*/following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+						+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 						.size() > 0) {
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
 							+ getAboveOrBelowOfMainElement
-							+ "')]/parent::*/parent::*/parent::*/parent::*/following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 							.clear();
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
 							+ getAboveOrBelowOfMainElement
-							+ "')]/parent::*/parent::*/parent::*/parent::*/following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 							.sendKeys(String.valueOf(currencyInput));
 				} else if (CommonUtils.getdriver().findElements(By.xpath("//*[contains(@text,'"
 						+ getAboveOrBelowOfMainElement
-						+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+						+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 						.size() > 0) {
 					CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 							.clear();
 					CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//following-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 							.sendKeys(String.valueOf(currencyInput));
 				}
 			} else {
@@ -1185,9 +1150,228 @@ public class Work_advanceSettings {
 	}
 	
 	//work error and warn message 
-	public static void workErrorAndWarnMeassage() {
+	public static void workErrorAndWarnMeassage(String errorCondition, String inputValue) throws MalformedURLException, InterruptedException {
+		// work all fields
+		List<MobileElement> workFields = AndroidLocators.findElements_With_Xpath(
+				"//android.widget.LinearLayout[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@class,'Text')]");
+
+		// retrieving the list count
+		int workFieldsCount = workFields.size();
+		System.out.println(" ===== Work Fields Count ===== : " + workFieldsCount);
+
+		// clear the elements from list
+		workFields.clear();
+
+		// Initializing the string to retrieve last element
+		String workLastElement = null;
+
+		// scroll to bottom and add work fields to list
+		MobileActionGesture.flingVerticalToBottom_Android();
+		workFields.addAll(AndroidLocators.findElements_With_Xpath(
+				"//android.widget.LinearLayout[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@class,'Text')]"));
+
+		// Store work last element into 'workLastElement string'
+		workLastElement = workFields.get(workFields.size() - 1).getText();
+		System.out.println(" ***** Work Last Element is ***** : " + workLastElement);
+
+		// remove the elements from the list
+		workFields.clear();
+
+		// scroll to top
+		MobileActionGesture.flingToBegining_Android();
+
+		// adding the work fields present in the first screen
+		workFields.addAll(AndroidLocators.findElements_With_Xpath(
+				"//android.widget.LinearLayout[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@class,'Text')]"));
+
+		// get the count of work fields present in the first screen
+		workFieldsCount = workFields.size();
+		System.out.println(" ---- Before swiping the device screen fields count are ---- : " + workFieldsCount);
+
+		// swipe and retrieve the work fields until the last element found
+		while (!workFields.isEmpty() && workFields != null) {
+			boolean flag = false;
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
+			workFields.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath(
+					"//android.widget.LinearLayout[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@class,'Text')]")));
+
+			// get the count of work fields
+			workFieldsCount = workFields.size();
+			System.out.println(" .... After swiping the device screen fields count are .... : " + workFieldsCount);
+
+			// if work last element matches with newList then break the for loop
+			for (int i = 0; i < workFieldsCount; i++) {
+
+				// printing elements from last to first
+				System.out.println("***** Print work fields elements text ***** : "
+						+ workFields.get(workFieldsCount - (i + 1)).getText());
+
+				// printing the elements in the list
+				System.out.println("===== Work fields text ===== : " + workFields.get(i).getText());
+
+				// if list matches with last element the loop will break
+				if (workFields.get(i).getText().equals(workLastElement)) {
+					System.out.println("----- Work fields text inside elements ----- : " + workFields.get(i).getText());
+					flag = true;
+				}
+			}
+			// break the while loop if the work last element found
+			if (flag == true)
+				break;
+		} // break the while loop
+
+		MobileActionGesture.flingToBegining_Android();
 		
-	}
+		// providing input for work fields by iterating using the workList(newList)
+		for (int j = 0; j < workFieldsCount; j++) {
+			String workOriginalFields = workFields.get(j).getText();
+			String workFieldsText = workFields.get(j).getText().replaceAll("[!@#$%&*,.?\":{}|<>]", "");
+			System.out.println("***** Before removing special character ***** : " + workOriginalFields
+					+ "\n----- After removing special character ----- : " + workFieldsText);
+			
+			//splitting and assigning input to variable
+			String[] inputArray = inputValue.split(",");
+			String currencyInput = inputArray[0];
+			String dateInput = null;
+			dateInput = inputArray[1];
+
+			switch (workFieldsText) {
+			case "Work Name":
+				MobileActionGesture.scrollUsingText(workFieldsText);
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
+					MobileActionGesture.scrollUsingText(workFieldsText);
+					Work.generateWorkName = RandomStringUtils.randomAlphabetic(6).toLowerCase();
+					CommonUtils.getdriver()
+							.findElement(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]"))
+							.sendKeys(Work.generateWorkName);
+				}
+				break;
+			case "Ends":
+				MobileActionGesture.scrollUsingText(workFieldsText);
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
+					MobileActionGesture.scrollUsingText(workFieldsText);
+					AndroidLocators.clickElementusingXPath("//*[starts-with(@text,'" + workFieldsText
+							+ "')]/parent::*/parent::*/android.widget.LinearLayout/*[@resource-id='in.spoors.effortplus:id/pick_date_button']");
+					CommonUtils.alertContentXpath();
+					try {
+						Forms_basic.dateScriptInForms(3);
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					CommonUtils.wait(3);
+					AndroidLocators.clickElementusingXPath("//*[starts-with(@text,'" + workFieldsText
+							+ "')]/parent::*/parent::*/android.widget.LinearLayout/*[@resource-id='in.spoors.effortplus:id/pick_time_buton']");
+					CommonUtils.alertContentXpath();
+					Work.workEndTime(2, 5);
+					CommonUtils.wait(1);
+				}
+				break;
+			case "Currency":
+				MobileActionGesture.scrollUsingText(workFieldsText);
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]"))
+						.size() > 0) {
+					currencyErrorInput(workFieldsText, currencyInput, errorCondition);
+				}
+				break;	
+				}
+			}
+		}
+		
 	
-	
+		// currency error and warn message input
+		public static int currencyErrorInput(String workFieldsText, String currencyInput, String errorCondition) throws InterruptedException {
+			// initializing assigniong
+			int currencyErrorInput = 0;
+			currencyErrorInput = Integer.parseInt(currencyInput);
+
+			// assigning inputdata to variable
+			String getAboveOrBelowOfMainElement = commonMethodForInput(workFieldsText);
+
+			for (int j = 0; j < 3; j++) {
+				currencyErrorInput = currencyErrorInput - 1;
+				System.out.println("------- Currency value ------ :" + currencyErrorInput);
+				// based previous element inputing the main element
+				if (CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement + "')]"))
+						.isDisplayed()) {
+					if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.size() > 0) {
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
+								+ getAboveOrBelowOfMainElement
+								+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+								.clear();
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
+								+ getAboveOrBelowOfMainElement
+								+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+								.sendKeys(String.valueOf(currencyErrorInput));
+					} else if (CommonUtils.getdriver().findElements(By.xpath("//*[contains(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.size() > 0) {
+						CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'"
+								+ getAboveOrBelowOfMainElement
+								+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+								.clear();
+						CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'"
+								+ getAboveOrBelowOfMainElement
+								+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+								.sendKeys(String.valueOf(currencyErrorInput));
+					}
+				} else {
+					if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.size() > 0) {
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+								+ getAboveOrBelowOfMainElement
+								+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+								.clear();
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+								+ getAboveOrBelowOfMainElement
+								+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+								.sendKeys(String.valueOf(currencyErrorInput));
+					} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.size() > 0) {
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+								+ getAboveOrBelowOfMainElement
+								+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+								.clear();
+						CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
+								+ getAboveOrBelowOfMainElement
+								+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+								.sendKeys(String.valueOf(currencyErrorInput));
+					}
+				}
+				
+				// validating error and warning condition
+				if (errorCondition.equals("Show Error when")) {
+					saveWork();
+					// retrieving error message using OCR
+					String dateText = CommonUtils.OCR();
+					System.out.println("---- Expected toast message is ---- : " + dateText);
+				} else if (errorCondition.equals("Show Warning when")) {
+					saveWork();
+					FormAdvanceSettings.handlingWarningAlert();
+				}
+				MobileActionGesture.scrollUsingText(getAboveOrBelowOfMainElement);
+				
+				// increasing the currency value
+				currencyErrorInput = currencyErrorInput + 2;
+				System.out.println(".... After increaing the currency value .... : " + currencyErrorInput);
+			}
+			return currencyErrorInput;
+		}
 }

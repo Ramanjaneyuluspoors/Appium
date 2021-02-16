@@ -32,6 +32,7 @@ public class Forms_basic {
 	// if specified form is in homepage click on it else click on home fab '+' and
 	// go to forms
 	public static void verifyForminHomePage(String form) throws MalformedURLException {
+		try {
 		CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 				"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\""
 						+ form + "\").instance(0))"));
@@ -46,13 +47,14 @@ public class Forms_basic {
 					"//*[@resource-id='in.spoors.effortplus:id/toolbar']/android.widget.TextView[@text='" + form
 							+ "']");
 			CommonUtils.homeFabClick();
-		} else {
-			try {
-				Thread.sleep(800);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		} 
+		}catch(Exception e) {
+//			try {
+//				Thread.sleep(800);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			goToFormPage();
 		}
 	}
@@ -309,7 +311,7 @@ public class Forms_basic {
 		// date formatter eg-02 Aug 2020
 		SimpleDateFormat DateFor = new SimpleDateFormat("dd MMMM yyyy");
 		// EEE-Day of month, MMM-month, dd-date, yyyy-year
-		SimpleDateFormat New_Date_Format = new SimpleDateFormat("EEE, MMM dd yyyy");
+		SimpleDateFormat New_Date_Format = new SimpleDateFormat("EEE, dd MMM yyyy");
 
 		// get current date
 		String todayDate = DateFor.format(date);
@@ -354,11 +356,19 @@ public class Forms_basic {
 
 		// converting to string
 		String date_Year_Append_to_String = date_Year_Append.toString();
-
-		// parsing display date
-		Date parse_display_date = New_Date_Format.parse(date_Year_Append_to_String);
+		
+		System.out.println(".... After converting the date to string .... : " + date_Year_Append_to_String);
+    
+		Date parse_display_date = null;
+		
+		try {
+			// parsing display date
+			parse_display_date = New_Date_Format.parse(date_Year_Append_to_String);
+		} catch (ParseException ex) {
+			ex.printStackTrace();
+		}
 		System.out.println(".... After parsing the display date .... : " + parse_display_date);
-
+		
 		// formating pared date to calendar format
 		String formatDisplayDate = DateFor.format(parse_display_date);
 		System.out.println("---- Forrmat the new date ---- : " + formatDisplayDate);
@@ -516,24 +526,24 @@ public class Forms_basic {
 	public static void fill_Form_With_Pagination(int i)
 			throws MalformedURLException, InterruptedException, ParseException {
 		int j = i + 1;
-		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='PAGE " + j
-				+ "']/parent::*/parent::android.widget.LinearLayout/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='PAGE " + j
+				+ "']/parent::*/following::*[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.TextView"));
 		int countOfFields = formFields1.size();
 		formFields1.clear();
 
 		// get last element text
 		String lastTxtElement = null;
 		MobileActionGesture.flingVerticalToBottom_Android();
-		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='PAGE " + j
-				+ "']/parent::*/parent::android.widget.LinearLayout/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='PAGE " + j
+				+ "']/parent::*/following::*[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.TextView")));
 		lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 		System.out.println("Get the last element text: " + lastTxtElement);
 		formFields1.clear();
 		MobileActionGesture.flingToBegining_Android();
 
 		// add the elements to list
-		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='PAGE " + j
-				+ "']/parent::*/parent::android.widget.LinearLayout/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='PAGE " + j
+				+ "']/parent::*/following::*[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.TextView")));
 		countOfFields = formFields1.size();
 		System.out.println(" ==== Before swiping fields count is ==== : " + countOfFields);
 
@@ -541,8 +551,8 @@ public class Forms_basic {
 		while (!formFields1.isEmpty()) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
-			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='PAGE " + j
-					+ "']/parent::*/parent::android.widget.LinearLayout/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='PAGE " + j
+					+ "']/parent::*/following::*[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.TextView")));
 			countOfFields = formFields1.size();
 			System.out.println(".... After swiping fields count .... : " + countOfFields);
 			for (int k = 0; k < countOfFields; k++) {

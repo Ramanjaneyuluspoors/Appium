@@ -2584,15 +2584,10 @@ public class FormAdvanceSettings {
 		CommonUtils.alertContentXpath();
 		if (AndroidLocators.resourceId("android:id/alertTitle").isDisplayed()) {
 			MobileElement message = AndroidLocators.resourceId("android:id/message");
-//					CommonUtils.getdriver()
-//					.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/message\")"));
 			System.out.println(" **** Warning message is **** :" + message.getText());
 			AndroidLocators.resourceId("android:id/button2").click();
-//			CommonUtils.getdriver()
-//					.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button2\")"))
-//					.click();
 		}
-		CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/saveForm']");
+			CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 	}
 
 	// validating error and warn message in form pagination
@@ -2698,16 +2693,19 @@ public class FormAdvanceSettings {
 			throws MalformedURLException, InterruptedException, ParseException {
 		List<MobileElement> formFields1 = CommonUtils.getdriver().findElements(
 				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		
 		int countOfFields = formFields1.size();
 		formFields1.clear();
 
 		String lastTxtElement = null;
+		
 		// get last element text
 		MobileActionGesture.flingVerticalToBottom_Android();
 		formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy
 				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 		lastTxtElement = formFields1.get(formFields1.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 		System.out.println(" **** Get the last element text **** : " + lastTxtElement);
+		
 		formFields1.clear();
 		MobileActionGesture.flingToBegining_Android();
 
@@ -2745,7 +2743,7 @@ public class FormAdvanceSettings {
 			String fieldsText = formFields1.get(m).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println(" **** Before removing special character **** : " + originalText
 					+ "\n----- After removing regexp ---- : " + fieldsText);
-
+			//splitting and assigning input to variable
 			String[] inputArray = inputValue.split(",");
 			String currencyInput = inputArray[0];
 			String dateInput = null;
@@ -2794,6 +2792,7 @@ public class FormAdvanceSettings {
 			// decreasing currency input for boundary value testing
 			currencyErrorInput = currencyErrorInput - 1;
 			System.out.println(" **** Enter the currency input **** :" + currencyErrorInput);
+			
 			MobileActionGesture.scrollUsingText(fieldsText);
 			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 					+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText")).click();
@@ -2802,6 +2801,7 @@ public class FormAdvanceSettings {
 					.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
 					.sendKeys(String.valueOf(currencyErrorInput));
+			
 			// validating error and warning condition
 			if (errorCondition.equals("Show Error when")) {
 				MobileActionGesture.scrollUsingText("Text");
@@ -2820,6 +2820,7 @@ public class FormAdvanceSettings {
 			MobileActionGesture.scrollUsingText(fieldsText);
 			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 					+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText")).clear();
+			
 			// increasing the currency value
 			currencyErrorInput = currencyErrorInput + 2;
 			System.out.println(".... After increaing the currency value .... : " + currencyErrorInput);
