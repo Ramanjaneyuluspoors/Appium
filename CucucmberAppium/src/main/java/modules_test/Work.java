@@ -27,9 +27,14 @@ public class Work {
 	public static void goToWorkPage(String workName) throws MalformedURLException {
 		CommonUtils.homeFabClick();
 		HomepageAction.select_dialog_list("Work");
-//		CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Work']")).click();
 		// swipe and click on the specified work
 		MobileActionGesture.scrollTospecifiedElement("" + workName + "");
+		try {
+			CommonUtils.interruptSyncAndLetmeWork();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		CommonUtils.waitForElementVisibility("//*[contains(@text,'Create')]");
 	}
 
@@ -82,8 +87,14 @@ public class Work {
 		} catch (Exception e) {
 			System.out.println("Going to create work!!");
 			workFab();
-//			workCreation();
-			createWork();
+//			workCreation(); 
+			try {
+				work_Creation();
+			} catch (MalformedURLException | InterruptedException | ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+//			createWork();
 			workSearch(generateWorkName);
 			verifyWorkExistOrNotInWorkScreen(generateWorkName);
 		}
