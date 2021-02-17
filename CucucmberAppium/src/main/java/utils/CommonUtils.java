@@ -301,19 +301,16 @@ public class CommonUtils {
 	public static void interruptSyncAndLetmeWork() throws InterruptedException {
 //		try {
 		if (driver.findElements(By.id("button2")).size() > 0) {
-			driver.findElement(By.id("button2")).click();
+			AndroidLocators.clickElementusingID("button2");
 		} else if (driver
 				.findElements(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"))
 				.size() > 0) {
-			driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"))
-					.click();
-		} else if (driver
-				.findElements(By.xpath("//*[@class='android.widget.Button'][@text='INTERRUPT SYNC & LET ME WORK']"))
+			AndroidLocators.clickElementusingResourceId("android:id/button2");
+		} else if (driver.findElements(By.xpath("//android.widget.Button[@text='Interrupt Sync & Let me work']"))
 				.size() > 0) {
-			driver.findElement(By.xpath("//*[@class='android.widget.Button'][@text='INTERRUPT SYNC & LET ME WORK']"))
-					.click();
-		} else if (driver.findElements(MobileBy.xpath("//*[@text='INTERRUPT SYNC & LET ME WORK']")).size() > 0) {
-			driver.findElement(MobileBy.xpath("//*[@text='INTERRUPT SYNC & LET ME WORK']")).click();
+			AndroidLocators.clickElementusingXPath("//android.widget.Button[@text='Interrupt Sync & Let me work']");
+		} else if (driver.findElements(MobileBy.xpath("//*[@text='Interrupt Sync & Let me work']")).size() > 0) {
+			AndroidLocators.clickElementusingXPath("//*[@text='Interrupt Sync & Let me work']");
 			System.out.println("---- INTERRUPT SYNC & LET ME WORK Is clicked Successfully!! ----");
 		} else {
 			System.out.println("Interrupt sync pop-up is not displayed");
@@ -325,13 +322,10 @@ public class CommonUtils {
 
 	// hide keyboard
 	public static void keyboardHide() {
-		try {
-			CommonUtils.getdriver().hideKeyboard();
-		} catch (Exception e) {
-		}
+		CommonUtils.getdriver().hideKeyboard();
 	}
 
-	// allow bluetooth
+	// allow bluetooth 
 	public static void allow_bluetooth() throws InterruptedException {
 		try {
 			if (CommonUtils.getdriver().findElements(By.id("message")).size() > 0) {
