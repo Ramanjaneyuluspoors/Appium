@@ -4,9 +4,11 @@ import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.text.RandomStringGenerator;
 import org.junit.gen5.api.Assertions;
 import org.openqa.selenium.By;
@@ -1149,8 +1151,9 @@ public class Work_advanceSettings {
 		}
 	}
 	
-	//work error and warn message 
-	public static void workErrorAndWarnMeassage(String errorCondition, String inputValue) throws MalformedURLException, InterruptedException {
+	// work error and warn message
+	public static void workErrorAndWarnMeassage(String errorCondition, String inputValue)
+			throws MalformedURLException, InterruptedException, ParseException {
 		// work all fields
 		List<MobileElement> workFields = AndroidLocators.findElements_With_Xpath(
 				"//android.widget.LinearLayout[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@class,'Text')]");
@@ -1221,15 +1224,15 @@ public class Work_advanceSettings {
 		} // break the while loop
 
 		MobileActionGesture.flingToBegining_Android();
-		
+
 		// providing input for work fields by iterating using the workList(newList)
 		for (int j = 0; j < workFieldsCount; j++) {
 			String workOriginalFields = workFields.get(j).getText();
 			String workFieldsText = workFields.get(j).getText().replaceAll("[!@#$%&*,.?\":{}|<>]", "");
 			System.out.println("***** Before removing special character ***** : " + workOriginalFields
 					+ "\n----- After removing special character ----- : " + workFieldsText);
-			
-			//splitting and assigning input to variable
+
+			// splitting and assigning input to variable
 			String[] inputArray = inputValue.split(",");
 			String currencyInput = inputArray[0];
 			String dateInput = null;
@@ -1277,16 +1280,30 @@ public class Work_advanceSettings {
 				break;
 			case "Currency":
 				MobileActionGesture.scrollUsingText(workFieldsText);
-				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]"))
-						.size() > 0) {
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
 					currencyErrorInput(workFieldsText, currencyInput, errorCondition);
 				}
-				break;	
+				break;
+
+			case "Number":
+				MobileActionGesture.scrollUsingText(workFieldsText);
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
+					currencyErrorInput(workFieldsText, currencyInput, errorCondition);
 				}
+				break;
+			case "Date":
+				MobileActionGesture.scrollUsingText(workFieldsText);
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[starts-with(@text,'" + workFieldsText + "')]")).size() > 0) {
+					dateErrorAndWarnMessageValidation(workFieldsText, dateInput, errorCondition);
+				}
+				break;
 			}
 		}
-		
-	
+	}
+
 		// currency error and warn message input
 		public static int currencyErrorInput(String workFieldsText, String currencyInput, String errorCondition) throws InterruptedException {
 			// initializing assigniong
@@ -1355,23 +1372,91 @@ public class Work_advanceSettings {
 								.sendKeys(String.valueOf(currencyErrorInput));
 					}
 				}
+				saveWork();
 				
 				// validating error and warning condition
 				if (errorCondition.equals("Show Error when")) {
-					saveWork();
 					// retrieving error message using OCR
 					String dateText = CommonUtils.OCR();
 					System.out.println("---- Expected toast message is ---- : " + dateText);
 				} else if (errorCondition.equals("Show Warning when")) {
-					saveWork();
 					FormAdvanceSettings.handlingWarningAlert();
 				}
 				MobileActionGesture.scrollUsingText(getAboveOrBelowOfMainElement);
-				
+
 				// increasing the currency value
 				currencyErrorInput = currencyErrorInput + 2;
 				System.out.println(".... After increaing the currency value .... : " + currencyErrorInput);
 			}
 			return currencyErrorInput;
 		}
-}
+		
+		// date error and warn meessage validation
+		public static void dateErrorAndWarnMessageValidation(String workFieldsText, String dateInput,
+				String errorCondition) throws ParseException, InterruptedException {
+
+			// date formatter
+			SimpleDateFormat DateFor = new SimpleDateFormat("dd MMMM yyyy");
+
+			java.util.Date date = new java.util.Date();
+			// formating current date using date formatter
+			String toDaydate = DateFor.format(date);
+			// printing current date
+			System.out.println("**** Todays date is **** : " + toDaydate);
+
+			// parse the today date
+			Date presentDate = DateFor.parse(toDaydate);
+			// print parsing today date
+			System.out.println("....After parsing today date is ... : " + presentDate);
+
+			// parsing given date from string
+			date = DateFor.parse(dateInput);
+			// formating input date into our date formatter
+			String formatGivenDate = DateFor.format(date);
+			// printing given date
+			System.out.println("---- Given date is ---- : " + formatGivenDate);
+
+			for (int p = 0; p < 3; p++) {
+				
+				//swipe to specified field
+				MobileActionGesture.scrollUsingText(workFieldsText);
+				// Number of Days to add
+				date = DateUtils.addDays(date, -1);
+				// conversion of date
+				String inputDate = DateFor.format(date);
+
+				// Printing customized date
+				System.out.println(" **** My given date is **** : " + inputDate);
+
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath(
+						"//*[starts-with(@text,'" + workFieldsText + "')]/parent::*/parent::*/android.widget.Button"))
+						.size() > 0) {
+
+					AndroidLocators.clickElementusingXPath("//*[starts-with(@text,'" + workFieldsText
+							+ "')]/parent::*/parent::*/android.widget.Button");
+
+					CommonUtils.alertContentXpath();
+					// providing the given input
+					Forms_basic.getCalendarDates(inputDate);
+				}
+				saveWork();
+
+				// validating date based on codition
+				if (errorCondition.equals("Show Error when")) {
+					// retrieving error message using OCR
+					String dateText = CommonUtils.OCR();
+					System.out.println("---- Expected toast message is ---- : " + dateText);
+				} else if (errorCondition.equals("Show Warning when")) {
+					FormAdvanceSettings.handlingWarningAlert();
+				}
+
+				// adding new date
+				date = DateUtils.addDays(date, 2);
+				// format the increased date
+				String newIncreasedDate = DateFor.format(date);
+				// printing the increased date
+				System.out.println("**** After increasing the date **** : " + newIncreasedDate);
+			}
+		}
+
+	}
