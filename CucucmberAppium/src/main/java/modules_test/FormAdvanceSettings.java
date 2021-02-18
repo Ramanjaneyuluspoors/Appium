@@ -132,8 +132,8 @@ public class FormAdvanceSettings {
 					min_test = min_test + 2;
 				}
 				// inserting max input value
-				for (p = 0; p < 3; p++) {
-					max_text = max_text - 1;
+				for (p = 0; p < 2; p++) {
+					max_text = max_text + 1;
 					String textMaxInput = textGenerator.generate(max_text);
 					String textMaxInput1 = textGenerator.generate(max);
 					System.out.println("Max input data is: " + textMaxInput);
@@ -161,7 +161,7 @@ public class FormAdvanceSettings {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-					max_text = max_text + 2;
+					max_text = max_text - 1;
 				}
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
@@ -184,7 +184,7 @@ public class FormAdvanceSettings {
 			case "S-Phone NUmber":
 				MobileActionGesture.scrollUsingText(fieldsText);
 				// inserting min input value
-				for (n = 0; n < 3; n++) {
+				for (n = 0; n < 2; n++) {
 					min_test = min_test - 1;
 					String phoneNum = RandomStringUtils.randomNumeric(min_test);
 					String phoneNum1 = RandomStringUtils.randomNumeric(min);
@@ -213,8 +213,8 @@ public class FormAdvanceSettings {
 					min_test = min_test + 2;
 				}
 				// inserting max input value
-				for (p = 0; p < 3; p++) {
-					max_text = max_text - 1;
+				for (p = 0; p < 2; p++) {
+					max_text = max_text + 1;
 					String phoneNum = RandomStringUtils.randomNumeric(max_text);
 					String phoneNum1 = RandomStringUtils.randomNumeric(max);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
@@ -239,7 +239,7 @@ public class FormAdvanceSettings {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-					max_text = max_text + 2;
+					max_text = max_text - 1;
 				}
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
@@ -259,7 +259,7 @@ public class FormAdvanceSettings {
 			case "S-Currency":
 				MobileActionGesture.scrollUsingText(fieldsText);
 				// inserting min input value
-				for (n = 0; n < 3; n++) {
+				for (n = 0; n < 2; n++) {
 					min_test = min_test - 1;
 					System.out.println("min input data: " + min_test);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
@@ -286,8 +286,8 @@ public class FormAdvanceSettings {
 					min_test = min_test + 2;
 				}
 				// inserting max input value
-				for (p = 0; p < 3; p++) {
-					max_text = max_text - 1;
+				for (p = 0; p < 2; p++) {
+					max_text = max_text + 1;
 					MobileActionGesture.scrollUsingText(fieldsText);
 					System.out.println("Max input data is: " + max_text);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
@@ -311,7 +311,7 @@ public class FormAdvanceSettings {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-					max_text = max_text + 2;
+					max_text = max_text - 1;
 				}
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
@@ -331,7 +331,7 @@ public class FormAdvanceSettings {
 			case "S-Number":
 				MobileActionGesture.scrollUsingText(fieldsText);
 				// inserting min input value
-				for (n = 0; n < 3; n++) {
+				for (n = 0; n < 2; n++) {
 					min_test = min_test - 1;
 					System.out.println("min input data: " + min_test);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
@@ -358,8 +358,8 @@ public class FormAdvanceSettings {
 					min_test = min_test + 2;
 				}
 				// inserting max input value
-				for (p = 0; p < 3; p++) {
-					max_text = max_text - 1;
+				for (p = 0; p < 2; p++) {
+					max_text = max_text + 1;
 					MobileActionGesture.scrollUsingText(fieldsText);
 					System.out.println("Max input data is: " + max_text);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
@@ -383,7 +383,7 @@ public class FormAdvanceSettings {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-					max_text = max_text + 2;
+					max_text = max_text - 1;
 				}
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
@@ -459,7 +459,7 @@ public class FormAdvanceSettings {
 				MobileActionGesture.scrollUsingText(fieldsText);
 				RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
 				// inserting min input value
-				for (n = 0; n < 3; n++) {
+				for (n = 0; n < 2; n++) {
 					min_test = min_test - 1;
 					String textMinInput = textGenerator.generate(min_test);
 					String textMinInput1 = textGenerator.generate(min);
@@ -490,8 +490,8 @@ public class FormAdvanceSettings {
 					min_test = min_test + 2;
 				}
 				// inserting max input value
-				for (p = 0; p < 3; p++) {
-					max_text = max_text - 1;
+				for (p = 0; p < 2; p++) {
+					max_text = max_text + 1;
 					String textMaxInput = textGenerator.generate(max_text);
 					String textMaxInput1 = textGenerator.generate(max);
 					System.out.println("Max input data is: " + textMaxInput);
@@ -519,7 +519,7 @@ public class FormAdvanceSettings {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-					max_text = max_text + 2;
+					max_text = max_text - 1;
 				}
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
@@ -542,7 +542,7 @@ public class FormAdvanceSettings {
 			case "S-Phone NUmber":
 				MobileActionGesture.scrollUsingText(fieldsText);
 				// inserting min input value
-				for (n = 0; n < 3; n++) {
+				for (n = 0; n < 2; n++) {
 					min_test = min_test - 1;
 					String phoneNum = RandomStringUtils.randomNumeric(min_test);
 					String phoneNum1 = RandomStringUtils.randomNumeric(min);
@@ -571,8 +571,8 @@ public class FormAdvanceSettings {
 					min_test = min_test + 2;
 				}
 				// inserting max input value
-				for (p = 0; p < 3; p++) {
-					max_text = max_text - 1;
+				for (p = 0; p < 2; p++) {
+					max_text = max_text + 1;
 					String phoneNum = RandomStringUtils.randomNumeric(max_text);
 					String phoneNum1 = RandomStringUtils.randomNumeric(max);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
@@ -597,7 +597,7 @@ public class FormAdvanceSettings {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-					max_text = max_text + 2;
+					max_text = max_text - 1;
 				}
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
@@ -617,7 +617,7 @@ public class FormAdvanceSettings {
 			case "S-Currency":
 				MobileActionGesture.scrollUsingText(fieldsText);
 				// inserting min input value
-				for (n = 0; n < 3; n++) {
+				for (n = 0; n < 2; n++) {
 					min_test = min_test - 1;
 					System.out.println("min input data: " + min_test);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
@@ -644,8 +644,8 @@ public class FormAdvanceSettings {
 					min_test = min_test + 2;
 				}
 				// inserting max input value
-				for (p = 0; p < 3; p++) {
-					max_text = max_text - 1;
+				for (p = 0; p < 2; p++) {
+					max_text = max_text + 1;
 					MobileActionGesture.scrollUsingText(fieldsText);
 					System.out.println("Max input data is: " + max_text);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
@@ -669,7 +669,7 @@ public class FormAdvanceSettings {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-					max_text = max_text + 2;
+					max_text = max_text - 1;
 				}
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
@@ -689,7 +689,7 @@ public class FormAdvanceSettings {
 			case "S-Number":
 				MobileActionGesture.scrollUsingText(fieldsText);
 				// inserting min input value
-				for (n = 0; n < 3; n++) {
+				for (n = 0; n < 2; n++) {
 					min_test = min_test - 1;
 					System.out.println("min input data: " + min_test);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
@@ -716,8 +716,8 @@ public class FormAdvanceSettings {
 					min_test = min_test + 2;
 				}
 				// inserting max input value
-				for (p = 0; p < 3; p++) {
-					max_text = max_text - 1;
+				for (p = 0; p < 2; p++) {
+					max_text = max_text + 1;
 					MobileActionGesture.scrollUsingText(fieldsText);
 					System.out.println("Max input data is: " + max_text);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
@@ -741,7 +741,7 @@ public class FormAdvanceSettings {
 					MobileActionGesture.scrollUsingText(fieldsText);
 					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).clear();
-					max_text = max_text + 2;
+					max_text = max_text - 1;
 				}
 				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
 						+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
@@ -2580,14 +2580,20 @@ public class FormAdvanceSettings {
 	}
 
 	// handling warning alert in form
-	public static void handlingWarningAlert() {
-		CommonUtils.alertContentXpath();
+	public static void handlingWarningAlert() throws InterruptedException {
+		CommonUtils.wait(1);
 		if (AndroidLocators.resourceId("android:id/alertTitle").isDisplayed()) {
 			MobileElement message = AndroidLocators.resourceId("android:id/message");
 			System.out.println(" **** Warning message is **** :" + message.getText());
-			AndroidLocators.resourceId("android:id/button2").click();
-		}
+			if (AndroidLocators.resourceId("android:id/button2").isDisplayed()) {
+				AndroidLocators.resourceId("android:id/button2").click();
+			} else if (AndroidLocators.xpath("//*[@text='CANCEL']").isDisplayed()) {
+				AndroidLocators.clickElementusingXPath("//*[@text='CANCEL']");
+			}
 			CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
+		} else {
+			CommonUtils.wait(2);
+		}
 	}
 
 	// validating error and warn message in form pagination
@@ -2845,11 +2851,11 @@ public class FormAdvanceSettings {
 		// parse the today date
 		Date presentDate = DateFor.parse(toDaydate);
 		// print parsing today date
-		System.out.println("....After parsing today date ... : " + presentDate);
+		System.out.println("....After parsing today date is ... : " + presentDate);
 
-		// converting given date in string format to date format
+		// parsing given date from string
 		date = DateFor.parse(dateInput);
-		// formating converted date into our date formatter
+		// formating input date into our date formatter
 		String formatGivenDate = DateFor.format(date);
 		// printing given date
 		System.out.println("---- Given date is ---- : " + formatGivenDate);
@@ -2881,13 +2887,16 @@ public class FormAdvanceSettings {
 					.findElements(MobileBy.xpath(
 							"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button"))
 					.size() > 0) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath(
-						"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button"))
-						.click();
+				
+				AndroidLocators.clickElementusingXPath(
+						"//*[starts-with(@text,'" + fieldsText + "')]/parent::*/parent::*/android.widget.Button");
+
 				CommonUtils.alertContentXpath();
 				
 				Forms_basic.getCalendarDates(inputDate);
 			}
+			
+			//validations
 			if (errorCondition.equals("Show Error when")) {
 				Forms_basic.formSaveButton();
 				// retrieving error message using OCR

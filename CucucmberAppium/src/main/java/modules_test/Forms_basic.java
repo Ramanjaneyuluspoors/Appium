@@ -311,7 +311,7 @@ public class Forms_basic {
 		// date formatter eg-02 Aug 2020
 		SimpleDateFormat DateFor = new SimpleDateFormat("dd MMMM yyyy");
 		// EEE-Day of month, MMM-month, dd-date, yyyy-year
-		SimpleDateFormat New_Date_Format = new SimpleDateFormat("EEE, dd MMM yyyy");
+		SimpleDateFormat New_Date_Format = new SimpleDateFormat("EEE, MMM dd yyyy");
 
 		// get current date
 		String todayDate = DateFor.format(date);

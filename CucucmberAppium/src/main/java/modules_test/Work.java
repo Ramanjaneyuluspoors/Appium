@@ -49,6 +49,7 @@ public class Work {
 	// a work
 	public static void checkWorkExistInHomePageorNot(String workName)
 			throws InterruptedException, MalformedURLException {
+		CommonUtils.wait(5);
 		try {
 			MobileActionGesture.scrollUsingText(workName);
 			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + workName + "')]"))
@@ -74,7 +75,7 @@ public class Work {
 
 	// verify work exist or not
 	public static void verifyWorkExistOrNotInWorkScreen(String workName)
-			throws MalformedURLException, InterruptedException {
+			throws MalformedURLException, InterruptedException, ParseException {
 		try {
 			if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Work Name: " + workName + "']"))
 					.isDisplayed()) {
@@ -95,13 +96,14 @@ public class Work {
 				e1.printStackTrace();
 			}
 //			createWork();
+			work_Creation();
 			workSearch(generateWorkName);
 			verifyWorkExistOrNotInWorkScreen(generateWorkName);
 		}
 	}
 
 	// verify the created work
-	public static void goingToWorkModifyScreen(String workName) throws InterruptedException, MalformedURLException {
+	public static void goingToWorkModifyScreen(String workName) throws InterruptedException, MalformedURLException, ParseException {
 		Thread.sleep(1000);
 		if (CommonUtils.getdriver().findElements(By.id("action_search")).size() > 0) {
 			AndroidLocators.clickElementusingID("action_search");
@@ -127,11 +129,14 @@ public class Work {
 	}
 
 	// clicking on '+' in work
-	public static String workFab() throws InterruptedException {
-		AndroidLocators.clickElementusingID("fab");
+	public static void workFab() throws InterruptedException {
+		if (CommonUtils.getdriver().findElement(MobileBy.id("fab")).isDisplayed()) {
+			AndroidLocators.clickElementusingID("fab");
+		} else {
+			AndroidLocators.clickElementusingResourceId("in.spoors.effortplus:id/fab");
+		}
 		CommonUtils.interruptSyncAndLetmeWork();
 		CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
-		return "pass";
 	}
 
 	// work creation
@@ -1215,7 +1220,7 @@ public class Work {
 	}
 
 	// search the work and click on it
-	public static void searchAndClickOnWork(String workName) throws MalformedURLException, InterruptedException {
+	public static void searchAndClickOnWork(String workName) throws MalformedURLException, InterruptedException, ParseException {
 		workSearch(workName);
 		verifyWorkExistOrNotInWorkScreen(workName);
 	}
