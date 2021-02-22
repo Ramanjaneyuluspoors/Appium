@@ -1035,6 +1035,9 @@ public class CustomerPageActions {
 							} else {
 								// write entity item creation method
 								Forms_basic.createEntity();
+								AndroidLocators.clickElementusingXPath("//*[@content-desc='Save']");
+								CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
+								CommonUtils.getdriver().findElements(MobileBy.id("entityTitle")).get(0).click();
 							}
 							CommonUtils.wait(3);
 						} else {

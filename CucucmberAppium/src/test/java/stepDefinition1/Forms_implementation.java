@@ -85,7 +85,8 @@ public class Forms_implementation {
 	public void save_form_as_draft() throws InterruptedException {
 		Forms_basic.form_Save_As_Draft();
 	}
-
+	
+	/********* Form advance settings ************/
 	@Given("^Swipe to MinMax form$")
 	public void Swipe_to_MinMax_form(String MinMaxform) throws InterruptedException, MalformedURLException {
 		Forms_basic.verifyForminHomePage(MinMaxform);

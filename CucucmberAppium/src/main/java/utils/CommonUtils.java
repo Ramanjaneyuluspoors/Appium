@@ -201,13 +201,13 @@ public class CommonUtils {
 
 	// wait for element using xpath
 	public static void waitForElementVisibility(String waitelexpath) {
-		wait = new WebDriverWait(driver, 20);
+		wait = new WebDriverWait(driver, 25);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(waitelexpath)));
 	}
 	
 	// wait for element using xpath
 		public static void longWaitElementVisibility(String waitelexpath) {
-			wait = new WebDriverWait(driver, 7000);
+			wait = new WebDriverWait(driver, 6000);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(waitelexpath)));
 		}
 
@@ -309,9 +309,6 @@ public class CommonUtils {
 		} else if (driver.findElements(By.xpath("//android.widget.Button[@text='Interrupt Sync & Let me work']"))
 				.size() > 0) {
 			AndroidLocators.clickElementusingXPath("//android.widget.Button[@text='Interrupt Sync & Let me work']");
-		} else if (driver.findElements(MobileBy.xpath("//*[@text='Interrupt Sync & Let me work']")).size() > 0) {
-			AndroidLocators.clickElementusingXPath("//*[@text='Interrupt Sync & Let me work']");
-			System.out.println("---- INTERRUPT SYNC & LET ME WORK Is clicked Successfully!! ----");
 		} else {
 			System.out.println("Interrupt sync pop-up is not displayed");
 		}
@@ -323,6 +320,7 @@ public class CommonUtils {
 	// hide keyboard
 	public static void keyboardHide() {
 		CommonUtils.getdriver().hideKeyboard();
+	
 	}
 
 	// allow bluetooth 

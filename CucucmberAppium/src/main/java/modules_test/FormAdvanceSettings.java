@@ -405,17 +405,22 @@ public class FormAdvanceSettings {
 
 	//form min max validations without using pages
 	public static void min_max_withoutPages(int min, int max) throws MalformedURLException {
+		
 		List<MobileElement> minMaxFields = CommonUtils.getdriver().findElements(
 				MobileBy.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView"));
+		
 		int minMaxFieldsCount = minMaxFields.size();
 		minMaxFields.clear();
+		
 		// swipe and get the last element from the list
 		String lastTxtElement = null;
 		MobileActionGesture.flingVerticalToBottom_Android();
 		minMaxFields.addAll(CommonUtils.getdriver().findElements(MobileBy
 				.xpath("//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+		
 		lastTxtElement = minMaxFields.get(minMaxFields.size() - 1).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 		System.out.println("Get the last element text: " + lastTxtElement);
+		
 		minMaxFields.clear();
 		MobileActionGesture.flingToBegining_Android();
 
@@ -464,17 +469,14 @@ public class FormAdvanceSettings {
 					String textMinInput = textGenerator.generate(min_test);
 					String textMinInput1 = textGenerator.generate(min);
 					System.out.println("min input data: " + textMinInput);
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText")).click();
+					AndroidLocators.clickElementusingXPath("/*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText\")");
 					CommonUtils.getdriver().hideKeyboard();
-					CommonUtils.getdriver()
-							.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-									+ "')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-							.sendKeys(textMinInput);
+					AndroidLocators.sendInputusing_XPath("//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/following-sibling::*/child::android.widget.EditText");
 					MobileActionGesture.scrollUsingText("Currency");
-					CommonUtils.getdriver().findElement(MobileBy.xpath(
-							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText"))
-							.click();
+					AndroidLocators.clickElementusingXPath(
+							"//*[contains(@text,'Currency')]/parent::*/following-sibling::*/child::android.widget.EditText");
 					CommonUtils.getdriver().hideKeyboard();
 					if (textMinInput.length() < textMinInput1.length()) {
 						String text = CommonUtils.OCR();

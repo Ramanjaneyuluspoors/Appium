@@ -221,16 +221,16 @@ public class Work_advanceSettings {
 //				saveWork();
 //			}
 //				break;
-//			case "Pincode":
-//			case "Currency":
-//			case "Number":
-//				MobileActionGesture.scrollUsingText(workFieldsText);
-//				if (CommonUtils.getdriver()
-//						.findElements(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]")).size() > 0) {
-//					// based on previous element inputing the main element
-//					numberCurrencyInputMinMax(workFieldsText, min, max);
-//				}
-//				break;
+			case "Pincode":
+			case "Currency":
+			case "Number":
+				MobileActionGesture.scrollUsingText(workFieldsText);
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[contains(@text,'" + workFieldsText + "')]")).size() > 0) {
+					// based on previous element inputing the main element
+					numberCurrencyInputMinMax(workFieldsText, min, max);
+				}
+				break;
 			}
 		}
 	}
@@ -2308,4 +2308,11 @@ public class Work_advanceSettings {
 		} // for loop close
 	} // method close
 
+	//validate work fields
+	public static void validateWorkfields() throws InterruptedException, MalformedURLException {
+		Work.saveWork();
+		Work.workSearch(Work.generateWorkName);
+		AndroidLocators.clickElementusingXPath("//*[@resource-id='in.spoors.effortplus:id/titleTextView']");	
+		MobileActionGesture.flingVerticalToBottom_Android();
+	}
 }

@@ -6,7 +6,6 @@ import java.text.ParseException;
 import cucumber.api.java.en.*;
 import modules_test.Work;
 import modules_test.Work_advanceSettings;
-import utils.CommonUtils;
 
 public class Works_Implementation {
 
@@ -23,22 +22,20 @@ public class Works_Implementation {
 	}
 
 	@Then("user search for created work {string}")
-	public void user_search_for_created_work(String workName) throws MalformedURLException, InterruptedException {
-//		Work.goingToWorkModifyScreen(workName);
+	public void user_search_for_created_work(String workName) throws MalformedURLException, InterruptedException, ParseException {
+		Work.goingToWorkModifyScreen(workName);
 	}
-	
 	
 	@And("modify the work")
 	public void modify_the_work() throws MalformedURLException, InterruptedException, ParseException {
-//		Work.workModification();
-//		Work.saveWork();
-//		CommonUtils.interruptSyncAndLetmeWork();
+		Work.workModification();
+		Work.saveWork();
 	}
 	
 	@And("complete the work")
 	public void complete_the_work() throws MalformedURLException, InterruptedException, ParseException {
-//		Work.getWorkNameAndSearch();
-//		Work.WorkAction();
+		Work.workSearch(Work.generateWorkName);;
+		Work.WorkAction();
 	}
 	
 	                           /* Work advance settings */
@@ -78,17 +75,28 @@ public class Works_Implementation {
 		Work_advanceSettings.fieldDependencyBasedOnValueInOtherFieldsTesing(conditionName, dependentFieldType, inputData);
 	}
 	
-	/* Validate Based on Values in Other Fields */
+	/* Validate Based on Values in Other Fields(error and warn message) */
 	@Given("move to specified work {string}")
-	public void move_to_specified_work(String workname) throws MalformedURLException, InterruptedException {
-		Work.checkWorkExistInHomePageorNot(workname);
-//		Work.goToWorkPage(workname);
+	public void move_to_specified_work(String workName) throws MalformedURLException, InterruptedException {
+		Work.checkWorkExistInHomePageorNot(workName);
+//		Work.goToWorkPage(workName);
 	}
 	
 	@When("user gives the condition {string} and provides the input as {string}")
 	public void user_gives_the_condition_and_provide_the_input_as(String errorCondition, String specifiedInput)
-			throws MalformedURLException, InterruptedException {
+			throws MalformedURLException, InterruptedException, ParseException {
 		Work_advanceSettings.workErrorAndWarnMeassage(errorCondition, specifiedInput);
-
+	}
+	
+	/*Validate restrict data from mobile setting*/
+	@Given("go to specified work {string}")
+	public void go_to_specified_work(String Workname) throws MalformedURLException, InterruptedException {
+		Work.checkWorkExistInHomePageorNot(Workname);
+	}
+	
+	@When("user create a work and view the work then validate")
+	public void user_create_a_work_and_view_the_work_then_validate() throws MalformedURLException, InterruptedException, ParseException {
+		Work.work_Creation();
+		Work_advanceSettings.validateWorkfields();
 	}
 }
