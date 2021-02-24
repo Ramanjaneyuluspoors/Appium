@@ -3,6 +3,7 @@ package stepDefinition1;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 
+import common_Steps.AndroidLocators;
 import cucumber.api.java.en.*;
 import modules_test.Work;
 import modules_test.Work_advanceSettings;
@@ -12,7 +13,6 @@ public class Works_Implementation {
 	@Given("verify work exist or not {string}")
 	public void verify_work_exist_or_not(String workName) throws MalformedURLException, InterruptedException {
 		Work.checkWorkExistInHomePageorNot(workName);
-//		Work.goToWorkPage(workName);
 	}
 
 	@When("user create the work")
@@ -99,4 +99,35 @@ public class Works_Implementation {
 		Work.work_Creation();
 		Work_advanceSettings.validateWorkfields();
 	}
+	
+	                               /* Work Settings */
+	@Given("move to workcard {string}")
+	public void move_to_workcard(String workName) throws MalformedURLException, InterruptedException {
+		Work.checkWorkExistInHomePageorNot(workName);
+	}
+	
+	@When("user create a work")
+	public void user_create_a_work() throws MalformedURLException, InterruptedException, ParseException {
+		Work.fill_Work_MandatoryFields();
+		Work_advanceSettings.saveWork();
+	}
+
+	@Then("check work checkin is exist or not {string}")
+	public void check_work_checkin_is_exist_or_not(String workName)
+			throws MalformedURLException, InterruptedException, ParseException {
+		Work.goingToWorkModifyScreen(workName);
+		AndroidLocators.clickElementusingResourceId("in.spoors.effortplus:id/button1");
+		Work.workCheck_In();
+	}
+
+	@And("perform work action")
+	public void perform_work_action() throws MalformedURLException, InterruptedException, ParseException {
+		Work.performSingleAction();
+	}
+
+	@And("Reject the work")
+	public void reject_the_work() throws MalformedURLException, InterruptedException, ParseException {
+		Work.workRejection();
+	}
+	
 }

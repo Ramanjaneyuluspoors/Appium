@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 
 public class ServerService {
+	public static AppiumDriver<MobileElement> AppiumDriver;
 	static AppiumDriverLocalService service;
 	static boolean flag=checkIfServerIsRunnning(4723);
 	

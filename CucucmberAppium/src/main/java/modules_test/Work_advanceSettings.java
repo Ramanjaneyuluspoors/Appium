@@ -39,6 +39,7 @@ public class Work_advanceSettings {
 				System.out.println(" **** work time is not override **** ");
 			}
 		}
+		CommonUtils.interruptSyncAndLetmeWork();
 	}
 
 	// work min max validations
@@ -745,6 +746,7 @@ public class Work_advanceSettings {
 			System.out.println("After swiping fields count: " + countOfDependentField);
 
 			for (int j = 0; j < workFields.size(); j++) {
+				
 				// if specified element found break the for loop
 				if (specifiedElement.size() > 0 || workFields.get(j).getText().equals(workLastElementText)) {
 					flag = true;
@@ -866,9 +868,14 @@ public class Work_advanceSettings {
 					+ fieldsText
 					+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
 					.getText();
-			getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
-					.split("\\(")[0];
-			System.out.println("*** Edit Text label name above element is *** : " + getAboveOrBelowOfMainElement);
+			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'(')]")).size() > 0) {
+				getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
+						.split("\\(")[0];
+				System.out.println("*** Edit Text label name above element is *** : " + getAboveOrBelowOfMainElement);
+			} else {
+				getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "");
+				System.out.println("*** Edit Text label name above element is *** : " + getAboveOrBelowOfMainElement);
+			}
 		} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
 				+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
 				.size() > 0) {
@@ -876,9 +883,14 @@ public class Work_advanceSettings {
 					+ fieldsText
 					+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
 					.getText();
-			getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
-					.split("\\(")[0];
-			System.out.println("*** Text View label name above element is *** : " + getAboveOrBelowOfMainElement);
+			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'(')]")).size() > 0) {
+				getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
+						.split("\\(")[0];
+				System.out.println("*** Edit Text label name below element is *** : " + getAboveOrBelowOfMainElement);
+			} else {
+				getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "");
+				System.out.println("*** Edit Text label name below element is *** : " + getAboveOrBelowOfMainElement);
+			}
 		} else {
 			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
 					+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
@@ -887,9 +899,16 @@ public class Work_advanceSettings {
 						.findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
 								+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.EditText"))
 						.getText();
-				getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
-						.split("\\(")[0];
-				System.out.println("*** Edit Text label name below element is *** : " + getAboveOrBelowOfMainElement);
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'(')]")).size() > 0) {
+					getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
+							.split("\\(")[0];
+					System.out
+							.println("*** Text View label name above element is *** : " + getAboveOrBelowOfMainElement);
+				} else {
+					getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "");
+					System.out
+							.println("*** Text View label name above element is *** : " + getAboveOrBelowOfMainElement);
+				}
 			} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
 					+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
 					.size() > 0) {
@@ -897,9 +916,16 @@ public class Work_advanceSettings {
 						.findElement(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText
 								+ "')]//parent::*//parent::*//parent::*//parent::*/following-sibling::android.widget.LinearLayout[1]//android.widget.TextView"))
 						.getText();
-				getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
-						.split("\\(")[0];
-				System.out.println("*** Text View label name below element is *** : " + getAboveOrBelowOfMainElement);
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'(')]")).size() > 0) {
+					getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "")
+							.split("\\(")[0];
+					System.out
+							.println("*** Text View label name below element is *** : " + getAboveOrBelowOfMainElement);
+				} else {
+					getAboveOrBelowOfMainElement = getAboveOrBelowOfMainElement.replaceAll("[!@#$%&*,.?\":{}|<>]", "");
+					System.out
+							.println("*** Text View label name below element is *** : " + getAboveOrBelowOfMainElement);
+				}
 			}
 		}
 		return getAboveOrBelowOfMainElement;
@@ -963,6 +989,127 @@ public class Work_advanceSettings {
 		}
 	}
 
+	// select input based on above/below label element
+	public static void selectInputBasedOnAboveOrBelowElement(String getAboveOrBelowOfMainElement) {
+		String clickableElement = null;
+		// based previous element inputing the main element
+		if (CommonUtils.getdriver()
+				.findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement + "')]"))
+				.isDisplayed()) {
+			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'"
+					+ getAboveOrBelowOfMainElement
+					+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/android.widget.LinearLayout/android.widget.TextView"))
+					.size() > 0) {
+				clickableElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
+						+ getAboveOrBelowOfMainElement
+						+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/android.widget.LinearLayout/android.widget.TextView"))
+						.getText();
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[contains(@text,'" + clickableElement
+								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[1]"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[1]");
+				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + clickableElement
+						+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.Button"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.Button");
+				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath(
+						"//*[contains(@text,'" + clickableElement + "')]/parent::*/parent::*/android.widget.Button"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.Button");
+				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath(
+						"//*[contains(@text,'" + clickableElement + "')]/parent::*/parent::*/android.widget.Spinner"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.Spinner");
+				}
+			} else if (CommonUtils.getdriver().findElements(By.xpath("//*[contains(@text,'"
+					+ getAboveOrBelowOfMainElement
+					+ "')]/parent::*/parent::*/following::android.widget.LinearLayout[1]/android.widget.LinearLayout/android.widget.TextView"))
+					.size() > 0) {
+				clickableElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
+						+ getAboveOrBelowOfMainElement
+						+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/android.widget.LinearLayout/android.widget.TextView"))
+						.getText();
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[contains(@text,'" + clickableElement
+								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[1]"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[1]");
+
+				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath(
+						"//*[contains(@text,'" + clickableElement + "')]/parent::*/parent::*/android.widget.Button"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.Button");
+				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath(
+						"//*[contains(@text,'" + clickableElement + "')]/parent::*/parent::*/android.widget.Spinner"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.Spinner");
+				}
+			}
+		} else {
+			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
+					+ getAboveOrBelowOfMainElement
+					+ "')]/parent::*/parent::*/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]/android.widget.LinearLayout/android.widget.TextView"))
+					.size() > 0) {
+				clickableElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
+						+ getAboveOrBelowOfMainElement
+						+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/android.widget.LinearLayout/android.widget.TextView"))
+						.getText();
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[contains(@text,'" + clickableElement
+								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[1]"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[1]");
+
+				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath(
+						"//*[contains(@text,'" + clickableElement + "')]/parent::*/parent::*/android.widget.Button"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.Button");
+				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath(
+						"//*[contains(@text,'" + clickableElement + "')]/parent::*/parent::*/android.widget.Spinner"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.Spinner");
+				}
+			} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
+					+ getAboveOrBelowOfMainElement
+					+ "')]/parent::*/parent::*/preceding-sibling::android.widget.LinearLayout[1]/android.widget.LinearLayout/android.widget.TextView"))
+					.size() > 0) {
+				clickableElement = CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
+						+ getAboveOrBelowOfMainElement
+						+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/android.widget.LinearLayout/android.widget.TextView"))
+						.getText();
+				if (CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[contains(@text,'" + clickableElement
+								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[1]"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[1]");
+
+				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath(
+						"//*[contains(@text,'" + clickableElement + "')]/parent::*/parent::*/android.widget.Button"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.Button");
+				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath(
+						"//*[contains(@text,'" + clickableElement + "')]/parent::*/parent::*/android.widget.Spinner"))
+						.size() > 0) {
+					AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + clickableElement
+							+ "')]/parent::*/parent::*/android.widget.Spinner");
+				}
+			}
+		}
+	}
+	
 	// number field dependecy based on value in other field
 	public static void currencyInput(String workBaseCondition, String fieldsText, String workFieldInput) {
 		// initializing and assigning
@@ -1306,6 +1453,7 @@ public class Work_advanceSettings {
 		for (int j = 0; j < 3; j++) {
 			currencyErrorInput = currencyErrorInput - 1;
 			System.out.println("------- Currency value ------ :" + currencyErrorInput);
+			
 			// based previous element inputing the main element
 			if (CommonUtils.getdriver()
 					.findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement + "')]"))

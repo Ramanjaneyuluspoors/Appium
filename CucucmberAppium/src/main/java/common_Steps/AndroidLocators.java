@@ -62,6 +62,11 @@ public class AndroidLocators {
 	public static void clickElementusingClassName(String classNameLocator) {
 		CommonUtils.getdriver().findElement(MobileBy.className(classNameLocator)).click();
 	}
+	
+	// resource id using uiselector
+	public static MobileElement returnUsingId(String IdLocator) {
+		return CommonUtils.getdriver().findElement(MobileBy.id("" + IdLocator + ""));
+	}
 
 	// findElements with classname
 	public static List<MobileElement> findElements_With_ClassName(String classNameLocator) {
@@ -141,10 +146,8 @@ public class AndroidLocators {
 	public static void sendEmailInputusing_XPath(String xpathLocator) {
 		RandomStringGenerator emailGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
 		String email = emailGenerator.generate(5);
-		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).click();
 		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).clear();
 		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).sendKeys(email + "@gmail.com");
-		CommonUtils.keyboardHide();
 	}
 
 	// sending URL input using xpath
@@ -191,6 +194,12 @@ public class AndroidLocators {
 		CommonUtils.getdriver().hideKeyboard();
 	}
 
+	// send text using xpath
+	public static void enterTextusingXpath(String locator, String sText) {
+		CommonUtils.getdriver().findElement(MobileBy.xpath(locator)).clear();
+		CommonUtils.getdriver().findElement(MobileBy.xpath(locator)).sendKeys(sText);
+	}
+	
 	// get text using xpath
 	public String getTextUsingXpath(String locator) {
 		return CommonUtils.getdriver().findElementByXPath(locator).getText();

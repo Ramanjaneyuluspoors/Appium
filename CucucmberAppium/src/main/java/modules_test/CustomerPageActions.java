@@ -304,7 +304,7 @@ public class CustomerPageActions {
 			CommonUtils.keyboardHide();
 			AndroidLocators.clickElementusingXPath("//*[@text='SUBMIT']");
 		}
-		Thread.sleep(500);
+		CommonUtils.wait(5);
 	}
 
 	// handling customer check-in alert
@@ -317,7 +317,7 @@ public class CustomerPageActions {
 			CommonUtils.keyboardHide();
 			AndroidLocators.clickElementusingXPath("//*[@text='OK']");
 		}
-		Thread.sleep(2000);
+		CommonUtils.wait(10);;
 	}
 
 	// customer checkout in customer screen

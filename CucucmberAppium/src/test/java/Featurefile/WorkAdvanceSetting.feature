@@ -3,7 +3,7 @@ Feature: Performing workfields advance settings regression testing
 @Work_MinMax_validations 
 Scenario: Work MinMax Validations 
 	Given Swipe to specified work 
-		|MY-TEST|	
+		|My-Test|	
 	When user enters Min value 5 and Max value 9 then perform validations 
 	
 @Work_Regular_expression 
@@ -26,4 +26,9 @@ Scenario Outline: Work Validate_Based_on_Values_in_Other_Fields
 	When user gives the condition "<errorCondition>" and provides the input as "<specifiedValue>" 
 	Examples: 
 		|workname|errorCondition|specifiedValue|
-		|work-Error and warn message|Show Error when|10,9 Apr 2021|
+		|AUTOMATION-WORK|Show Warning when|10,18 Feb 2021|
+		
+@Validating_Workfields_based_restrictDataFromMobile_setting 
+Scenario: Validating workfields restrict data from mobile 
+	Given go to specified work "My-Test" 
+	When user create a work and view the work then validate

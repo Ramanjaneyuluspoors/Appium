@@ -100,7 +100,7 @@ public class CommonUtils {
 	}
 
 	// connection appium server using port number
-	public static AndroidDriver<MobileElement> getDriver() throws MalformedURLException {
+	public static AndroidDriver<MobileElement> getAppiumDriver() throws MalformedURLException {
 		serverUrl = new URL("http://localhost:" + APPIUM_PORT + "/wd/hub");
 		driver = new AndroidDriver<MobileElement>(serverUrl, capabilities);
 		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
@@ -294,7 +294,7 @@ public class CommonUtils {
 				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"));
 		if (clickOk.getText().contains(text))
 			clickOk.click();
-		Thread.sleep(1000);
+		CommonUtils.wait(2);
 	}
 
 	// click on interrupt sync popup

@@ -8,10 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.commons.text.RandomStringGenerator;
 import org.openqa.selenium.By;
-import org.apache.commons.lang3.RandomStringUtils;
-
 import Actions.HomepageAction;
 import Actions.MobileActionGesture;
 import common_Steps.AndroidLocators;
@@ -55,9 +52,29 @@ public class Forms_basic {
 
 	// click on form save button and if i understood alert display then click on it
 	public static void formSaveButton() throws InterruptedException {
-		AndroidLocators.resourceId("in.spoors.effortplus:id/saveForm").click();
-		CommonUtils.alertContentXpath();
-		if (CommonUtils.getdriver()
+		if (CommonUtils.getdriver().findElement(MobileBy.id("saveForm")).isDisplayed()) {
+			AndroidLocators.clickElementusingID("saveForm");
+			formSaveAlert();
+		} else if (CommonUtils.getdriver()
+				.findElement(MobileBy
+						.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/saveForm\")"))
+				.isDisplayed()) {
+			AndroidLocators.clickElementusingResourceId("in.spoors.effortplus:id/saveForm");
+			formSaveAlert();
+		} else {
+			AndroidLocators.clickElementusingXPath("//*[@content-desc='Save']");
+			formSaveAlert();
+		}
+		CommonUtils.interruptSyncAndLetmeWork();
+		// verify if popup with i understand message is display then click on it
+		i_understand_alert();
+	}
+	
+	// save form alert
+	public static void formSaveAlert() {
+		if (CommonUtils.getdriver().findElements(MobileBy.id("formSaveButton")).size() > 0) {
+			AndroidLocators.clickElementusingID("formSaveButton");
+		} else if (CommonUtils.getdriver()
 				.findElements(MobileBy
 						.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/formSaveButton\")"))
 				.size() > 0) {
@@ -73,9 +90,6 @@ public class Forms_basic {
 		} else {
 			HomepageAction.form_SignIn_SignOut();
 		}
-		CommonUtils.interruptSyncAndLetmeWork();
-		// verify if popup with i understand message is display then click on it
-		i_understand_alert();
 	}
 	
 	//i understand alert
@@ -1353,6 +1367,7 @@ public class Forms_basic {
 						CommonUtils.getdriver().findElement(MobileBy.id("fab")).click();
 						CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 						verifyFormPagesAndFill();
+						formSaveButton();
 						CommonUtils.waitForElementVisibility(
 								"//*[@resource-id='in.spoors.effortplus:id/form_id_text_view']");
 						if (CommonUtils.getdriver().findElements(MobileBy.id("form_id_text_view")).size() > 0) {
@@ -1640,6 +1655,7 @@ public class Forms_basic {
 							CommonUtils.getdriver().findElement(MobileBy.id("fab")).click();
 							CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 							verifyFormPagesAndFill();
+							formSaveButton();
 							CommonUtils.waitForElementVisibility(
 									"//*[@resource-id='in.spoors.effortplus:id/form_id_text_view']");
 							if (CommonUtils.getdriver().findElements(MobileBy.id("form_id_text_view")).size() > 0) {
@@ -2651,6 +2667,7 @@ public class Forms_basic {
 										CommonUtils.getdriver().findElement(MobileBy.id("fab")).click();
 										CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 										verifyFormPagesAndFill();
+										formSaveButton();
 										CommonUtils.waitForElementVisibility(
 												"//*[@resource-id='in.spoors.effortplus:id/form_id_text_view']");
 										if (CommonUtils.getdriver().findElements(MobileBy.id("form_id_text_view"))
