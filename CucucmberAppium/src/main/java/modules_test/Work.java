@@ -50,7 +50,7 @@ public class Work {
 	// a work
 	public static void checkWorkExistInHomePageorNot(String workName)
 			throws InterruptedException, MalformedURLException {
-		CommonUtils.wait(5);
+		CommonUtils.wait(3);
 		try {
 			MobileActionGesture.scrollUsingText(workName);
 			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + workName + "')]"))
@@ -90,15 +90,13 @@ public class Work {
 		} catch (Exception e) {
 			System.out.println("--- Going to create work --- s!!");
 			workFab();
-//			workCreation(); 
 			try {
 				work_Creation();
 			} catch (MalformedURLException | InterruptedException | ParseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-//			createWork();
-			work_Creation();
+			fill_Work_MandatoryFields();
 			workSearch(generateWorkName);
 			verifyWorkExistOrNotInWorkScreen(generateWorkName);
 		}
@@ -107,12 +105,11 @@ public class Work {
 	// verify the created work
 	public static void goingToWorkModifyScreen(String workName)
 			throws InterruptedException, MalformedURLException, ParseException {
-		CommonUtils.wait(5);
+		CommonUtils.wait(3);
 		if (CommonUtils.getdriver().findElements(By.id("action_search")).size() > 0) {
 			AndroidLocators.clickElementusingID("action_search");
 			CommonUtils.getdriver().findElement(MobileBy.id("search_src_text")).sendKeys(generateWorkName);
 			AndroidLocators.pressEnterKeyInAndroid();
-			CommonUtils.interruptSyncAndLetmeWork();
 			CommonUtils.keyboardHide();
 			verifyWorkExistOrNotInWorkScreen(generateWorkName);
 		} else {
@@ -127,7 +124,6 @@ public class Work {
 			AndroidLocators.clickElementusingID("action_search");
 			CommonUtils.getdriver().findElement(MobileBy.id("search_src_text")).sendKeys(generateWorkName);
 			AndroidLocators.pressEnterKeyInAndroid();
-			CommonUtils.interruptSyncAndLetmeWork();
 			CommonUtils.keyboardHide();
 			verifyWorkExistOrNotInWorkScreen(generateWorkName);
 		}
@@ -221,7 +217,7 @@ public class Work {
 				.findElement(MobileBy.xpath("//*[@text='" + getAddhrsOfAmPm + "']"));
 		MobileActionGesture.singleLongPress(clickAmPm);
 		CommonUtils.OkButton("OK");
-		Thread.sleep(500);
+		CommonUtils.wait(3);
 	}
 
 	// while saving the work creation verify save or continue button is displaying
@@ -275,11 +271,13 @@ public class Work {
 					if (CommonUtils.getdriver()
 							.findElements(By.xpath("//*[@resource-id='in.spoors.effortplus:id/heading']")).size() > 0) {
 						AndroidLocators.clickElementusingClassName("android.widget.Button");
-						CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 					} else {
 						AndroidLocators.clickElementusingID("button1");
-						CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 					}
+					//if any alert display then handle and perform work action
+					checkinToCus_PerformWorkAction();
+					//wait until formsave element is displayed
+					CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 					// perform action until next action displayed
 					Forms_basic.verifyFormPagesAndFill();
 					Forms_basic.formSaveButton();
@@ -295,11 +293,13 @@ public class Work {
 					if (CommonUtils.getdriver()
 							.findElements(By.xpath("//*[@resource-id='in.spoors.effortplus:id/heading']")).size() > 0) {
 						AndroidLocators.clickElementusingClassName("android.widget.Button");
-						CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 					} else {
 						AndroidLocators.clickElementusingID("button1");
-						CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 					}
+					//if any alert display then handle and perform work action
+					checkinToCus_PerformWorkAction();
+					//wait until formsave element is displayed
+					CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 					// perform action until next action displayed
 					Forms_basic.verifyFormPagesAndFill();
 					Forms_basic.formSaveButton();
@@ -320,11 +320,13 @@ public class Work {
 				if (CommonUtils.getdriver()
 						.findElements(By.xpath("//*[@resource-id='in.spoors.effortplus:id/heading']")).size() > 0) {
 					AndroidLocators.clickElementusingClassName("android.widget.Button");
-					CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 				} else {
 					AndroidLocators.clickElementusingID("button1");
-					CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 				}
+				//if any alert display then handle and perform work action
+				checkinToCus_PerformWorkAction();
+				//wait until formsave element is displayed
+				CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 				// perform action until next action displayed
 				Forms_basic.verifyFormPagesAndFill();
 				Forms_basic.formSaveButton();
@@ -340,16 +342,25 @@ public class Work {
 				if (CommonUtils.getdriver()
 						.findElements(By.xpath("//*[@resource-id='in.spoors.effortplus:id/heading']")).size() > 0) {
 					AndroidLocators.clickElementusingClassName("android.widget.Button");
-					CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 				} else {
 					AndroidLocators.clickElementusingID("button1");
-					CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 				}
+				//if any alert display then handle and perform work action
+				checkinToCus_PerformWorkAction();
+				//wait until formsave element is displayed
+				CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");
 				// perform action and save
 				Forms_basic.verifyFormPagesAndFill();
 				Forms_basic.formSaveButton();
 			}
 		}
+	}
+	
+	// check-in to customer to perform workaction
+	public static void checkinToCus_PerformWorkAction() throws InterruptedException {
+		CommonUtils.handling_alert("message", "button1", "android:id/message", "android:id/button1",
+				"//*[@resource-id='android:id/message']", "//*[@text='CHECK IN']");
+		CustomerPageActions.customerCheckInReason();
 	}
 
 	// save workaction
@@ -2083,6 +2094,7 @@ public class Work {
 		if(workCheckIn.getText().contains("OFF")) {
 			System.out.println(".... User is going to checkin to work .... ");
 			workCheckIn.click();
+			//handling checkin alert
 			workCheckinAlert();
 		}
 	}
@@ -2093,16 +2105,17 @@ public class Work {
 				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"));
 		if (checkin.getText().contains("CHECK IN")) {
 			MobileActionGesture.tapByElement(checkin);
+			//handling interrupt sync
 			CommonUtils.interruptSyncAndLetmeWork();
-			if (CommonUtils.getdriver().findElement(MobileBy.id("saveForm")).isDisplayed()) {
+			if (CommonUtils.getdriver().findElements(MobileBy.id("saveForm")).size() > 0) {
 				// fill form
 				Forms_basic.verifyFormPagesAndFill();
 				// save form
 				saveWorkCheckinForm();
 			} else if (CommonUtils.getdriver()
-					.findElement(MobileBy
+					.findElements(MobileBy
 							.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/saveForm\")"))
-					.isDisplayed()) {
+					.size() > 0) {
 				// fill work check-in form
 				Forms_basic.verifyFormPagesAndFill();
 				// save form
@@ -2114,20 +2127,22 @@ public class Work {
 	}
 	
 	
-	
 	// save form for work check-in
 	public static void saveWorkCheckinForm() {
 		if (CommonUtils.getdriver().findElement(MobileBy.id("saveForm")).isDisplayed()) {
 			AndroidLocators.clickElementusingID("saveForm");
+			//handling form save alert
 			Forms_basic.formSaveAlert();
 		} else if (CommonUtils.getdriver()
 				.findElement(MobileBy
 						.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/saveForm\")"))
 				.isDisplayed()) {
 			AndroidLocators.clickElementusingResourceId("in.spoors.effortplus:id/saveForm");
+			//handling form save alert
 			Forms_basic.formSaveAlert();
 		} else {
 			AndroidLocators.clickElementusingXPath("//*[@content-desc='Save']");
+			//handling form save alert
 			Forms_basic.formSaveAlert();
 		}
 	}
@@ -2137,6 +2152,7 @@ public class Work {
 		MobileElement workCheckIn = AndroidLocators.returnUsingId("workCheckInCheckOut");
 		if (workCheckIn.getText().contains("ON")) {
 			System.out.println(".... User is going to check-out work .... ");
+			//handling checkout alert
 			check_out_Alert();
 		}
 	}
@@ -2156,24 +2172,30 @@ public class Work {
 		boolean isElementFound = true;
 		if (CommonUtils.getdriver().findElements(MobileBy.id("rejectWork")).size() > 0) {
 			AndroidLocators.clickElementusingID("rejectWork");
+			//handling work rejection alert
 			workRejectionAlert();
 		} else if (CommonUtils.getdriver()
 				.findElements(MobileBy
 						.AndroidUIAutomator("new UiSelector().resourceId(\"in.spoors.effortplus:id/rejectWork\")"))
 				.size() > 0) {
 			AndroidLocators.clickElementusingResourceId("in.spoors.effortplus:id/rejectWork");
+			//handling work rejection alert
 			workRejectionAlert();
 		} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@content-desc='Reject']")).size() > 0) {
 			AndroidLocators.clickElementusingXPath("//*[@content-desc='Reject']");
+			//handling work rejection alert
 			workRejectionAlert();
 		} else {
 			System.out.println("*** work rejection symbol is not displayed *** ");
 		}
 		
+		//validating next action is enabled or not when work is rejected
 		isElementFound = CommonUtils.getdriver()
 				.findElement(MobileBy.xpath("//*[@resource-id='in.spoors.effortplus:id/button1']")).isEnabled();
 		if (isElementFound == false) {
-			System.out.println("*** After work rejection unable to perform action because of disable ***");
+			System.out.println("*** After work rejection next action is disabled ***");
+		} else {
+			System.out.println("*** Next action is disabled ***");
 		}
 	}
 	
@@ -2182,11 +2204,14 @@ public class Work {
 		if (CommonUtils.getdriver()
 				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/message\")"))
 				.isDisplayed()) {
+			//retrieving the text reject work text
 			String getTextOfRejectWork = CommonUtils.getdriver()
 					.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/message\")"))
 					.getText();
 			System.out.println(" ---- Work rejection text ---- :" + getTextOfRejectWork);
+			//click on ok button to reject work
 			CommonUtils.OkButton("OK");
+			//handling interrupt sync 
 			CommonUtils.interruptSyncAndLetmeWork();
 			if (CommonUtils.getdriver().findElements(MobileBy.id("saveForm")).size() > 0) {
 				// fill form
@@ -2205,4 +2230,44 @@ public class Work {
 		}
 	}
 	
+	//validate work '+' icon 
+	public static void verifyingFabIcon(String workName) throws InterruptedException, MalformedURLException {
+		//swipe to workcard
+		MobileActionGesture.scrollUsingText(workName);
+		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'" + workName + "')]"))
+				.size() > 0) {
+			AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + workName + "')]");
+			CommonUtils.interruptSyncAndLetmeWork();
+			CommonUtils.waitForElementVisibility("//*[contains(@text,'" + workName + "')]");
+		} else {
+			CommonUtils.homeFabClick();
+			HomepageAction.select_dialog_list("Work");
+		}
+	}
+	
+	// validating work fab icon('+')
+	public static void workFabIcon_DisplayingOrNot(String workName) {
+		boolean isElementDisplay = false;
+		if (CommonUtils.getdriver().findElements(MobileBy.id("action_search")).size() > 0) {
+			isElementDisplay = CommonUtils.getdriver().findElement(MobileBy.id("fab")).isDisplayed();
+			if (isElementDisplay == false) {
+				System.out.println("**** Work fab icon is not displaying due to work configuration **** ");
+			} else {
+				System.out.println(
+						"**** Work fab icon is displaying due to allow user to add new work seeting is enabled **** ");
+			}
+		} else {
+			try {
+				// swipe and click on the specified work
+				MobileActionGesture.scrollUsingText("" + workName + "");
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='" + workName + "']")).size() > 0) {
+					System.out.println("*** Workname is not displaying based on configuration ***");
+				} else {
+					System.out.println("*** Workname is displaying based on configuration ***");
+				}
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+	}
 }

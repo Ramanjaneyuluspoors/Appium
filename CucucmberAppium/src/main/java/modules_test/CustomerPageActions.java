@@ -317,7 +317,7 @@ public class CustomerPageActions {
 			CommonUtils.keyboardHide();
 			AndroidLocators.clickElementusingXPath("//*[@text='OK']");
 		}
-		CommonUtils.wait(10);;
+		CommonUtils.wait(5);
 	}
 
 	// customer checkout in customer screen

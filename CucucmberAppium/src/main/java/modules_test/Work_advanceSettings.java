@@ -268,26 +268,16 @@ public class Work_advanceSettings {
 						+ getAboveOrBelowOfMainElement
 						+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 						.size() > 0) {
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.clear();
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.sendKeys(textMinInput);
+					AndroidLocators.enterTextusingXpath("//*[starts-with(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+							textMinInput);
 				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
 						+ getAboveOrBelowOfMainElement
 						+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 						.size() > 0) {
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.clear();
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.sendKeys(textMinInput);
+					AndroidLocators.enterTextusingXpath("//*[starts-with(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+							textMinInput);
 				}
 			}
 
@@ -323,27 +313,17 @@ public class Work_advanceSettings {
 						.findElements(MobileBy.xpath(
 								"//android.widget.EditText[starts-with(@text,'" + getAboveOrBelowOfMainElement + "')]"))
 						.size() > 0) {
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.clear();
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.sendKeys(textMaxInput);
+					AndroidLocators.enterTextusingXpath("//*[starts-with(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+							textMaxInput);
 				} else if (CommonUtils.getdriver()
 						.findElements(MobileBy
 								.xpath("//*[@resource-id='in.spoors.effortplus:id/label_for_view'][starts-with(@text,'"
 										+ getAboveOrBelowOfMainElement + "')]"))
 						.size() > 0) {
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.clear();
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.sendKeys(textMaxInput);
+					AndroidLocators.enterTextusingXpath("//*[starts-with(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+							textMaxInput);
 				}
 			}
 
@@ -370,26 +350,16 @@ public class Work_advanceSettings {
 					+ getAboveOrBelowOfMainElement
 					+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 					.size() > 0) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-						+ getAboveOrBelowOfMainElement
-						+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-						.clear();
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-						+ getAboveOrBelowOfMainElement
-						+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-						.sendKeys(textGenerator.generate(max));
+				AndroidLocators.enterTextusingXpath("//*[starts-with(@text,'" + getAboveOrBelowOfMainElement
+						+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+						textGenerator.generate(max));
 			} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
 					+ getAboveOrBelowOfMainElement
 					+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 					.size() > 0) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-						+ getAboveOrBelowOfMainElement
-						+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-						.clear();
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-						+ getAboveOrBelowOfMainElement
-						+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-						.sendKeys(textGenerator.generate(max));
+				AndroidLocators.enterTextusingXpath("//*[starts-with(@text,'" + getAboveOrBelowOfMainElement
+						+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+						textGenerator.generate(max));
 			}
 		}
 	}
@@ -943,48 +913,32 @@ public class Work_advanceSettings {
 					+ getAboveOrBelowOfMainElement
 					+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 					.size() > 0) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-						+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-						.clear();
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-						+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-						.sendKeys(String.valueOf(InputData));
+				AndroidLocators.enterTextusingXpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
+						+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+						String.valueOf(InputData));
 			} else if (CommonUtils.getdriver().findElements(By.xpath("//*[contains(@text,'"
 					+ getAboveOrBelowOfMainElement
 					+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 					.size() > 0) {
-				CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-						+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-						.clear();
-				CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-						+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-						.sendKeys(String.valueOf(InputData));
+				AndroidLocators.enterTextusingXpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
+						+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+						String.valueOf(InputData));
 			}
 		} else {
 			if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
 					+ getAboveOrBelowOfMainElement
 					+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 					.size() > 0) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-						+ getAboveOrBelowOfMainElement
-						+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-						.clear();
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-						+ getAboveOrBelowOfMainElement
-						+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-						.sendKeys(String.valueOf(InputData));
+				AndroidLocators.enterTextusingXpath("//*[starts-with(@text,'" + getAboveOrBelowOfMainElement
+						+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+						String.valueOf(InputData));
 			} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
 					+ getAboveOrBelowOfMainElement
 					+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 					.size() > 0) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-						+ getAboveOrBelowOfMainElement
-						+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-						.clear();
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-						+ getAboveOrBelowOfMainElement
-						+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-						.sendKeys(String.valueOf(InputData));
+				AndroidLocators.enterTextusingXpath("//*[starts-with(@text,'" + getAboveOrBelowOfMainElement
+						+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+						String.valueOf(InputData));
 			}
 		}
 	}
@@ -1462,50 +1416,32 @@ public class Work_advanceSettings {
 						+ getAboveOrBelowOfMainElement
 						+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 						.size() > 0) {
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.clear();
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.sendKeys(String.valueOf(currencyErrorInput));
+					AndroidLocators.enterTextusingXpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]/parent::*/parent::*/parent::*/parent::*/following::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+							String.valueOf(currencyErrorInput));
 				} else if (CommonUtils.getdriver().findElements(By.xpath("//*[contains(@text,'"
 						+ getAboveOrBelowOfMainElement
 						+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 						.size() > 0) {
-					CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.clear();
-					CommonUtils.getdriver().findElement(By.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.sendKeys(String.valueOf(currencyErrorInput));
+					AndroidLocators.enterTextusingXpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//following::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+							String.valueOf(currencyErrorInput));
 				}
 			} else {
 				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
 						+ getAboveOrBelowOfMainElement
 						+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 						.size() > 0) {
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.clear();
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.sendKeys(String.valueOf(currencyErrorInput));
+					AndroidLocators.enterTextusingXpath("//*[starts-with(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+							String.valueOf(currencyErrorInput));
 				} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
 						+ getAboveOrBelowOfMainElement
 						+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
 						.size() > 0) {
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.clear();
-					CommonUtils.getdriver().findElement(MobileBy.xpath("//*[starts-with(@text,'"
-							+ getAboveOrBelowOfMainElement
-							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
-							.sendKeys(String.valueOf(currencyErrorInput));
+					AndroidLocators.enterTextusingXpath("//*[starts-with(@text,'" + getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+							String.valueOf(currencyErrorInput));
 				}
 			}
 

@@ -94,17 +94,15 @@ public class Forms_basic {
 	
 	//i understand alert
 	public static void i_understand_alert() throws InterruptedException {
-		try {
-			if (CommonUtils.getdriver()
-					.findElements(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"))
-					.size() > 0) {
-				AndroidLocators.resourceId("android:id/button1").click();
-				System.out.println("I understand message is displayed");
-			}
-		} catch (Exception e) {
-			System.out.println("I understand message is not displayed");
+		if (CommonUtils.getdriver()
+				.findElements(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"))
+				.size() > 0) {
+			AndroidLocators.resourceId("android:id/button1").click();
+			System.out.println("I understand message is displayed");
+		} else {
+			AndroidLocators.clickElementusingXPath("//*[@text='I UNDERSTAND']");
 		}
-		CommonUtils.wait(5);
+		CommonUtils.wait(3);
 	}
 
 	// click on form save and new
@@ -1147,10 +1145,16 @@ public class Forms_basic {
 					+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button"))
 					.click();
 			CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
-			if (CommonUtils.getdriver().findElements(MobileBy.id("titleTextView")).size() > 1) {
-				CommonUtils.getdriver().findElements(MobileBy.id("titleTextView")).get(1).click();
-			} else if (CommonUtils.getdriver().findElements(MobileBy.id("titleTextView")).size() > 0) {
+			if (CommonUtils.getdriver().findElements(MobileBy.id("titleTextView")).size() > 0) {
 				CommonUtils.getdriver().findElements(MobileBy.id("titleTextView")).get(0).click();
+			} else if (CommonUtils.getdriver().findElements(MobileBy.id("titleTextView")).size() > 1) {
+				CommonUtils.getdriver().findElements(MobileBy.id("titleTextView")).get(1).click();
+			} else if (CommonUtils.getdriver()
+					.findElements(MobileBy.xpath("//*[@resource-id='in.spoors.effortplus:id/rows_layout_id']"))
+					.size() > 0) {
+				CommonUtils.getdriver()
+						.findElements(MobileBy.xpath("//*[@resource-id='in.spoors.effortplus:id/rows_layout_id']"))
+						.get(0).click();
 			}
 			CommonUtils.waitForElementVisibility("//*[contains(@text,'" + fieldsText + "')]");
 		}

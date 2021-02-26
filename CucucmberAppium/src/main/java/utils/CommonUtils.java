@@ -288,13 +288,14 @@ public class CommonUtils {
 		waitForElementVisibility("//*[@resource-id='android:id/content']");
 	}
 
-	// click on text
+	// click on text get message and click on alert
 	public static void OkButton(String text) throws InterruptedException {
 		MobileElement clickOk = driver
 				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"));
 		if (clickOk.getText().contains(text))
 			clickOk.click();
 		CommonUtils.wait(2);
+
 	}
 
 	// click on interrupt sync popup
@@ -460,6 +461,12 @@ public class CommonUtils {
 		} else if (CommonUtils.getdriver().findElements(By.xpath("" + xpath_locator + "")).size() > 0) {
 			AndroidLocators.clickElementusingXPath("" + sub_xpath + "");
 		}
+		try {
+			CommonUtils.wait(2);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -471,4 +478,5 @@ public class CommonUtils {
 		} 
 	}
 
+	
 }
