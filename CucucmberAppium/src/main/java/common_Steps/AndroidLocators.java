@@ -46,7 +46,8 @@ public class AndroidLocators {
 	public static final int TYPE_TERRITORY = 31;
 	public static final int TYPE_CUSTOM_ENTITY = 32;
 	public static final int TYPE_DOCUMENT = 33;
-
+	
+	                                /* Return single element */
 	// resource id using uiselector
 	public static MobileElement resourceId(String resourceIdLocator) {
 		return CommonUtils.getdriver()
@@ -57,40 +58,53 @@ public class AndroidLocators {
 	public static MobileElement xpath(String xpathLocator) {
 		return CommonUtils.getdriver().findElement(MobileBy.xpath("" + xpathLocator + ""));
 	}
-
-	// click using findElementByClassName
-	public static void clickElementusingClassName(String classNameLocator) {
-		CommonUtils.getdriver().findElement(MobileBy.className(classNameLocator)).click();
-	}
 	
-	// resource id using uiselector
+	// return id using uiselector
 	public static MobileElement returnUsingId(String IdLocator) {
 		return CommonUtils.getdriver().findElement(MobileBy.id("" + IdLocator + ""));
 	}
-
+	
+	// resource id using uiselector
+	public static MobileElement returnUsingClassName(String ClassName) {
+		return CommonUtils.getdriver().findElement(MobileBy.className("" + ClassName + ""));
+	}
+	
+	                             /* Return multiple elements */
+	
 	// findElements with classname
 	public static List<MobileElement> findElements_With_ClassName(String classNameLocator) {
 		return CommonUtils.getdriver().findElements(MobileBy.className(classNameLocator));
 	}
 
-	// click element using id
-	public static void clickElementusingID(String IdLocator) {
-		CommonUtils.getdriver().findElement(MobileBy.id(IdLocator)).click();
+	// find elements using xpath
+	public static List<MobileElement> findElements_With_Xpath(String xpathLocator) {
+		return CommonUtils.getdriver().findElements(MobileBy.xpath(xpathLocator));
 	}
-
+								
 	// findElements with Id
 	public static List<MobileElement> findElements_With_Id(String IdLocator) {
 		return CommonUtils.getdriver().findElements(MobileBy.id(IdLocator));
 	}
 
+	// find elements with resource id locators
+	public static List<MobileElement> findElements_With_ResourceId(String resourceIdLocator) {
+		return CommonUtils.getdriver().findElements(
+				MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"" + resourceIdLocator + "\")"));
+	}
+								/* click element using different locators */
+	// click element using id
+	public static void clickElementusingID(String IdLocator) {
+		CommonUtils.getdriver().findElement(MobileBy.id(IdLocator)).click();
+	}
+	
+	// click using findElementByClassName
+	public static void clickElementusingClassName(String classNameLocator) {
+		CommonUtils.getdriver().findElement(MobileBy.className(classNameLocator)).click();
+	}
+
 	// click element using xpath
 	public static void clickElementusingXPath(String xpathLocator) {
 		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).click();
-	}
-
-	// find elements using xpath
-	public static List<MobileElement> findElements_With_Xpath(String xpathLocator) {
-		return CommonUtils.getdriver().findElements(MobileBy.xpath(xpathLocator));
 	}
 
 	// click element using resource-id
@@ -99,13 +113,7 @@ public class AndroidLocators {
 				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"" + resourceIdLocator + "\")"))
 				.click();
 	}
-
-	// find elements with resource id locators
-	public static List<MobileElement> findElements_With_ResourceId(String resourceIdLocator) {
-		return CommonUtils.getdriver().findElements(
-				MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"" + resourceIdLocator + "\")"));
-	}
-
+										/* sending input using different locators */
 	// sending input using resource-id
 	public static void sendInputusing_ResourceId(String resourceIdLocator) {
 		RandomStringGenerator textGenerator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
@@ -171,7 +179,21 @@ public class AndroidLocators {
 		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).clear();
 		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).sendKeys(PhoneNumber);
 	}
+	
+	// send text using id
+	public static void enterTextusingID(String locator, String sText) {
+		CommonUtils.getdriver().findElement(MobileBy.id(locator)).clear();
+		CommonUtils.getdriver().findElement(MobileBy.id(locator)).sendKeys(sText);
+	}
 
+	// send text using xpath
+	public static void enterTextusingXpath(String locator, String sText) {
+		CommonUtils.getdriver().findElement(MobileBy.xpath(locator)).clear();
+		CommonUtils.getdriver().findElement(MobileBy.xpath(locator)).click();
+		CommonUtils.getdriver().findElement(MobileBy.xpath(locator)).sendKeys(sText);
+		CommonUtils.getdriver().hideKeyboard();
+	}
+						/* press key events */
 	// press enter
 	public static void pressEnterKeyInAndroid() {
 		CommonUtils.getdriver().pressKey(new KeyEvent(AndroidKey.ENTER));
@@ -187,19 +209,7 @@ public class AndroidLocators {
 		CommonUtils.getdriver().pressKey(new KeyEvent(AndroidKey.HOME));
 	}
 
-	// send text using id
-	public static void enterTextusingID(String locator, String sText) {
-		CommonUtils.getdriver().findElement(MobileBy.id(locator)).clear();
-		CommonUtils.getdriver().findElement(MobileBy.id(locator)).sendKeys(sText);
-		CommonUtils.getdriver().hideKeyboard();
-	}
-
-	// send text using xpath
-	public static void enterTextusingXpath(String locator, String sText) {
-		CommonUtils.getdriver().findElement(MobileBy.xpath(locator)).clear();
-		CommonUtils.getdriver().findElement(MobileBy.xpath(locator)).sendKeys(sText);
-	}
-	
+							/* return text using different locators */
 	// get text using xpath
 	public String getTextUsingXpath(String locator) {
 		return CommonUtils.getdriver().findElementByXPath(locator).getText();

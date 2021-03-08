@@ -311,11 +311,13 @@ public class CustomerPageActions {
 	public static void customerCheckInReason() throws InterruptedException {
 		if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='Select check in reason']")).size() > 0) {
 			AndroidLocators.clickElementusingXPath("//*[@text='Meeting']");
-		} else if (CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='Enter check in reason']"))
-				.isDisplayed()) {
+		} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[@text='Enter check in reason']"))
+				.size() > 0) {
 			AndroidLocators.sendInputusing_Classname("android.widget.EditText");
 			CommonUtils.keyboardHide();
 			AndroidLocators.clickElementusingXPath("//*[@text='OK']");
+		}else {
+			System.out.println("No alert is displayed");
 		}
 		CommonUtils.wait(5);
 	}

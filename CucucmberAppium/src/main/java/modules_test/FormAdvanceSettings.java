@@ -2082,31 +2082,31 @@ public class FormAdvanceSettings {
 		//char arr[]=result.toCharArray();
 		String mainres="";
 		mainres+=result.charAt(0);
-			int f0=0,f1=0,f2=0;
+			int digit=0,lower=0,upper=0;
 			if(Character.isUpperCase(mainres.charAt(0))) {
-				f1=1;
+				upper=1;
 			}
 			else if(Character.isLowerCase(mainres.charAt(0))) {
-				f2=1;
+				lower=1;
 			}
 			else if(Character.isDigit(mainres.charAt(0))) {
-				f0=0;
+				digit=1;
 			}
 			while(true) {
 				result = generator.generate();
-				if(Character.isUpperCase(result.charAt(0)) && f1==0) {
+				if(Character.isUpperCase(result.charAt(0)) && upper==0) {
 					mainres+=result.charAt(0);
-					f1=1;
+					upper=1;
 				}
-				else if(Character.isLowerCase(result.charAt(0)) && f2==0) {
+				else if(Character.isLowerCase(result.charAt(0)) && lower==0) {
 					mainres+=result.charAt(0);
-					f2=1;
+					lower=1;
 				}
-				else if(Character.isLowerCase(result.charAt(0)) && f0==0) {
+				else if(Character.isDigit(result.charAt(0)) && digit==0) {
 					mainres+=result.charAt(0);
-					f0=1;
+					digit=1;
 				}
-				if(f1==1 && f2==1 && f0==1)
+				if(upper==1 && lower==1 && digit==1)
 					break;
 			}
 		
@@ -2127,7 +2127,6 @@ public class FormAdvanceSettings {
 			extPattern = unmatchPattern.replace("[", "[^");
 			Xeger generator = new Xeger(extPattern);
 			result = generator.generate();
-			
 			System.out.println("===== Not Match expression ===== : " + result);
 		}
 		return result;
@@ -2198,7 +2197,7 @@ public class FormAdvanceSettings {
 					"Before removing regular expression: " + OriginalText + "\nAfter removing regexp: " + fieldsText);
 
 			String matchRegExp = match_regExp(regExp);
-			String unMatchRegExp = unMatch_regExp(regExp);
+			
 
 			switch (fieldsText) {
 			case "Text":
@@ -2214,7 +2213,7 @@ public class FormAdvanceSettings {
 						if (pagination.size() > 0) {
 							pagination.get(j).click();
 							MobileActionGesture.scrollUsingText(OriginalText);
-							insertRegularExpression(OriginalText, matchRegExp, unMatchRegExp);
+							insertRegularExpression(OriginalText, matchRegExp, regExp);
 						}	
 					}
 					isText = true;
@@ -2224,9 +2223,9 @@ public class FormAdvanceSettings {
 		}
 	}
 		//insert regular expression for text data type
-		public static void insertRegularExpression(String OriginalText, String matchRegExp, String unMatchRegExp) {
+		public static void insertRegularExpression(String OriginalText, String matchRegExp, String regExp) {
 			//input regular expression
-			for(int i=0;i<3;i++) {
+			for (int i = 0; i < 3; i++) {
 				AndroidLocators.enterTextusingXpath("//*[contains(@text,'" + OriginalText
 						+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText", ""+matchRegExp.charAt(i));
 				
@@ -2243,6 +2242,7 @@ public class FormAdvanceSettings {
 						.clear();
 
 				/* inputting the unmatching regular expression(special charcter) */
+				String unMatchRegExp = unMatch_regExp(regExp);
 				
 				//input unmatch regular expression
 				AndroidLocators.enterTextusingXpath("//*[contains(@text,'" + OriginalText

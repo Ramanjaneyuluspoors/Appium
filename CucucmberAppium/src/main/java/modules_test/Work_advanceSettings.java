@@ -24,7 +24,6 @@ public class Work_advanceSettings {
 	// save work
 	public static void saveWork() throws InterruptedException {
 		AndroidLocators.clickElementusingID("saveWork");
-		CommonUtils.alertContentXpath();
 		MobileElement saveButton = CommonUtils.getdriver().findElement(MobileBy.id("workSaveButton"));
 		if (saveButton.isDisplayed()) {
 			saveButton.click();

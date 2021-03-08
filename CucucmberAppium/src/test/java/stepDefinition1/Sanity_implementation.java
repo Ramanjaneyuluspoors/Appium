@@ -115,8 +115,8 @@ public class Sanity_implementation {
 	}
 
 	@When("^user create work$")
-	public void user_create_work() throws MalformedURLException, InterruptedException {
-		Work.createWork();
+	public void user_create_work() throws MalformedURLException, InterruptedException, ParseException {
+		Work.work_Creation();
 		Work.save_And_StartAction();
 	}
 

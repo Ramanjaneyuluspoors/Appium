@@ -238,12 +238,12 @@ public class CommonUtils {
 	// click on menu bar
 	public static void openMenu() throws MalformedURLException, InterruptedException {
 		if (driver.findElements(By.xpath("//*[@content-desc='Open drawer']")).size() > 0) {
-			driver.findElement(By.xpath("//*[@content-desc='Open drawer']")).click();
+			AndroidLocators.clickElementusingXPath("//*[@content-desc='Open drawer']");
 		} else if (driver.findElements(By.xpath("//*[@contentDescription='Open drawer']")).size() > 0) {
-			driver.findElement(MobileBy.xpath("//*[@contentDescription='Open drawer']")).click();
+			AndroidLocators.clickElementusingXPath("//*[@contentDescription='Open drawer']");
 		} else if (driver.findElements(By.xpath("//android.widget.ImageButton[@content-desc='Open drawer']"))
 				.size() > 0) {
-			driver.findElement(By.xpath("//android.widget.ImageButton[@content-desc='Open drawer']")).click();
+			AndroidLocators.clickElementusingXPath("//android.widget.ImageButton[@content-desc='Open drawer']");
 		} else {
 			System.out.println("*** Menubar is not displayed ***");
 		}
@@ -274,8 +274,8 @@ public class CommonUtils {
 	// clicks on Home in menu bar to move homepage
 	public static void clickHomeInMenubar() throws InterruptedException {
 		if (driver.findElements(MobileBy.xpath("//*[@text='Home']")).size() > 0) {
-			driver.findElement(MobileBy.xpath("//*[@text='Home']")).click();
-			Thread.sleep(500);
+			AndroidLocators.clickElementusingXPath("//*[@text='Home']");
+			CommonUtils.wait(5);
 			MobileActionGesture.scrollTospecifiedElement("Home");
 			waitForElementVisibility("//*[@text='Home']");
 		} else {
@@ -294,13 +294,12 @@ public class CommonUtils {
 				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"));
 		if (clickOk.getText().contains(text))
 			clickOk.click();
-		CommonUtils.wait(2);
+		CommonUtils.wait(1);
 
 	}
 
 	// click on interrupt sync popup
 	public static void interruptSyncAndLetmeWork() throws InterruptedException {
-//		try {
 		if (driver.findElements(By.id("button2")).size() > 0) {
 			AndroidLocators.clickElementusingID("button2");
 		} else if (driver
@@ -313,37 +312,34 @@ public class CommonUtils {
 		} else {
 			System.out.println("Interrupt sync pop-up is not displayed");
 		}
-//		} catch (Exception e) {
-//			System.out.println(e);
-//		}
 	}
 
 	// hide keyboard
 	public static void keyboardHide() {
 		CommonUtils.getdriver().hideKeyboard();
-	
 	}
 
 	// allow bluetooth 
 	public static void allow_bluetooth() throws InterruptedException {
 		try {
 			if (CommonUtils.getdriver().findElements(By.id("message")).size() > 0) {
-				CommonUtils.getdriver().findElement(MobileBy.id("button1")).click();
+				AndroidLocators.clickElementusingID("button1");
 			} else if (CommonUtils.getdriver()
 					.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/message\")"))
 					.isDisplayed()) {
 				AndroidLocators.resourceId("android:id/button1").click();
 			} else if (CommonUtils.getdriver().findElement(By.xpath("//*[@resource-id='android:id/message']"))
 					.isDisplayed()) {
+				AndroidLocators.clickElementusingResourceId("//*[@text='Allow']");
 				CommonUtils.getdriver().findElement(By.xpath("//*[@text='Allow']")).click();
 			} else if (CommonUtils.getdriver()
 					.findElement(
 							By.xpath("//*[@class='android.widget.LinearLayout']/*[@resource-id='android:id/message']"))
 					.isDisplayed()) {
-				CommonUtils.getdriver().findElement(By.xpath("//*[@text='Allow']")).click();
+				AndroidLocators.clickElementusingResourceId("//*[@text='Allow']");
 			} else if (CommonUtils.getdriver().findElement(By.xpath("[@text='EFFORT Plus wants to turn on Bluetooth']"))
 					.isDisplayed()) {
-				CommonUtils.getdriver().findElement(By.xpath("//*[@text='Allow']")).click();
+				AndroidLocators.clickElementusingResourceId("//*[@text='Allow']");
 			}
 		} catch (Exception e) {
 			System.out.println("allow bluetooth alert is not dislayed");
@@ -367,12 +363,9 @@ public class CommonUtils {
 				.findElements(MobileBy.AndroidUIAutomator(
 						"new UiSelector().resourceId(\"in.spoors.effortplus:id/sendClientReportToServerButton\")"))
 				.size() > 0) {
-			CommonUtils.getdriver()
-					.findElement(MobileBy.AndroidUIAutomator(
-							"new UiSelector().resourceId(\"in.spoors.effortplus:id/sendClientReportToServerButton\")"))
-					.click();
+			AndroidLocators.clickElementusingID("in.spoors.effortplus:id/sendClientReportToServerButton");
 		} else {
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@text='SEND DEBUG INFO']")).click();
+			AndroidLocators.clickElementusingXPath("//*[@text='SEND DEBUG INFO']");
 		}
 		try {
 			CommonUtils.wait(2);
@@ -396,14 +389,13 @@ public class CommonUtils {
 				.sendKeys(text);
 		keyboardHide();
 		if (driver.findElements(By.id("button1")).size() > 0) {
-			driver.findElement(By.id("button1")).click();
+			AndroidLocators.clickElementusingID("button1");
 		} else if (driver
 				.findElements(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"))
 				.size() > 0) {
-			driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/button1\")"))
-					.click();
+			AndroidLocators.clickElementusingID("android:id/button1");
 		} else {
-			driver.findElement(MobileBy.xpath("SEND")).click();
+			AndroidLocators.clickElementusingXPath("SEND");
 		}
 		wait(5);
 	}
@@ -417,15 +409,14 @@ public class CommonUtils {
 				.findElements(MobileBy.AndroidUIAutomator(
 						"new UiSelector().resourceId(\"in.spoors.effortplus:id/initiateFirstSyncButton\")"))
 				.size() > 0) {
-			driver.findElement(MobileBy.AndroidUIAutomator(
-					"new UiSelector().resourceId(\"in.spoors.effortplus:id/initiateFirstSyncButton\")")).click();
+			AndroidLocators.clickElementusingResourceId("in.spoors.effortplus:id/initiateFirstSyncButton");
 		} else if (driver.findElements(By.xpath("//*[@class='android.widget.Button'][@text='INITIATE FULL SYNC']"))
 				.size() > 0) {
-			driver.findElement(By.xpath("//*[@class='android.widget.Button'][@text='INITIATE FULL SYNC']")).click();
+			AndroidLocators.clickElementusingXPath("//*[@class='android.widget.Button'][@text='INITIATE FULL SYNC']");
 		} else {
-			driver.findElement(By.xpath("[@text='INITIATE FULL SYNC']")).click();
+			AndroidLocators.clickElementusingXPath("[@text='INITIATE FULL SYNC']");
 		}
-		Thread.sleep(15000);
+		wait(15);
 	}
 
 	// click on search icon

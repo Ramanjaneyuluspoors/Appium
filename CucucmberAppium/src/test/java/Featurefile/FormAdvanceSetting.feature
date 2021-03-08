@@ -13,15 +13,15 @@ Scenario: Form Field Dependency Based on Values in Other Fields
 	Given scroll to specified form 
 		|Forms|
 	When user click on given form name
-		|formPagination| 
-	Then user gives the basecondition "Hide when" and dependencyfield "Text" and input is "ramu" 
+		|Advance setting| 
+	Then user gives the basecondition "Mandatory when" and dependencyfield "Text" and input is "ramu" 
 	
 @RegularExpression 
 Scenario: Regular Expression Validations 
 	Given move to specified form 
 		|Forms|
 	When user click on the given form
-		|Form-5| 
+		|Regular Expressing| 
 	Then user enters the Regular Expression "[0-9A-Za-z]" for datatype "Text" 
 	
 @Highlighting_Background_Field_Based_on_FieldValue 
