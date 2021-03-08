@@ -10,6 +10,7 @@ import modules_test.Forms_basic;
 import utils.CommonUtils;
 
 public class Forms_implementation {
+	                              /* Form creation,modification */  
 	@Given("scroll to form {string}")
 	public void scroll_to_form(String form) throws MalformedURLException, InterruptedException, ParseException {
 		Forms_basic.verifyForminHomePage(form);
@@ -37,7 +38,7 @@ public class Forms_implementation {
 	public void Navigate_to_homepage() throws MalformedURLException, InterruptedException, ParseException {
 		CommonUtils.goBackward();
 	}
-
+								/* Form save and new, form discard */
 	@Given("swipe to form {string}")
 	public void swipe_to_form(String form) throws MalformedURLException, InterruptedException, ParseException {
 		Forms_basic.verifyForminHomePage(form);
@@ -65,7 +66,7 @@ public class Forms_implementation {
 		CommonUtils.openMenu();
 		CommonUtils.clickHomeInMenubar();
 	}
-
+                                      /* form save as draft */
 	@Given("scroll and click on forms {string}")
 	public void scroll_and_click_on_forms(String form) throws MalformedURLException {
 		Forms_basic.verifyForminHomePage(form);
@@ -86,7 +87,9 @@ public class Forms_implementation {
 		Forms_basic.form_Save_As_Draft();
 	}
 	
-	/********* Form advance settings ************/
+	                                /********* Form advance settings ************/
+	
+				/*Form fields minimum value and maximum value validations*/
 	@Given("^Swipe to MinMax form$")
 	public void Swipe_to_MinMax_form(String MinMaxform) throws InterruptedException, MalformedURLException {
 		Forms_basic.verifyForminHomePage(MinMaxform);
@@ -103,7 +106,8 @@ public class Forms_implementation {
 		FormAdvanceSettings.clickSectionInPages();
 		FormAdvanceSettings.minMaxTesting(min, max);
 	}
-
+							/*Form Field Dependency based on value in other fields*/
+	
 	@Given("^scroll to specified form$")
 	public void scroll_to_specified_form(String form) throws MalformedURLException {
 		Forms_basic.verifyForminHomePage(form);
@@ -120,7 +124,8 @@ public class Forms_implementation {
 		FormAdvanceSettings.clickSectionInPages();
 		FormAdvanceSettings.fieldDependencyValueOtherFields(baseCondition, formFieldLabel, formFieldInput);
 	}
-
+								/* Form Regular expression */
+	
 	@Given("move to specified form")
 	public void move_to_specified_form(String form) throws MalformedURLException {
 		Forms_basic.verifyForminHomePage(form);
@@ -137,7 +142,8 @@ public class Forms_implementation {
 		FormAdvanceSettings.clickSectionInPages();
 		FormAdvanceSettings.regularExpressionTesting(regExp, formFieldLabel);
 	}
-
+										/* Form High lighting background color */
+	
 	@Given("^scroll to specified color form$")
 	public void scroll_to_specified_color_form(String Form) throws MalformedURLException {
 		Forms_basic.verifyForminHomePage(Form);
@@ -154,7 +160,7 @@ public class Forms_implementation {
 		FormAdvanceSettings.clickSectionInPages();
 		FormAdvanceSettings.testing_highlighting_background_field_basedOn_fieldValue(fieldValue, fieldLabel);
 	}
-
+									/*Form Error and warn message*/
 	@Given("^swipe to specified form$")
 	public void swipe_to_specified_form(String Form) throws MalformedURLException {
 		Forms_basic.verifyForminHomePage(Form);
