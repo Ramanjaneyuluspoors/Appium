@@ -32,3 +32,12 @@ Scenario Outline: fill the form then save as draft
 	Examples: 
 		|cardName|formname|
 		|Forms|formNormal fields|
+
+@Form_resticiton_to_employee_group		
+Scenario Outline: Restrict access to employee group
+	Given move to forms card "<cardName>"
+	Then validate form display on employee group restriction "<formname>"
+	Examples: 
+		|cardName|formname|
+		|Forms|formNormal fields|
+	
