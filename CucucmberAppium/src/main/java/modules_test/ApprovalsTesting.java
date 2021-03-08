@@ -96,14 +96,13 @@ public class ApprovalsTesting {
 
 	// remarks input
 	public static void remarksForApproveCancelResubmitAndCancel() {
-		if (CommonUtils.getdriver()
-				.findElement(MobileBy.AndroidUIAutomator("new UiSelector().resourceId(\"android:id/alertTitle\")"))
+		if (AndroidLocators.resourceId("new UiSelector().resourceId(\"android:id/alertTitle\")")
 				.isDisplayed()) {
 			AndroidLocators.sendInputusing_Classname("android.widget.EditText");
 			CommonUtils.keyboardHide();
 			CommonUtils.handling_alert("button1", "button1", "android:id/button1", "android:id/button1",
 					"//*[@text='SUBMIT']", "//*[@text='SUBMIT']");
-		} else if (CommonUtils.getdriver().findElement(By.id("alertTitle")).isDisplayed()) {
+		} else if (AndroidLocators.returnUsingId("alertTitle").isDisplayed()) {
 			AndroidLocators.sendInputusing_Classname("android.widget.EditText");
 			CommonUtils.keyboardHide();
 			CommonUtils.handling_alert("button1", "button1", "android:id/button1", "android:id/button1",
