@@ -6,12 +6,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Arrays;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.openqa.selenium.By;
-
-import com.aventstack.extentreports.gherkin.model.And;
 
 import Actions.HomepageAction;
 import Actions.MobileActionGesture;
@@ -23,6 +22,10 @@ import utils.MediaPermission;
 
 public class Work {
 	public static String generateWorkName;
+	public static String[] conditionValues = { "Equals", "Contains", "Does not contains", "Starts with", "Ends with",
+			"Empty", "Not Empty", "Equal to", "Less Than or Equal to", "Greater Than or equal to", "Not equal to",
+			"Less Than", "Greater Than", "After", "Before", "In between", "On", "Not on", "On Or Before", "On Or After",
+			"In", "Not In" };
 
 	// go to work page from home fab icon '+' then swipe and click on the specified
 	// work
@@ -2604,7 +2607,7 @@ public class Work {
 		while (!CommonUtils.getdriver().findElement(MobileBy.id("button1")).isEnabled()) {
 
 			System.out.println(
-					" ----- Parent work action is disable perform subtask action thn peform parent work action ----- ");
+					" ----- Parent work action is disable perform subtask action then peform parent work action ----- ");
 
 			// scroll to subtask
 			MobileActionGesture.scrollUsingResourceId("in.spoors.effortplus:id/subTasksTV");
@@ -2627,5 +2630,208 @@ public class Work {
 		// perform parent work action
 		performSingleAction();
 	}
+	
+	
+	// validating workfields dependency based on values
+	public static void workFields_Dependency_Basedon_input(String performDonotPerform, String baseCondition,
+			String workFields, String userInput) throws MalformedURLException, InterruptedException, ParseException {
+		// dependent work field
+		List<MobileElement> specifiedElement = AndroidLocators.findElements_With_Xpath(
+				"//*[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@text,'"
+						+ workFields + "')]");
+
+		// work all fields
+		List<MobileElement> workAllFields = AndroidLocators.findElements_With_Xpath(
+				"//*[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@class,'Text')]");
+		
+		// count of field
+		int countOfDependentField = specifiedElement.size();
+		System.out.println(" ===== Work Field Count is ===== : " + countOfDependentField);
+
+		// remove fields from list
+		specifiedElement.clear();
+
+		// initializig the lastElement
+		String workLastElementText = null;
+
+		// scroll to end and get last element text from the list
+		MobileActionGesture.flingVerticalToBottom_Android();
+		specifiedElement.addAll(AndroidLocators.findElements_With_Xpath(
+				"//*[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@class,'Text')]"));
+		workLastElementText = specifiedElement.get(specifiedElement.size() - 1).getText();
+		System.out.println("**** Work Last element text is **** :" + workLastElementText);
+
+		// remove fields from list
+		specifiedElement.clear();
+		MobileActionGesture.flingToBegining_Android();
+
+		// add elements to list of workfields displaying in first screen
+		specifiedElement.addAll(AndroidLocators.findElements_With_Xpath(
+				"//*[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@text,'"
+						+ workFields + "')]"));
+		countOfDependentField = specifiedElement.size();
+		System.out.println("Before swiping count: " + countOfDependentField);
+
+		// if element is not exist scroll to specified element and add to list
+		while (specifiedElement.isEmpty()) {
+			boolean flag = false;
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
+			specifiedElement.addAll(AndroidLocators.findElements_With_Xpath(
+					"//*[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@text,'"
+							+ workFields + "')]"));
+			workAllFields.addAll(AndroidLocators.findElements_With_Xpath(
+					"//*[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout[1]//*[contains(@class,'Text')]"));
+			
+			//get count of list fields
+			countOfDependentField = specifiedElement.size();
+			System.out.println("After swiping fields count: " + countOfDependentField);
+
+			for (int j = 0; j < workAllFields.size(); j++) {
+
+				// if specified element found break the for loop
+				if (specifiedElement.size() > 0 || workAllFields.get(j).getText().equals(workLastElementText)) {
+					flag = true;
+				}
+			}
+			// break the while loop
+			if (flag == true) {
+				break;
+			}
+		}
+
+		for (int k = 0; k < countOfDependentField; k++) {
+			String OriginalText = specifiedElement.get(k).getText();
+			String fieldsText = specifiedElement.get(k).getText().replaceAll("\\([!@#$%&*(),.?\":{}|<>]", "");
+			System.out.println("***** Before removing regular expression ***** : " + OriginalText
+					+ "\n..... After removing regexp ..... : " + fieldsText);
+			
+			if (fieldsText.equals(workFields)) {
+			
+				switch (fieldsText) {
+				case "Work Name":
+					MobileActionGesture.scrollUsingText(fieldsText);
+					fill_Work_MandatoryFields();
+					
+				}
+
+			}
+
+		}
+
+	}
+	
+	public static void getConditionValues() {
+		
+		int[] values = new int[conditionValues.length];
+		
+		//initialize an array with same value
+		Arrays.fill(values,0);
+		
+		for (int i = 0; i < values.length; i++) {
+
+			if (conditionValues[i].equals("Equals")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Contains")) {
+				values[i] = 1; 
+			} else if (conditionValues[i].equals("Does not contains")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Starts with")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Ends with")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Empty")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Not Empty")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Equal to")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Less Than or Equal to")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Greater Than or equal to")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Not equal to")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Less Than")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Greater Than")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("After")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Before")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("In between")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("On")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Not on")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("On Or Before")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("On Or After")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("In")) {
+				values[i] = 1;
+			} else if (conditionValues[i].equals("Not In")) {
+				values[i] = 1;
+			}
+		}
+	}
+	
+	//workfield dependency based on input 
+	public static void workNameInput(String performDonotPerform, String fieldsText, String userInput) {
+		
+		// initializing string for inputdata
+		String WorkNameInputData = null;
+
+		// text input data
+		String[] myInput = { userInput, userInput + "extraWords", "extraWords" + userInput,
+				"extraWords" };
+	
+		if (performDonotPerform.equals("Perform")) {
+			// iterating the given input
+			for (int k = 0; k < myInput.length; k++) {
+
+				WorkNameInputData = myInput[k];
+
+				System.out.println("------- Text Input data ------ :" + WorkNameInputData);
+
+				// get above/below element of main element
+				String getAboveOrBelowOfMainElement = Work_advanceSettings.commonMethodForInput(fieldsText);
+				// based previous element inputing the main element
+				if (CommonUtils.getdriver()
+						.findElement(MobileBy.xpath("//*[contains(@text,'" + getAboveOrBelowOfMainElement + "')]"))
+						.isDisplayed()) {
+					if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.size() > 0) {
+						AndroidLocators.enterTextusingXpath("//*[starts-with(@text,'" + getAboveOrBelowOfMainElement
+								+ "')]//parent::*//parent::*//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+								WorkNameInputData);
+					} else if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'"
+							+ getAboveOrBelowOfMainElement
+							+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText"))
+							.size() > 0) {
+						AndroidLocators.enterTextusingXpath("//*[starts-with(@text,'" + getAboveOrBelowOfMainElement
+								+ "')]//parent::*//parent::*//preceding-sibling::android.widget.LinearLayout[1]/*/*//android.widget.EditText",
+								WorkNameInputData);
+					}
+					WorkNameInputData = AndroidLocators.xpath(
+							"(//*[@resource-id='in.spoors.effortplus:id/formLinearLayout']//android.widget.EditText)[1]")
+							.getText();
+					System.out.println("---- Retrieve the workname ---- :" + WorkNameInputData);
+				}
+			}	
+	
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

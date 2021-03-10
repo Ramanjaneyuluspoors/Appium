@@ -3,11 +3,8 @@ package modules_test;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 
-import org.openqa.selenium.By;
-
 import Actions.MobileActionGesture;
 import common_Steps.AndroidLocators;
-import io.appium.java_client.MobileBy;
 import utils.CommonUtils;
 
 public class ApprovalsTesting {

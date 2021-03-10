@@ -2624,6 +2624,8 @@ public class FormAdvanceSettings {
 				+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
 		lastTxtElement = formFields1.get(formFields1.size() - 1).getText();
 		System.out.println("---- Get the last element text ---- : " + lastTxtElement);
+		
+		//removing elements from list
 		formFields1.clear();
 		MobileActionGesture.flingToBegining_Android();
 
@@ -2639,8 +2641,10 @@ public class FormAdvanceSettings {
 			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			formFields1.addAll(CommonUtils.getdriver().findElements(MobileBy.xpath("//*[contains(@text,'PAGE " + j
 					+ "')]/following::android.widget.LinearLayout//android.widget.LinearLayout/android.widget.LinearLayout[1]/android.widget.TextView")));
+			//get count
 			countOfFields = formFields1.size();
 			System.out.println(".... After swiping fields count .... : " + countOfFields);
+			
 			for (int k = 0; k < countOfFields; k++) {
 				System.out.println("***** Print form fields elements text ***** : "
 						+ formFields1.get(countOfFields - (k + 1)).getText());
@@ -2680,18 +2684,18 @@ public class FormAdvanceSettings {
 					Forms_basic.text(fieldsText);
 				}
 			}
-//			else if (fieldsText.contains("Currency") || fieldsText.contains("G-Currency")
-//					|| fieldsText.contains("S-Currency") || fieldsText.contains("Number")
-//					|| fieldsText.contains("G-Number") || fieldsText.contains("S-Number")) 
-//			{
-//				MobileActionGesture.scrollUsingText(fieldsText);
-//				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]"))
-//						.size() > 0) {
-//					MobileActionGesture.scrollUsingText(fieldsText);
-//					// method for validating currency using error and warning condition
-//					currencyValidation_error_And_warn_message(errorCondition, currencyErrorInput, fieldsText);
-//				}
-//			} 
+			else if (fieldsText.contains("Currency") || fieldsText.contains("G-Currency")
+					|| fieldsText.contains("S-Currency") || fieldsText.contains("Number")
+					|| fieldsText.contains("G-Number") || fieldsText.contains("S-Number")) 
+			{
+				MobileActionGesture.scrollUsingText(fieldsText);
+				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]"))
+						.size() > 0) {
+					MobileActionGesture.scrollUsingText(fieldsText);
+					// method for validating currency using error and warning condition
+					currencyValidation_error_And_warn_message(errorCondition, currencyErrorInput, fieldsText);
+				}
+			} 
 			else if (fieldsText.contains("Date") || fieldsText.contains("G-Date") || fieldsText.contains("S-Date")) {
 				MobileActionGesture.scrollUsingText(fieldsText);
 				if (CommonUtils.getdriver().findElements(MobileBy.xpath("//*[starts-with(@text,'" + fieldsText + "')]"))
@@ -2811,20 +2815,16 @@ public class FormAdvanceSettings {
 			System.out.println(" **** Enter the currency input **** :" + currencyErrorInput);
 			
 			MobileActionGesture.scrollUsingText(fieldsText);
-			CommonUtils.getdriver().findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-					+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText")).click();
-			CommonUtils.getdriver().hideKeyboard();
-			CommonUtils.getdriver()
-					.findElement(MobileBy.xpath("//*[contains(@text,'" + fieldsText
-							+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
-					.sendKeys(String.valueOf(currencyErrorInput));
+			AndroidLocators.enterTextusingXpath(
+					"//*[contains(@text,'" + fieldsText
+							+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText",
+					String.valueOf(currencyErrorInput));
 			
 			// validating error and warning condition
 			if (errorCondition.equals("Show Error when")) {
 				MobileActionGesture.scrollUsingText("Text");
-				CommonUtils.getdriver().findElement(MobileBy.xpath(
-						"//*[contains(@text,'Text')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText"))
-						.click();
+				AndroidLocators.clickElementusingXPath(
+						"//*[contains(@text,'Text')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.EditText");
 				CommonUtils.getdriver().hideKeyboard();
 			} else if (errorCondition.equals("Show Warning when")) {
 				verify_mandatory_error();
@@ -2930,19 +2930,18 @@ public class FormAdvanceSettings {
 
 	//calendar click next('>' symbol)
 	public static void goRight() {
-		CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Next month']")).click();
+		AndroidLocators.clickElementusingXPath("//*[@content-desc='Next month']");
 	}
 	
 	//calendar click next('<' symbol)
 	public static void goLeft() throws InterruptedException {
-		CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='Previous month']")).click();
+		AndroidLocators.clickElementusingXPath("//*[@content-desc='Previous month']");
 		CommonUtils.wait(1);
 	}
 	
-	//select specified year
+	// select specified year
 	public static void clickElementByText(String txt) throws InterruptedException, MalformedURLException {
-		CommonUtils.getdriver()
-				.findElement(MobileBy.xpath("//*[@resource-id='android:id/text1'][@text='" + txt + "']")).click();
+		AndroidLocators.clickElementusingXPath("//*[@resource-id='android:id/text1'][@text='" + txt + "']");
 	}
 	
 	//click on year
@@ -2963,7 +2962,7 @@ public class FormAdvanceSettings {
 		for (int l = 0; l < allDates.size(); l++) {
 			String myDateList = allDates.get(l).getAttribute("content-desc");
 			if (myDateList.contains(inputDate)) {
-				CommonUtils.getdriver().findElement(MobileBy.xpath("//*[@content-desc='" + inputDate + "']")).click();
+				AndroidLocators.clickElementusingXPath("//*[@content-desc='" + inputDate + "']");
 				flag = true;
 			}
 			if(flag == true)
