@@ -60,11 +60,22 @@ Scenario: completing subtask and parent work
 
 @complete_subtask_then_perform_parent_workAction
 Scenario: perform parent work when subtask is completed
-	Given verify parent work exit or not "Testing Subwork"
-	When User add parent work "Testing Subwork"
+	Given verify parent work exit or not "SubTaskcriteria"
+	When User add parent work "SubTaskcriteria"
 	And check subtask is exist or not
 	Then verify parent work action is enabled or not dependent on subtask
 	
+@perform_parentWork_When_subtask_is_rejected 	
+Scenario: perform parent work when subtask is rejected
+	Given Go to work and verify parent work exist or not "SubTaskcriteria"
+	When user create the parent work "SubTaskcriteria"
+	And  create subtask 
+	Then Reject subtask and validate parent work action  
+
+@Configure_dependency_based_on_values_in_this_Work 
+Scenario: Action Execution Dependencies based on Workfields 
+	Given move to work "SubTaskcriteria" 
+	When user enters the criteria "Perform" when "all conditions are satisified" for the workfields "workname" the input is "abc" 
 	
 	
 	
