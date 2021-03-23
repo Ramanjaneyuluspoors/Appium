@@ -23,19 +23,37 @@ public class CustomerPageActions {
 			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
 					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textContains(\""
 							+ customer + "\").instance(0))"));
-			if (AndroidLocators.returnUsingId("//*[contains(@text,'" + customer + "')]").isDisplayed()) {
-				AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + customer + "')]");
-			}
-		} catch (Exception e) {
-			try {
+			if (AndroidLocators.xpath("//*[@text='" + customer + "']").isDisplayed()) {
+				AndroidLocators.clickElementusingXPath("//*[@text='" + customer + "']");
+				
+			} else {
 				CommonUtils.homeFabClick();
-			} catch (MalformedURLException e1) {
-				e1.printStackTrace();
+				AndroidLocators.clickElementusingXPath("//*[@text='" + customer + "']");
 			}
-			AndroidLocators.clickElementusingXPath("//*[@text='" + customer + "']");
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
 	}
 
+	//add customer screen page
+	public static void goToCustomerScreen(String customer) {
+		try {
+			CommonUtils.getdriver().findElement(MobileBy.AndroidUIAutomator(
+					"new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textContains(\""
+							+ customer + "\").instance(0))"));
+			if (AndroidLocators.xpath("//*[@text='" + customer + "']").isDisplayed()) {
+				AndroidLocators.clickElementusingXPath("//*[@text='" + customer + "']");
+				customerFab();
+			} else {
+				CommonUtils.homeFabClick();
+				AndroidLocators.clickElementusingXPath("//*[@text='" + customer + "']");
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	
 	// search for customer
 	public static void customerSearch(String customerName) throws MalformedURLException {
 		CommonUtils.waitForElementVisibility("//*[@text='Customers']");
@@ -130,7 +148,12 @@ public class CustomerPageActions {
 	public static void saveMethod() {
 		MobileElement customerSaveButton = AndroidLocators.returnUsingId("saveCustomer");
 		customerSaveButton.click();
-		CommonUtils.waitForElementVisibility("//*[@content-desc='Open drawer']");
+		try {
+			CommonUtils.wait(3);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	// search for created customer
@@ -353,7 +376,7 @@ public class CustomerPageActions {
 		// customer fields
 		List<MobileElement> customer_fields = AndroidLocators.findElements_With_Xpath(
 				"//*[@resource-id='in.spoors.effortplus:id/formHolderEdit']/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout//*[contains(@class,'Text') and not(contains(@resource-id,'android:id/text1'))]");
-
+		
 		// get size of list
 		int custFieldsCount = customer_fields.size();
 		System.out.println("**** Customer fields count **** :" + custFieldsCount);
@@ -384,59 +407,65 @@ public class CustomerPageActions {
 
 		// scroll to top
 		MobileActionGesture.flingToBegining_Android();
-
+		
 		// add first screen elements of customer to list
 		customer_fields.addAll(AndroidLocators.findElements_With_Xpath(
-				"//*[@resource-id='in.spoors.effortplus:id/nameEditLayout']/parent::android.widget.LinearLayout/android.widget.LinearLayout/android.widget.TextView"));
+				"//*[@resource-id='in.spoors.effortplus:id/formHolderEdit']/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.LinearLayout//*[contains(@class,'Text') and not(contains(@resource-id,'android:id/text1'))]"));
 
 		// get count of elements available in the first screen are
 		custFieldsCount = customer_fields.size();
 		System.out.println("*** customer first screen fields count *** : " + custFieldsCount);
 
 		// scroll and add elelemnts to list until last element found
-		while (!customer_fields.isEmpty() && customer_fields != null) {
+		while (!customer_fields.isEmpty()) {
 			boolean flag = false;
 			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
+
 			customer_fields.addAll(AndroidLocators.findElements_With_Xpath(
-					"//*[@resource-id='in.spoors.effortplus:id/nameEditLayout']/parent::android.widget.LinearLayout/android.widget.LinearLayout/android.widget.TextView"));
-
+					"//*[@resource-id='in.spoors.effortplus:id/formHolderEdit']/android.widget.LinearLayout//android.widget.LinearLayout//*[contains(@class,'Text') and not(contains(@resource-id,'android:id/text1'))]"));
+			
+			// get the count of customer fields
 			custFieldsCount = customer_fields.size();
-			System.out.println("... After swiping customer fields count is ... : " + custFieldsCount);
-
+			System.out.println("... After swiping and adding customer fields, the count is ... : " + custFieldsCount);
+			
+			// if customer last element matches element present in List then break the for loop
 			for (int l = 0; l < custFieldsCount; l++) {
+				// printing the elements in the list
 				System.out.println("*** Fields Inside loop *** : " + customer_fields.get(l).getText());
 
+				// if list matches with last element the loop will break
 				if (customer_fields.get(l).getText().contains(custLastElement)) {
 					System.out.println("---- customer inside elements ---- : " + customer_fields.get(l).getText());
 					flag = true;
 				}
 			}
+			
 			// break the loop once last element found
 			if (flag == true) {
 				break;
 			}
 		}
-
+        
 		MobileActionGesture.flingToBegining_Android();
 		boolean isName = false, isStreet = false, isArea = false, isLandmark = false, isCity = false, isState = false,
-				isDistrict = false, isPincode = false, isDate = false, isText = false, isURL = false, isEmail = false,
-				isCountry = false, isEmployee = false, isPhoneNumber = false, isDateTime = false, isTime = false,
-				isPickList = false, isMultiPickList = false, isPhone = false, isMultiSelectDropdown = false,
-				isLocation = false, isCurrency = false, isNumber = false, isDropdown = false, isYesNo = false,
-				isCustomer = false, isForm = false, isCustomEntity = false, isSignature = false;
+				isDistrict = false, isPincode = false, isDate = false, isText = false, isURL = false, isCountry = false,
+				isEmployee = false, isDateTime = false, isTime = false, isPickList = false, isMultiPickList = false,
+				isPhone = false, isMultiSelectDropdown = false, isLocation = false, isCurrency = false,
+				isNumber = false, isDropdown = false, isYesNo = false, isCustomer = false, isForm = false,
+				isCustomEntity = false, isSignature = false, isEmail = false;
 
 		// providing input for customer fields by iterating the customer list
-		for (int j = 0; j < custFieldsCount; j++) {
-			String originalText = customer_fields.get(j).getText();
-			String cusFieldsText = customer_fields.get(j).getText().replaceAll("[\\(!@#$%&*(),.?\":{}|<>]", "");
+		for (int i = 0; i < custFieldsCount; i++) {
+						
+			String originalText = customer_fields.get(i).getText();
+			String cusFieldsText = customer_fields.get(i).getText().split("\\(")[0].replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("---- Before removing special character ---- : " + originalText
-					+ "\n .... After removing special character .... : " + cusFieldsText);
-
+					+ "\n.... After removing special character .... : " + cusFieldsText);
+			
 			switch (cusFieldsText) {
 			case "Type":
 				MobileActionGesture.scrollUsingText(originalText);
 				if (AndroidLocators.findElements_With_Xpath("//*[@text='" + cusFieldsText + "']").size() > 0) {
-					MobileActionGesture.scrollUsingText(originalText);
 					MobileElement type = AndroidLocators
 							.xpath("//*[@text='" + originalText + "']/parent::*/android.widget.Spinner");
 					MobileActionGesture.singleLongPress(type);
@@ -456,7 +485,7 @@ public class CustomerPageActions {
 						CommonUtils.getdriver().findElement(MobileBy.id("nameEditText")).sendKeys(randomstringCusName);
 					}
 					isName = true;
-				}
+				}                        
 				break;
 			case "Territory Type":
 				MobileActionGesture.scrollUsingText(originalText);
@@ -468,20 +497,20 @@ public class CustomerPageActions {
 						CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
 								.get(1).click();
 						CommonUtils.wait(3);
-					}
+					} 
 				}
 				break;
 			case "Phone number":
-				if (!isPhoneNumber) {
+				if(!isPhone) {
 					MobileActionGesture.scrollUsingText(originalText);
 					if (AndroidLocators.findElements_With_Xpath("//*[starts-with(@text,'" + originalText + "')]")
 							.size() > 0) {
 						AndroidLocators
 								.sendPhoneNumberInputUsing_xpath("//*[starts-with(@text,'" + originalText + "')]");
 					}
-					isPhoneNumber = true;
+					isPhone = true;
 				}
-				break;
+					break;
 			case "Street":
 				if (!isStreet) {
 					MobileActionGesture.scrollUsingText(originalText);
@@ -540,21 +569,18 @@ public class CustomerPageActions {
 				if (!isPincode) {
 					MobileActionGesture.scrollUsingText(originalText);
 					if (AndroidLocators.findElements_With_Xpath("//*[@text='" + originalText + "']").size() > 0) {
-						AndroidLocators.sendInputusing_Id("pinCodeEditText");
+						AndroidLocators.sendNumberUsingId("pinCodeEditText");
 					}
 					isPincode = true;
 				}
 				break;
 			case "Phone":
-				if (isPhone) {
 					MobileActionGesture.scrollUsingText(originalText);
 					if (AndroidLocators.findElements_With_Xpath("//*[starts-with(@text,'" + originalText + "')]")
 							.size() > 0) {
 						AndroidLocators
 								.sendPhoneNumberInputUsing_xpath("//*[starts-with(@text,'" + originalText + "')]");
 					}
-					isPhone = true;
-				}
 				break;
 			case "Employee":
 				if (!isEmployee) {
@@ -713,7 +739,7 @@ public class CustomerPageActions {
 					if (AndroidLocators.findElements_With_Xpath("//*[starts-with(@text,'" + originalText + "')]")
 							.size() > 0) {
 						MobileElement cusYesNo = AndroidLocators.xpath("//*[starts-with(@text,'" + originalText
-								+ "')/parent::*/parent::*/android.widget.Spinner");
+								+ "')]/parent::*/parent::*/android.widget.Spinner");
 						MobileActionGesture.singleLongPress(cusYesNo);
 						if (AndroidLocators.findElements_With_ClassName("android.widget.CheckedTextView").size() > 0) {
 							CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView"))
@@ -736,11 +762,12 @@ public class CustomerPageActions {
 				break;
 			case "Email":
 			case "G-Email":
-				if (!isEmail) {
+				if(!isEmail) {
 					MobileActionGesture.scrollUsingText(originalText);
 					if (AndroidLocators.findElements_With_Xpath("//*[starts-with(@text,'" + originalText + "')]")
 							.size() > 0) {
 						AndroidLocators.sendEmailInputusing_XPath("//*[starts-with(@text,'" + originalText + "')]");
+						CommonUtils.wait(3);
 					}
 					isEmail = true;
 				}
@@ -760,13 +787,14 @@ public class CustomerPageActions {
 			case "G-Country":
 				if (!isCountry) {
 					MobileActionGesture.scrollUsingText(originalText);
+					MobileActionGesture.scrollUsingText("Pick a country");
 					if (AndroidLocators.findElements_With_Xpath("//*[starts-with(@text,'" + originalText + "')]")
 							.size() > 0) {
 						if (AndroidLocators.findElements_With_Xpath("//*[contains(@text,'" + originalText
-								+ "')]/parent::*/parent::*/android.widget.Spinner//*[contains(@text,'Pick a country')]")
+								+ "')]/parent::*/parent::*/android.widget.Spinner")
 								.size() > 0) {
 							MobileElement country = AndroidLocators.xpath("//*[contains(@text,'" + originalText
-									+ "')]/parent::*/parent::*/android.widget.Spinner//*[contains(@text,'Pick a country')]");
+									+ "')]/parent::*/parent::*/android.widget.Spinner");
 							MobileActionGesture.singleLongPress(country);
 							MobileActionGesture.scrollTospecifiedElement("Angola");
 						} else {
@@ -862,7 +890,7 @@ public class CustomerPageActions {
 				}
 			case "Number":
 			case "G-Number":
-				if (isNumber) {
+				if (!isNumber) {
 					MobileActionGesture.scrollUsingText(originalText);
 					if (AndroidLocators.findElements_With_Xpath("//*[starts-with(@text,'" + originalText + "')]")
 							.size() > 0) {
@@ -872,7 +900,7 @@ public class CustomerPageActions {
 				}
 			case "Customer":
 			case "G-Cutomer":
-				if (isCustomer) {
+				if (!isCustomer) {
 					MobileActionGesture.scrollUsingText(originalText);
 					if (AndroidLocators.findElements_With_Xpath("//*[starts-with(@text,'" + originalText + "')]")
 							.size() > 0) {
@@ -902,7 +930,7 @@ public class CustomerPageActions {
 				break;
 			case "Custom Entity":
 			case "G-Custom Entity":
-				if (isCustomEntity) {
+				if (!isCustomEntity) {
 					MobileActionGesture.scrollUsingText(originalText);
 					if (AndroidLocators.findElements_With_Xpath("//*[starts-with(@text,'" + originalText + "')]")
 							.size() > 0) {
@@ -935,7 +963,7 @@ public class CustomerPageActions {
 				break;
 			case "Signature":
 			case "G-Signature":
-				if (isSignature) {
+				if (!isSignature) {
 					MobileActionGesture.scrollUsingText(originalText);
 					if (AndroidLocators.findElements_With_Xpath("//*[starts-with(@text,'" + originalText + "')]")
 							.size() > 0) {
@@ -955,7 +983,7 @@ public class CustomerPageActions {
 				break;
 			case "Currency":
 			case "G-Currency":
-				if (isCurrency) {
+				if (!isCurrency) {
 					MobileActionGesture.scrollUsingText(originalText);
 					if (AndroidLocators.findElements_With_Xpath("//*[starts-with(@text,'" + originalText + "')]")
 							.size() > 0) {
@@ -1017,6 +1045,7 @@ public class CustomerPageActions {
 				break;
 			}
 		}
+		
 	}
 
 }

@@ -3,10 +3,10 @@ package modules_test;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Arrays;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -433,7 +433,7 @@ public class Work {
 			workFieldsCount = workFields.size();
 			System.out.println(" .... After swiping the device screen fields count are .... : " + workFieldsCount);
 
-			// if work last element matches with newList then break the for loop
+			// if work last element matches with List then break the for loop
 			for (int i = 0; i < workFieldsCount; i++) {
 
 				// printing elements from last to first

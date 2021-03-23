@@ -8,7 +8,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
 
 import common_Steps.AndroidLocators;
-import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import modules_test.Forms_basic;
 import utils.CommonUtils;
@@ -42,7 +41,7 @@ public class HomepageAction {
 			Forms_basic.verifyFormPagesAndFill();
 			Forms_basic.formSaveButton();
 		} else if (AndroidLocators.findElements_With_Id("signInButton").size() > 0) {
-			CommonUtils.getdriver().findElement(By.id("signInButton")).click();
+			AndroidLocators.clickElementusingID("signInButton");
 			if (AndroidLocators.findElements_With_Id("heading").size() > 0) {
 				CommonUtils.getdriver().findElements(By.className("android.widget.Button")).get(0).click();
 			}
@@ -106,7 +105,7 @@ public class HomepageAction {
 				Forms_basic.formSaveButton();
 			}
 		} else if (AndroidLocators.findElements_With_Xpath("//*[@text='SIGN OUT']").size() > 0) {
-			CommonUtils.getdriver().findElement(By.xpath("//*[@text='SIGN OUT']")).click();
+			AndroidLocators.clickElementusingXPath("//*[@text='SIGN OUT']");
 		} else {
 			System.out.println("Location not found");
 		}

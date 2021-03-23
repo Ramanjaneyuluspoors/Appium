@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.openqa.selenium.By;
 import Actions.HomepageAction;
 import Actions.MobileActionGesture;
 import common_Steps.AndroidLocators;
@@ -712,7 +711,7 @@ public class Forms_basic {
 		// iterate and fill the form
 		for (int k = 0; k < countOfFields; k++) {
 			String OriginalfieldsText = formFields1.get(k).getText();
-			String fieldsText = formFields1.get(k).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			String fieldsText = formFields1.get(k).getText().replaceAll("[\\(!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("==== Before removeing special character ==== : " + OriginalfieldsText
 					+ "\n----- after removing regexp ----- : " + fieldsText);
 
@@ -1491,7 +1490,7 @@ public class Forms_basic {
 
 	// create entity item
 	public static void createEntity() throws MalformedURLException, InterruptedException, ParseException {
-//		MobileActionGesture.scrollTospecifiedElement("Abc");
+		MobileActionGesture.scrollTospecifiedElement("Abc");
 		AndroidLocators.clickElementusingID("customEntitiesFab");
 		CommonUtils.waitForElementVisibility("//*[contains(@text,'Create')]");
 		// insert entity data
@@ -1542,7 +1541,7 @@ public class Forms_basic {
 		// scroll and add list fields(labelView) till last text element find
 		while (!labelViews.isEmpty() && labelViews != null) {
 			boolean flag = false;
-			MobileActionGesture.verticalSwipeByPercentages(0.7, 0.2, 0.5);
+			MobileActionGesture.verticalSwipeByPercentages(0.8, 0.2, 0.5);
 			labelViews.addAll(AndroidLocators.findElements_With_Xpath(
 					"//*[@resource-id='in.spoors.effortplus:id/formLinearLayout']/android.widget.LinearLayout/android.widget.LinearLayout//*[contains(@class,'Text')]"));
 
@@ -1552,11 +1551,6 @@ public class Forms_basic {
 
 			// verify last text element if finds then exit for loop
 			for (int i = 0; i < labelViews.size(); i++) {
-
-				// printing elements from last to first
-				System.out.println("***** Print work fields elements text ***** : "
-						+ labelViews.get(countOfAllFields - (i + 1)).getText());
-
 				// printing the elements in the list
 				System.out.println("===== Work fields text ===== : " + labelViews.get(i).getText());
 
@@ -1570,11 +1564,13 @@ public class Forms_basic {
 			if (flag == true)
 				break;
 		} // while loop close
+		
+		MobileActionGesture.flingToBegining_Android();
 
 		// iterate the list fields
 		for (int i = 0; i < countOfAllFields; i++) {
 			String allFieldsTextOriginal = labelViews.get(i).getText();
-			String allFieldsText = labelViews.get(i).getText().replaceAll("[!@#$%&*(),.?\":{}|<>]", "");
+			String allFieldsText = labelViews.get(i).getText().replaceAll("[\\(!@#$%&*(),.?\":{}|<>]", "");
 			System.out.println("==== Before removing specia character ==== : " + allFieldsTextOriginal
 					+ "\n**** After removing the special chararcter **** : " + allFieldsText);
 
@@ -1586,15 +1582,14 @@ public class Forms_basic {
 				CommonUtils.waitForElementVisibility("//*[@text='MARK MY LOCATION']");
 				AndroidLocators.clickElementusingXPath("//*[@text='MARK MY LOCATION']");
 				AndroidLocators.clickElementusingXPath("//*[@text='USE MARKED LOCATION']");
-//				CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/pick_location_button']");
-				CommonUtils.wait(5);
+				CommonUtils.wait(10);
 				break;
 			case "Customer":
 				MobileActionGesture.scrollUsingText(allFieldsText);
-				if (AndroidLocators.xpath("//*[@id='label_for_view' and contains(@text,'"
-						+ allFieldsText + "')]/parent::*/android.widget.Button").isEnabled()) {
+				if (AndroidLocators.xpath("//*[contains(@text,'"
+						+ allFieldsText + "')]/parent::*/parent::*/android.widget.Button").isEnabled()) {
 					AndroidLocators.clickElementusingXPath("//*[@id='label_for_view' and contains(@text,'"
-							+ allFieldsText + "')]/parent::*/android.widget.Button");	
+							+ allFieldsText + "')]/parent::*/parent::*/android.widget.Button");	
 					CommonUtils.waitForElementVisibility("//*[@text='Customers']");
 					if (AndroidLocators.findElements_With_Id("item_id").size() > 0) {
 						CommonUtils.getdriver().findElements(MobileBy.id("item_id")).get(0).click();
@@ -1610,12 +1605,12 @@ public class Forms_basic {
 					System.out.println("Customer is already selected!!");
 				}
 				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + allFieldsText + "')]");
-				CommonUtils.wait(5);
+				CommonUtils.wait(3);
 				break;
 			case "Employee":
 				MobileActionGesture.scrollUsingText(allFieldsText);				
-				AndroidLocators.clickElementusingXPath("//*[@id='label_for_view' and contains(@text,'"
-						+ allFieldsText + "')]/parent::*/android.widget.Button");				
+				AndroidLocators.clickElementusingXPath("//*[contains(@text,'"
+						+ allFieldsText + "')]/parent::*/parent::*/android.widget.Button");				
 				if (AndroidLocators.findElements_With_ClassName("android.widget.CheckBox").size() > 0) {
 					CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckBox")).get(0).click();
 					AndroidLocators.clickElementusingXPath("//*[@content-desc='Select']");
@@ -1627,15 +1622,15 @@ public class Forms_basic {
 				break;
 			case "Time":
 				MobileActionGesture.scrollUsingText(allFieldsText);
-				AndroidLocators.clickElementusingXPath("//*[@id='label_for_view' and contains(@text,'"
-						+ allFieldsText + "')]/parent::*/android.widget.Button");				
+				AndroidLocators.clickElementusingXPath("//*[contains(@text,'"
+						+ allFieldsText + "')]/parent::*/parent::*/android.widget.Button");				
 				TimeScriptInForms(1, 1);
 				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + allFieldsText + "')]");
 				break;
 			case "DateTime":
 				MobileActionGesture.scrollUsingText(allFieldsText);
-				AndroidLocators.clickElementusingXPath("//*[@id='label_for_view' and contains(@text,'" + allFieldsText
-						+ "')]/parent::*/android.widget.LinearLayout/android.widget.Button[1]");
+				AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + allFieldsText
+						+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[1]");
 				CommonUtils.alertContentXpath();
 				try {
 					Forms_basic.dateScriptInForms(1);
@@ -1650,19 +1645,29 @@ public class Forms_basic {
 					e2.printStackTrace();
 				}
 				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + allFieldsText + "')]");
+				if (AndroidLocators
+						.findElements_With_Xpath("//*[starts-with(@text,'" + allFieldsText
+								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.Button[2]")
+						.size() > 0) {
+					AndroidLocators
+							.clickElementusingXPath("//*[@resource-id='in.spoors.effortplus:id/pick_time_buton']");
+					Work.workEndTime(1, 5);
+				} else {
+					System.out.println("DateTime is already picked");
+				}
+				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + allFieldsText + "')]");
 				break;
 			case "Date":
 				MobileActionGesture.scrollUsingText(allFieldsText);
-				AndroidLocators.clickElementusingXPath("//*[@id='label_for_view' and contains(@text,'" + allFieldsText
-						+ "')]/parent::*/android.widget.Button");
-				CommonUtils.alertContentXpath();
+				AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + allFieldsText
+						+ "')]/parent::*/parent::*/android.widget.Button");
 				Forms_basic.dateScriptInForms(1);
 				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + allFieldsText + "')]");
 				break;
 			case "Customer Type":
 				MobileActionGesture.scrollUsingText(allFieldsText);
-				MobileElement customerType = AndroidLocators.xpath("//*[@id='label_for_view' and contains(@text,'" + allFieldsText
-								+ "')]/parent::*/android.widget.Spinner");
+				MobileElement customerType = AndroidLocators.xpath("//*[contains(@text,'" + allFieldsText
+								+ "')]/parent::*/parent::*/android.widget.Spinner");
 				MobileActionGesture.singleLongPress(customerType);
 				if (AndroidLocators.findElements_With_ClassName("android.widget.CheckedTextView")
 						.size() > 0) {
@@ -1675,8 +1680,8 @@ public class Forms_basic {
 			case "Form":
 				MobileActionGesture.scrollUsingText(allFieldsText);
 				MobileElement form = 
-						AndroidLocators.xpath("//*[@id='label_for_view' and contains(@text,'" + allFieldsText
-								+ "')]/parent::*/android.widget.Button");
+						AndroidLocators.xpath("//*[contains(@text,'" + allFieldsText
+								+ "')]/parent::*/parent::*/android.widget.Button");
 				MobileActionGesture.tapByElement(form);
 				CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
 				try {
@@ -1708,8 +1713,8 @@ public class Forms_basic {
 				break;
 			case "Signature":
 				MobileActionGesture.scrollUsingText(allFieldsText);
-				MobileElement signature = AndroidLocators.xpath("//*[@id='label_for_view' and contains(@text,'" + allFieldsText
-								+ "')]/parent::*/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.Button");
+				MobileElement signature = AndroidLocators.xpath("//*[contains(@text,'" + allFieldsText
+								+ "')]/parent::*/parent::*/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.Button");
 				MobileActionGesture.tapByElement(signature);
 				MediaPermission.mediaPermission();
 				CommonUtils.waitForElementVisibility("//*[@text='CAPTURE']");
@@ -1720,8 +1725,8 @@ public class Forms_basic {
 				break;
 			case "Country":
 				MobileActionGesture.scrollUsingText(allFieldsText);
-				MobileElement country = AndroidLocators.xpath("//*[@id='label_for_view' and contains(@text,'" + allFieldsText
-								+ "')]/parent::*/android.widget.Spinner");
+				MobileElement country = AndroidLocators.xpath("//*[contains(@text,'" + allFieldsText
+								+ "')]/parent::*/parent::*/android.widget.Spinner");
 				MobileActionGesture.singleLongPress(country);
 				MobileActionGesture.scrollTospecifiedElement("India");
 				CommonUtils.waitForElementVisibility("//*[starts-with(@text,'" + allFieldsText + "')]");
@@ -1732,7 +1737,7 @@ public class Forms_basic {
 			case "Yes/No":
 				MobileActionGesture.scrollUsingText(allFieldsText);
 				MobileElement yesno = AndroidLocators.xpath("//*[@id='label_for_view' and contains(@text,'"
-						+ allFieldsText + ")]/parent::*/android.widget.Spinner");
+						+ allFieldsText + ")]/parent::*/parent::*/android.widget.Spinner");
 				MobileActionGesture.singleLongPress(yesno);
 				CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView")).get(1)
 						.click();
@@ -1741,8 +1746,8 @@ public class Forms_basic {
 				break;
 			case "Territory":
 				MobileActionGesture.scrollUsingText(allFieldsText);
-				MobileElement territory = AndroidLocators.xpath("//*[@id='label_for_view' and contains(@text,'" + allFieldsText
-								+ "')]/parent::*/android.widget.Spinner");
+				MobileElement territory = AndroidLocators.xpath("//*[contains(@text,'" + allFieldsText
+								+ "')]/parent::*/parent::*/android.widget.Spinner");
 				MobileActionGesture.singleLongPress(territory);
 				CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView")).get(1)
 						.click();
@@ -1751,8 +1756,8 @@ public class Forms_basic {
 				break;
 			case "Dropdown":
 				MobileActionGesture.scrollUsingText(allFieldsText);
-				MobileElement dropdown = AndroidLocators.xpath("//*[@id='label_for_view' and contains(@text,'"
-						+ allFieldsText + "')]/parent::*/android.widget.Spinner");
+				MobileElement dropdown = AndroidLocators.xpath("//*[contains(@text,'"
+						+ allFieldsText + "')]/parent::*/parent::*/android.widget.Spinner");
 				MobileActionGesture.singleLongPress(dropdown);
 				CommonUtils.getdriver().findElements(MobileBy.className("android.widget.CheckedTextView")).get(1)
 						.click();
@@ -1761,8 +1766,8 @@ public class Forms_basic {
 				break;
 			case "Multi Select Dropdown":
 				MobileActionGesture.scrollUsingText(allFieldsText);
-				MobileElement multidropdown = AndroidLocators.xpath("//*[@id='label_for_view' and contains(@text,'"
-						+ allFieldsText + "')]/parent::*/android.widget.Button");
+				MobileElement multidropdown = AndroidLocators.xpath("//*[contains(@text,'"
+						+ allFieldsText + "')]/parent::*/parent::*/android.widget.Button");
 				MobileActionGesture.tapByElement(multidropdown);
 				CommonUtils.waitForElementVisibility("//*[@text='Pick values']");
 				List<MobileElement> pickValues = AndroidLocators
@@ -1780,7 +1785,7 @@ public class Forms_basic {
 			case "Pick List":
 				MobileActionGesture.scrollUsingText(allFieldsText);
 				AndroidLocators.clickElementusingXPath("//*[@id='label_for_view' and starts-with(@text,'"
-						+ allFieldsText + "')]/parent::*/android.widget.Button");
+						+ allFieldsText + "')]/parent::*/parent::*/android.widget.Button");
 				CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
 				if (CommonUtils.getdriver().findElements(MobileBy.id("titleTextView")).get(0).isDisplayed()) {
 					CommonUtils.getdriver().findElements(MobileBy.id("titleTextView")).get(0).click();
@@ -1792,8 +1797,8 @@ public class Forms_basic {
 				break;
 			case "Multi Pick List":
 				MobileActionGesture.scrollUsingText(allFieldsText);
-				MobileElement multipicklist = AndroidLocators.xpath("//*[@id='label_for_view' and starts-with(@text,'" + allFieldsText
-								+ "')]/parent::*/android.widget.Button");
+				MobileElement multipicklist = AndroidLocators.xpath("//*[starts-with(@text,'" + allFieldsText
+								+ "')]/parent::*/parent::*/android.widget.Button");
 				MobileActionGesture.tapByElement(multipicklist);
 				CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
 				List<MobileElement> pickMultiPickList = AndroidLocators.findElements_With_ClassName("android.widget.CheckBox");
@@ -1810,8 +1815,8 @@ public class Forms_basic {
 			case "Multi Pick Customer":
 				MobileActionGesture.scrollUsingText(allFieldsText);
 				MobileElement multiPickCustomer = 
-						AndroidLocators.xpath("//*[@id='label_for_view' and starts-with(@text,'" + allFieldsText
-								+ "')]/parent::*/android.widget.Button");
+						AndroidLocators.xpath("//*[starts-with(@text,'" + allFieldsText
+								+ "')]/parent::*/parent::*/android.widget.Button");
 				MobileActionGesture.tapByElement(multiPickCustomer);
 				CommonUtils.waitForElementVisibility("//*[@text='Customers']");
 				if (CommonUtils.getdriver().findElements(MobileBy.id("pickCustomerCheck")).size() > 0) {
@@ -1837,89 +1842,89 @@ public class Forms_basic {
 			case "Entity Name":
 				if (AndroidLocators
 						.findElements_With_Xpath(
-								"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]")
+								"//*[contains(@text,'" + allFieldsText + "')]")
 						.size() > 0) {
 					AndroidLocators.sendInputusing_XPath(
-							"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]");
+							"//*[contains(@text,'" + allFieldsText + "')]");
 				} else {
 					MobileActionGesture.scrollUsingText(allFieldsText);
 					AndroidLocators.sendInputusing_XPath(
-							"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]");
+							"//*[contains(@text,'" + allFieldsText + "')]");
 				}
 				break;
 			case "Text":
 				if (AndroidLocators.findElements_With_Xpath(
-								"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]")
+								"//*[contains(@text,'" + allFieldsText + "')]")
 						.size() > 0) {
 					AndroidLocators.sendInputusing_XPath(
-							"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]");
+							"//*[contains(@text,'" + allFieldsText + "')]");
 				} else {
 					MobileActionGesture.scrollUsingText(allFieldsText);
 					AndroidLocators.sendInputusing_XPath(
-							"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]");
+							"//*[contains(@text,'" + allFieldsText + "')]");
 				}
 				break;
 			case "Currency":
 				if (AndroidLocators.findElements_With_Xpath(
-								"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]")
+								"//*[contains(@text,'" + allFieldsText + "')]")
 						.size() > 0) {
 					AndroidLocators.sendNumberInputUsing_xpath(
-							"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]");
+							"//*[contains(@text,'" + allFieldsText + "')]");
 				} else {
 					MobileActionGesture.scrollUsingText(allFieldsText);
 					AndroidLocators.sendNumberInputUsing_xpath(
-							"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]");
+							"//*[contains(@text,'" + allFieldsText + "')]");
 				}
 				break;
 			case "Number":
 				if (AndroidLocators.findElements_With_Xpath(
-								"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]")
+								"//*[contains(@text,'" + allFieldsText + "')]")
 						.size() > 0) {
 					AndroidLocators.sendNumberInputUsing_xpath(
-							"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]");
+							"//*[contains(@text,'" + allFieldsText + "')]");
 				} else {
 					MobileActionGesture.scrollUsingText(allFieldsText);
 					AndroidLocators.sendNumberInputUsing_xpath(
-							"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]");
+							"//*[contains(@text,'" + allFieldsText + "')]");
 				}
 				break;
 			case "Phone":
 			case "Phone Number":
 			case "PhoneOptional":
 				if (AndroidLocators.findElements_With_Xpath(
-								"//*[@class='android.widget.EditText' and starts-with(@text,'" + allFieldsText + "')]")
+								"//*[starts-with(@text,'" + allFieldsText + "')]")
 						.size() > 0) {
 					AndroidLocators.sendPhoneNumberInputUsing_xpath(
-							"//*[@class='android.widget.EditText' and starts-with(@text,'" + allFieldsText + "')]");
+							"//*[starts-with(@text,'" + allFieldsText + "')]");
 
 				} else {
 					MobileActionGesture.scrollUsingText(allFieldsText);
 					AndroidLocators.sendPhoneNumberInputUsing_xpath(
-							"//*[@class='android.widget.EditText' and starts-with(@text,'" + allFieldsText + "')]");
+							"//*[starts-with(@text,'" + allFieldsText + "')]");
 				}
 				break;
 			case "URL":
 				if (AndroidLocators.findElements_With_Xpath(
-								"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]")
+								"//*[contains(@text,'" + allFieldsText + "')]")
 						.size() > 0) {
 					AndroidLocators.sendUrlInputusing_XPath(
-							"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]");
+							"//*[contains(@text,'" + allFieldsText + "')]");
 				} else {
 					MobileActionGesture.scrollUsingText(allFieldsText);
 					AndroidLocators.sendUrlInputusing_XPath(
-							"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]");
+							"//*[contains(@text,'" + allFieldsText + "')]");
 				}
 				break;
 			case "Email":
 				if (AndroidLocators.findElements_With_Xpath(
-								"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]")
+								"//*[contains(@text,'" + allFieldsText + "')]")
 						.size() > 0) {
 					AndroidLocators.sendEmailInputusing_XPath(
-							"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]");
+							"//*[contains(@text,'" + allFieldsText + "')]");
 				} else {
 					MobileActionGesture.scrollUsingText(allFieldsText);
 					AndroidLocators.sendEmailInputusing_XPath(
-							"//*[@class='android.widget.EditText' and contains(@text,'" + allFieldsText + "')]");
+							"//*[contains(@text,'" + allFieldsText + "')]");
 				}
 			}
 		}
