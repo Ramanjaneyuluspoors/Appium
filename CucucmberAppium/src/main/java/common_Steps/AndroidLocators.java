@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.text.RandomStringGenerator;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
@@ -80,7 +83,24 @@ public class AndroidLocators {
 	public static List<MobileElement> findElements_With_Xpath(String xpathLocator) {
 		return CommonUtils.getdriver().findElements(MobileBy.xpath(xpathLocator));
 	}
+	
+	public static Boolean waitElementForVisibility(List<MobileElement> el) {
+        return waitElementForVisibility(el, 0, 10);
+    }
 								
+	public static Boolean waitElementForVisibility(List<MobileElement> el, int num, int seconds) {
+		WebDriverWait wait = new WebDriverWait(CommonUtils.getdriver(), seconds);
+		try {
+			WebElement element = wait.until(ExpectedConditions.visibilityOf(el.get(num)));
+			if (element.isDisplayed())
+				return true;
+			else
+				return false;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
 	// findElements with Id
 	public static List<MobileElement> findElements_With_Id(String IdLocator) {
 		return CommonUtils.getdriver().findElements(MobileBy.id(IdLocator));
@@ -172,6 +192,14 @@ public class AndroidLocators {
 		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).clear();
 		CommonUtils.getdriver().findElement(MobileBy.xpath(xpathLocator)).sendKeys(pincodeInput);
 	}
+	
+	//send number iput using id
+	public static void sendNumberUsingId(String idLocator) {
+		String pincodeInput = RandomStringUtils.randomNumeric(6);
+		CommonUtils.getdriver().findElement(MobileBy.id(idLocator)).clear();
+		CommonUtils.getdriver().findElement(MobileBy.id(idLocator)).sendKeys(pincodeInput);
+
+	}
 
 	// sending Phonenumber input using xpath
 	public static void sendPhoneNumberInputUsing_xpath(String xpathLocator) {
@@ -188,8 +216,8 @@ public class AndroidLocators {
 
 	// send text using xpath
 	public static void enterTextusingXpath(String locator, String sText) {
+//		CommonUtils.getdriver().findElement(MobileBy.xpath(locator)).click();
 		CommonUtils.getdriver().findElement(MobileBy.xpath(locator)).clear();
-		CommonUtils.getdriver().findElement(MobileBy.xpath(locator)).click();
 		CommonUtils.getdriver().findElement(MobileBy.xpath(locator)).sendKeys(sText);
 		CommonUtils.getdriver().hideKeyboard();
 	}

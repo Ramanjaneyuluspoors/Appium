@@ -11,11 +11,11 @@ Scenario: Customer Activity
 	Given Scroll to customer card and click 
 		|Customers|    
 	When user search for customer with 
-		|Arjun|
+		|Ajay Mobile|
 	Then verify customer exist or not "Arjun" 
-	And verfiy customer checkin 
-	And Do customer activity and checkout 
-		|Form-1|
+	And  verfiy customer checkin 
+	And  Do customer activity and checkout 
+		|Form-4|
 		
 @Routeplan 
 Scenario: Route Activity 
@@ -48,7 +48,7 @@ Scenario: Form completion with allFields
 	Given Scroll to form and click 
 		|Forms|
 	When user click on specified form
-		|New-Form| 	
+		|AllFieldsForm new| 	
 	Then fill the form to complete 
 	
 @Send_Debug_info

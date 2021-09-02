@@ -26,8 +26,8 @@ public class HomepageAction {
 		CommonUtils.waitForElementVisibility("//*[@resource-id='in.spoors.effortplus:id/startStopWorkSwitch']");
 		CommonUtils.SwitchStatus("startStopWorkSwitch");
 		if (CommonUtils.SwitchStatus("startStopWorkSwitch").contains("OFF")) {
-			AndroidLocators.clickElementusingXPath("//*[@class='android.widget.Switch'][@text='OFF']");
-			Thread.sleep(1000);
+			AndroidLocators.clickElementusingID("startStopWorkSwitch");
+			CommonUtils.wait(5);
 			sign_in_Options();
 		} // closing if block
 	}
@@ -54,7 +54,10 @@ public class HomepageAction {
 			CommonUtils.getdriver().findElements(By.className("android.widget.Button")).get(0).click();
 		} else if (AndroidLocators.findElements_With_Xpath("//*[@text='SIGN IN']").size() > 0) {
 			AndroidLocators.clickElementusingXPath("//*[@text='SIGN IN']");
-		} else if (AndroidLocators.findElements_With_Xpath("//*[@resource-id='com.android.permissioncontroller:id/permission_message']")
+		} else if (AndroidLocators.findElements_With_ResourceId("android:id/button1").size() > 0) {
+			AndroidLocators.clickElementusingResourceId("android:id/button1");
+		} else if (AndroidLocators
+				.findElements_With_Xpath("//*[@resource-id='com.android.permissioncontroller:id/permission_message']")
 				.size() > 0) {
 			MediaPermission.signinMediaPermission();
 			AndroidLocators.clickElementusingID("signInButton");
@@ -82,7 +85,7 @@ public class HomepageAction {
 		CommonUtils.waitForElementVisibility("//*[@class='android.widget.Switch']");
 		CommonUtils.SwitchStatus("startStopWorkSwitch");
 		if (CommonUtils.SwitchStatus("startStopWorkSwitch").contains("ON")) {
-			AndroidLocators.clickElementusingXPath("//*[@class='android.widget.Switch'][@text='ON']");
+			AndroidLocators.clickElementusingID("startStopWorkSwitch");
 			// verify if sign-out form exist then fill if not signout from map
 			signout_cases();
 		}
@@ -144,8 +147,7 @@ public class HomepageAction {
 
 	// select work/form/customer/dayplan from home fab dialog
 	public static void select_dialog_list(String selectValue) {
-		List<MobileElement> selectList = AndroidLocators
-				.findElements_With_ResourceId("new UiSelector().resourceId(\"android:id/text1\")");
+		List<MobileElement> selectList = AndroidLocators.findElements_With_ResourceId("android:id/text1");
 		for (int i = 0; i < selectList.size(); i++) {
 			String List_view_Text = selectList.get(i).getText();
 			if (List_view_Text.contains(selectValue)) {

@@ -586,7 +586,7 @@ public class FormAdvanceSettings {
 		// iterate and fill the form
 		for (int m = 0; m < minMaxFieldsCount; m++) {
 			String originalText = minMaxFields.get(m).getText();
-			String fieldsText = minMaxFields.get(m).getText().split("\\(")[0].replaceAll("\\s[!@#$%&*(),.?\":{}|<>]",
+			String fieldsText = minMaxFields.get(m).getText().split("\\(")[0].replaceAll("[!@#$%&*(),.?\":{}|<>]",
 					"");
 			System.out.println(
 					"Before removing special character: " + originalText + "after removing regexp: " + fieldsText);
@@ -776,7 +776,7 @@ public class FormAdvanceSettings {
 		// iterate and fill the form
 		for (int k = 0; k < countOfFields; k++) {
 			String OriginalText = formFields1.get(k).getText();
-			String fieldsText = formFields1.get(k).getText().split("\\(")[0].replaceAll("[\\s!@#$%&*(),.?\":{}|<>]",
+			String fieldsText = formFields1.get(k).getText().split("\\(")[0].replaceAll("[!@#$%&*(),.?\":{}|<>]",
 					"");
 			System.out.println("===== Before removing regular expression ===== : " + OriginalText
 					+ "\n----- After removing regexp ----- : " + fieldsText);
@@ -2786,12 +2786,12 @@ public class FormAdvanceSettings {
 	// handling warning alert in form
 	public static void handlingWarningAlert() throws InterruptedException {
 		CommonUtils.wait(1);
-		if (AndroidLocators.resourceId("android:id/alertTitle").isDisplayed()) {
+		if (AndroidLocators.findElements_With_ResourceId("android:id/alertTitle").size() > 0) {
 			MobileElement message = AndroidLocators.resourceId("android:id/message");
 			System.out.println(" **** Warning message is **** :" + message.getText());
-			if (AndroidLocators.resourceId("android:id/button2").isDisplayed()) {
+			if (AndroidLocators.findElements_With_ResourceId("android:id/button2").size() > 0) {
 				AndroidLocators.resourceId("android:id/button2").click();
-			} else if (AndroidLocators.xpath("//*[@text='CANCEL']").isDisplayed()) {
+			} else if (AndroidLocators.findElements_With_Xpath("//*[@text='CANCEL']").size() > 0) {
 				AndroidLocators.clickElementusingXPath("//*[@text='CANCEL']");
 			}
 			CommonUtils.waitForElementVisibility("//*[@content-desc='Save']");

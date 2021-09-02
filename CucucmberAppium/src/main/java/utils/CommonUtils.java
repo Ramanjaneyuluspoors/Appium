@@ -12,11 +12,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.text.RandomStringGenerator;
-
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -25,7 +22,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import Actions.MobileActionGesture;
 import common_Steps.AndroidLocators;
-import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
@@ -115,6 +111,7 @@ public class CommonUtils {
 	public static void implicitWait() {
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
+	
 
 	// screenshot method
 	public static String takeScreenShot() {
@@ -204,16 +201,16 @@ public class CommonUtils {
 		wait = new WebDriverWait(driver, 25);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(waitelexpath)));
 	}
-	
+
 	// wait for element using xpath
-		public static void longWaitElementVisibility(String waitelexpath) {
-			wait = new WebDriverWait(driver, 6000);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(waitelexpath)));
-		}
+	public static void longWaitElementVisibility(String waitelexpath) {
+		wait = new WebDriverWait(driver, 6000);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(waitelexpath)));
+	}
 
 	// click on sync button in homepage
 	public static void waitForSyncButton() throws InterruptedException {
-		if (AndroidLocators.returnUsingId("syncButton").isDisplayed()) {
+		if (AndroidLocators.findElements_With_Id("syncButton").size() > 0) {
 			MobileElement sync = AndroidLocators.returnUsingId("syncButton");
 			WebDriverWait waitforSync = new WebDriverWait(driver, 30);
 			waitforSync.until(ExpectedConditions.visibilityOf(sync));
@@ -223,37 +220,28 @@ public class CommonUtils {
 			} else {
 				CommonUtils.wait(5);
 			}
+		} else {
+			CommonUtils.sync_in_progress();
 		}
 	}
 
 	// sync progress
 	public static void sync_in_progress() throws InterruptedException {
 		if (AndroidLocators.findElements_With_Id("syncHeading").size() > 0) {
-			CommonUtils.wait(5);
+			CommonUtils.wait(20);
 		} else {
-			CommonUtils.wait(5);
+			CommonUtils.wait(10);
 		}
 	}
 
 	// click on menu bar
 	public static void openMenu() throws MalformedURLException, InterruptedException {
+		CommonUtils.wait(8);
 		if (AndroidLocators.findElements_With_Xpath("//*[@content-desc='Open drawer']").size() > 0) {
 			AndroidLocators.clickElementusingXPath("//*[@content-desc='Open drawer']");
-		} else if (AndroidLocators.findElements_With_Xpath("//*[@contentDescription='Open drawer']").size() > 0) {
-			AndroidLocators.clickElementusingXPath("//*[@contentDescription='Open drawer']");
-		} else if (AndroidLocators.findElements_With_Xpath("//android.widget.ImageButton[@content-desc='Open drawer']")
-				.size() > 0) {
-			AndroidLocators.clickElementusingXPath("//android.widget.ImageButton[@content-desc='Open drawer']");
 		} else {
-			System.out.println("*** Menubar is not displayed ***");
+			AndroidLocators.clickElementusingXPath("//*[@content-desc='Open drawer']");
 		}
-		CommonUtils.wait(1);
-	}
-
-	// javascript executor using id
-	public static void javaScriptUsingId(String eleId) {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("document.getElementById('" + eleId + "').click();");
 	}
 
 	// click on home "+" image
@@ -266,9 +254,9 @@ public class CommonUtils {
 
 	// clicks on back arrow symbol to move backward
 	public static void goBackward() {
-		do {
+		while (AndroidLocators.findElements_With_Xpath("//*[@content-desc='Navigate up']").size() > 0) {
 			driver.navigate().back();
-		} while (driver.findElements(By.xpath("//*[@content-desc='Navigate up']")).size() > 0);
+		}
 	}
 
 	// clicks on Home in menu bar to move homepage
@@ -276,7 +264,7 @@ public class CommonUtils {
 		if (AndroidLocators.findElements_With_Xpath("//*[@text='Home']").size() > 0) {
 			AndroidLocators.clickElementusingXPath("//*[@text='Home']");
 			CommonUtils.wait(5);
-			MobileActionGesture.scrollTospecifiedElement("Home");
+			MobileActionGesture.scrollUsingText("Home");
 			waitForElementVisibility("//*[@text='Home']");
 		} else {
 			System.out.println("--- Home button is not displayed ---");
@@ -294,7 +282,6 @@ public class CommonUtils {
 		if (clickOk.getText().contains(text))
 			clickOk.click();
 		CommonUtils.wait(1);
-
 	}
 
 	// click on interrupt sync popup
@@ -304,9 +291,9 @@ public class CommonUtils {
 		} else if (AndroidLocators.findElements_With_ResourceId("android:id/button1")
 				.size() > 0) {
 			AndroidLocators.clickElementusingResourceId("android:id/button2");
-		} else if (AndroidLocators.findElements_With_Xpath("//android.widget.Button[@text='Interrupt Sync & Let me work']")
+		} else if (AndroidLocators.findElements_With_Xpath("//*[@text='Interrupt Sync & Let me work']")
 				.size() > 0) {
-			AndroidLocators.clickElementusingXPath("//android.widget.Button[@text='Interrupt Sync & Let me work']");
+			AndroidLocators.clickElementusingXPath("//*[@text='Interrupt Sync & Let me work']");
 		} else {
 			System.out.println("Interrupt sync pop-up is not displayed");
 		}
@@ -398,7 +385,7 @@ public class CommonUtils {
 		} else {
 			AndroidLocators.clickElementusingXPath("[@text='INITIATE FULL SYNC']");
 		}
-		wait(15);
+		wait(25);
 	}
 
 	// click on search icon

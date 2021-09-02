@@ -28,7 +28,7 @@ public class TestBase {
 				ServerService.startService();
 				CommonUtils.loadConfigProp("selendroidtestapp.properties");
 				CommonUtils.setCapabilitiesForAndoird();
-				driver = CommonUtils.getDriver();
+				driver = CommonUtils.getAppiumDriver();
 			}
 
 		}

@@ -7,7 +7,6 @@ import common_Steps.AndroidLocators;
 import cucumber.api.java.en.*;
 import modules_test.Work;
 import modules_test.Work_advanceSettings;
-import utils.CommonUtils;
 
 public class Works_Implementation {
                                            /* Work creation and modification */
@@ -160,7 +159,6 @@ public class Works_Implementation {
 	
 	@Given("swipe to work and validate work {string}")
 	public void swipe_to_work_and_validate_work(String workName) throws InterruptedException {
-		CommonUtils.wait(10);
 		Work.clickOnWorkCard(workName);
 	}
 
@@ -201,7 +199,7 @@ public class Works_Implementation {
 		Work.validating_form_to_work_autocopy_by_swiping();
 		Work.saveWork();
 	}
-	                                /* autocopy subtask from parent work,add subtask and modifying subtask and complete subtask */
+	                        /* autocopy subtask from parent work,add subtask and modifying subtask and complete subtask */
 	
 	@Given("swipe to parent work {string}")
 	public void swipe_to_parent_work(String workName) throws MalformedURLException, InterruptedException {
@@ -295,5 +293,41 @@ public class Works_Implementation {
 		Work.perform_Parent_WorkAction_When_Subtask_is_Completed();
 	}
 	
+	
+	@Given("Go to work and verify parent work exist or not {string}")
+	public void Go_to_work_and_verify_parent_work_exist_or_not(String workName) throws MalformedURLException, InterruptedException {
+		Work.checkWorkExistInHomePageorNot(workName);
+	}
+	
+	@When("user create the parent work {string}")
+	public void user_create_the_parent_work(String workName) throws MalformedURLException, InterruptedException, ParseException{
+		Work.fill_Work_MandatoryFields();
+		Work.saveWork();
+		Work.goingToWorkScreen(workName);
+	}
+	
+	@And("create subtask")
+	public void create_subtask() throws InterruptedException, MalformedURLException, ParseException {
+		Work.verify_Subtask();
+		Work.fill_Work_MandatoryFields();
+		Work.saveWork();
+	}
+	
+	@Then("Reject subtask and validate parent work action")
+	public void Reject_subtask_and_validate_parent_work_action() throws MalformedURLException, InterruptedException, ParseException {
+		Work.perform_ParentWorkAction_when_Subtask_isRejected();
+	}
+	
+	@Given("move to work {string}")
+	public void move_to_work(String workName) throws MalformedURLException, InterruptedException {
+		Work.checkWorkExistInHomePageorNot(workName);
+	}
+	
+	@When("user enters the criteria {string} when {string} for the workfields {string} the input is {string}")
+	public void user_enters_the_criteria_when_for_the_workfields_the_is(String performDonotPerform,
+			String baseCondition, String workFields, String userInput) {
+		
+		
+	}
 	
 }

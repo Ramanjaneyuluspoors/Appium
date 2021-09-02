@@ -33,7 +33,7 @@ public class Sanity_implementation {
 	
 	@Given("^Scroll to customer card and click$")
 	public void scroll_to_customer_card_and_click(String customers) throws MalformedURLException {
-		CustomerPageActions.verifyCustomerInHomePage("" + customers + "");
+		CustomerPageActions.verifyCustomerInHomePage(customers);
 	}
 
 	@When("^user search for customer with$")
@@ -57,7 +57,7 @@ public class Sanity_implementation {
 		CustomerPageActions.clickActivity(formName);
 		Forms_basic.verifyFormPagesAndFill();
 		Forms_basic.formSaveButton();
-		CustomerPageActions.HomepageCusCheckout();
+		CustomerPageActions.checkout_in_customer_screen();
 	}
 
 	@Given("^Scroll to route plan and click$")

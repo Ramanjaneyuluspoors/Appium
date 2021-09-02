@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.BasicConfigurator;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.*;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.By;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
@@ -16,8 +16,8 @@ import utils.CommonUtils;
 import utils.ServerService; 
 	
 @RunWith(Cucumber.class)
-@CucumberOptions(features = {"C:\\Users\\spoors\\git\\Appium\\CucucmberAppium\\src\\test\\java\\Featurefile"}, 
-glue = "stepDefinition1", dryRun=false, strict=true, monochrome=true, tags= {"@Reports_validation or @employee_specifying_reports"}, 
+@CucumberOptions(features = {"C:\\Users\\spoors\\git\\Appium\\CucucmberAppium\\src\\test\\java\\Featurefile\\sanity.feature"}, 
+glue = "stepDefinition1", dryRun=false, strict=true, monochrome=true, tags= {"@CustomerActivity"}, 
 plugin = {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"})
 public class TestRunner {  
 	public static AndroidDriver<MobileElement> driver;
@@ -33,15 +33,32 @@ public class TestRunner {
 			ServerService.startService();
 			CommonUtils.loadConfigProp("" + propertiesPath + "");
 			CommonUtils.setCapabilitiesForAndoird();	
-			driver = CommonUtils.getDriver();
+			driver = CommonUtils.getAppiumDriver();
 			driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 			BasicConfigurator.configure();
 		}
 	}
 
+    @Test
+    public void Test(String _appPackage) {
+        System.out.println("Check if the App is Installed");
+        System.out.println(driver.isAppInstalled(_appPackage));
+    }
+	
+	@Test
+	public void getAppiumStatus() {
+		ServerService.AppiumDriver.navigate().to("http://www.baidu.com");
+		ServerService.AppiumDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		ServerService.AppiumDriver.findElementByName("wd").sendKeys("appium desired capability");
+		ServerService.AppiumDriver.findElement(By.name("wd")).clear();
+	}
+
 	@AfterClass
-	public static void teardown() {  
-		driver.quit(); 
-		ServerService.stopService(); 
+	public static void teardown() {
+		driver.quit();
+		ServerService.stopService();
 	} 
+	
+	
+	
 }

@@ -57,7 +57,6 @@ public class Work {
 	// a work
 	public static void checkWorkExistInHomePageorNot(String workName)
 			throws InterruptedException, MalformedURLException {
-		CommonUtils.wait(3);
 		try {
 			CommonUtils.getdriver().findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView("
 					+ "new UiSelector().text(\"" + workName + "\"));");
@@ -66,11 +65,12 @@ public class Work {
 				AndroidLocators.clickElementusingXPath("//*[contains(@text,'" + workName + "')]");
 				CommonUtils.interruptSyncAndLetmeWork();
 				workFab();
-			} else {
-				goToWorkPage(workName);
 			}
+//				else {
+//				goToWorkPage(workName);
+//			}
 		} catch (Exception e) {
-			System.out.println(e);
+			goToWorkPage(workName);
 		}
 	}
 
@@ -135,7 +135,7 @@ public class Work {
 	public static void workFab() throws InterruptedException {
 		if (AndroidLocators.findElements_With_Id("fab").size() > 0) {
 			AndroidLocators.clickElementusingID("fab");
-		} else if (AndroidLocators.resourceId("in.spoors.effortplus:id/fab").isDisplayed()) {
+		} else if (AndroidLocators.findElements_With_ResourceId("in.spoors.effortplus:id/fab").size() > 0) {
 			AndroidLocators.clickElementusingResourceId("in.spoors.effortplus:id/fab");
 		} else {
 			AndroidLocators.clickElementusingXPath("//*[@resource-id='in.spoors.effortplus:id/fab']");
@@ -436,10 +436,6 @@ public class Work {
 			// if work last element matches with List then break the for loop
 			for (int i = 0; i < workFieldsCount; i++) {
 
-				// printing elements from last to first
-				System.out.println("***** Print work fields elements text ***** : "
-						+ workFields.get(workFieldsCount - (i + 1)).getText());
-
 				// printing the elements in the list
 				System.out.println("===== Work fields text ===== : " + workFields.get(i).getText());
 
@@ -472,12 +468,7 @@ public class Work {
 		// providing input for work fields by iterating using the workList(newList)
 		for (int j = 0; j < workFieldsCount; j++) {
 			String workOriginalFields = workFields.get(j).getText();
-			System.out.println(workOriginalFields);
-			String[] val = workOriginalFields.split("\\*");
-
-			String workFieldsText = val[0];
-			// String workFieldsText =
-			// workFields.get(j).getText().replaceAll("\\s[!@#$%&*,.?\":{}|<>]", "");
+			String workFieldsText = workFields.get(j).getText().split("\\(")[0].replaceAll("\\s[!@#$%&*,.?\":{}|<>]", "");
 
 			System.out.println();
 			System.out.println("***** Before removing special character ***** : " + workOriginalFields
@@ -883,7 +874,7 @@ public class Work {
 							CommonUtils.getdriver().findElements(MobileBy.id("custom_entity_card")).get(0).click();
 						} else {
 							// write entity item creation method
-							Forms_basic.createEntity();
+							Custom_Entity.createEntity();
 							AndroidLocators.clickElementusingXPath("//*[@content-desc='Save']");
 							CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
 							CommonUtils.getdriver().findElements(MobileBy.id("entityTitle")).get(0).click();
@@ -1611,7 +1602,7 @@ public class Work {
 							CommonUtils.getdriver().findElements(MobileBy.id("custom_entity_card")).get(0).click();
 						} else {
 							// write entity item creation method
-							Forms_basic.createEntity();
+							Custom_Entity.createEntity();
 							AndroidLocators.clickElementusingXPath("//*[@content-desc='Save']");
 							CommonUtils.waitForElementVisibility("//*[@content-desc='Search']");
 							CommonUtils.getdriver().findElements(MobileBy.id("entityTitle")).get(0).click();

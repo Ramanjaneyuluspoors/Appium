@@ -14,12 +14,25 @@ public class CustomerImplementation {
 		CustomerPageActions.goToCustomerScreen(customer);
 	}
 	
-	@Then("Create a customer")
-	public void Create_a_customer() throws MalformedURLException, InterruptedException, ParseException {
-		CustomerPageActions.customerCreation();
+	@When("user create a customer")
+	public void user_create_a_customer() throws MalformedURLException, InterruptedException, ParseException {
+		CustomerPageActions.createCustomer();   //customer creation with few fields  (need to check with all fields)
+		CustomerPageActions.saveMethod();
 	}
 	
-	                                /********* Customer Advance setting **********/
+	@Then("validate customer is created or not")
+	public void validate_customer_is_created_or_not() throws MalformedURLException, InterruptedException {
+		CustomerPageActions.searchForCreatedCustomer();
+	}
+	
+	@And("modify the customer")
+	public void modify_the_customer() throws MalformedURLException, InterruptedException {
+		CustomerPageActions.goToCustomerModifyScreen();
+		CustomerPageActions.modifyCustomer();
+		validate_customer_is_created_or_not();
+	}
+	
+	                                /********* Customer Advance settings **********/
 	
 	                             /* Customer min max validation */
 	
@@ -68,6 +81,17 @@ public class CustomerImplementation {
 	public void user_enters_value_for_the_dependent_field(String fieldValue, String fieldType) throws MalformedURLException {
 	   Customer_Advancesetting.validating_BackgroundFields_Basedon_Dependent_Fieldvalue(fieldValue, fieldType);
 	}
+										/* Error and warn message validation based on field value */
+	
+	@Given("Scroll to customer screen {string}")
+	public void scroll_to_customer_screen(String customer) {
+		CustomerPageActions.goToCustomerScreen(customer);
+	}
 
+	@When("user gives the condition as {string} and provides the input as {string}")
+	public void user_gives_the_condition_as_and_provides_the_input_as(String errorCondition, String inputValue)
+			throws MalformedURLException, InterruptedException, ParseException {
+		Customer_Advancesetting.fieldValidation_BasedOn_ValueIn_OtherField(errorCondition, inputValue);
+	}
 	
 }

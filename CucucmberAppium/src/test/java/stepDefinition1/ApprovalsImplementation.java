@@ -9,16 +9,15 @@ import modules_test.ApprovalsTesting;
 public class ApprovalsImplementation {
 
 	@Given("swipe to my approvals card")
-	public void swipe_to_my_approvals_card() {
+	public void swipe_to_my_approvals_card() throws MalformedURLException, InterruptedException, ParseException {
 		ApprovalsTesting.goingToApprovalsCard();
 	}
-
-	@Then("fill an activity using approval process name ${string}")
-	public void fill_an_activity_using_approval_process_name(String formApprovalName)
-			throws MalformedURLException, InterruptedException, ParseException {
-		ApprovalsTesting.fill_approval_process_activity(formApprovalName);
-	}
 	
+	@Then("fill an activity using approval process name {string}")
+	public void fill_an_activity_using_approval_process_name(String formApprovalName) throws MalformedURLException, InterruptedException, ParseException {
+	    ApprovalsTesting.fill_approval_process_activity(formApprovalName);
+	}
+
 	@Given("fling to approval card")
 	public void fling_to_approval_card() {
 		ApprovalsTesting.goingToApprovalsCard();

@@ -3,7 +3,9 @@ Feature: Testing customer module
 @Customer_creation 
 Scenario: Customer creation 
 	Given verify customer card exist or not "Customers" 
-	Then Create a customer 
+	When user create a customer 
+	Then validate customer is created or not
+	And modify the customer
 	
 @Customer_Min_Max_validations 
 Scenario: Customer min max validation 
@@ -30,5 +32,13 @@ Scenario Outline: Customer Highlighting Background of a Field Based on Dependent
 	Examples: 
 		|customer|fieldvalue|fieldType|
 		|Customers|10|Currency|
+
+@Customer_Validate_Based_on_Values_in_Other_Fields 
+Scenario Outline: Customer Validate Based on Values in OtherFields 
+	Given Scroll to customer screen "<customer>" 
+	When user gives the condition as "<errorCondition>" and provides the input as "<inputValue>" 
+	Examples: 
+		|customer|errorCondition|inputValue|
+		|Customers|Show Error when|10,18 Feb 2021|
 				
 	

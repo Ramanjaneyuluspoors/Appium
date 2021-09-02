@@ -7,9 +7,9 @@ Scenario: Work MinMax Validations
 	When user enters Min value 5 and Max value 9 then perform validations 
 	
 @Work_Regular_expression 
-Scenario: Worjk Regular Expression 
+Scenario: Work Regular Expression 
 	Given scroll to specified work 
-		|RAMUEXP|
+		|MY-TEST|
 	When user enters regular expression "[a-z0-9A-Z]" then perform validation 
 	
 @WorkFieldDependencyBasedOnOtherFields 
